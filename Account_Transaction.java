@@ -4,7 +4,8 @@ import java.util.Date;
 
 
 public class Account_Transaction {
-    private int tranID; 
+    private int tranID;  
+    private static int nextID = 0;
     private Date tranDate; 
     private double tranAmount; 
     private char tranIdentifier;  
@@ -16,8 +17,20 @@ public class Account_Transaction {
         tranIdentifier = ' ';             
     } 
     
+    // Used for Database
     public Account_Transaction(int tranID, Date tranDate, double tranAmount, char tranIdentifier){ 
         this.tranID= tranID; 
+        this.tranDate = tranDate; 
+        this.tranAmount = tranAmount; 
+        this.tranIdentifier = tranIdentifier;   
+        if(tranID>nextID){ 
+            nextID=tranID;
+        }
+    } 
+    
+    // Used to create new account_transaction
+    public Account_Transaction(Date tranDate, double tranAmount, char tranIdentifier){ 
+        this.tranID= ++nextID; 
         this.tranDate = tranDate; 
         this.tranAmount = tranAmount; 
         this.tranIdentifier = tranIdentifier;             
