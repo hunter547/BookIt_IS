@@ -15,7 +15,6 @@ public class Account_Transaction {
         tranAmount = 0.0; 
         tranIdentifier = ' ';             
     } 
-    
 
     public int getTranID() {
         return tranID;
