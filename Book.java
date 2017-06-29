@@ -27,6 +27,21 @@ public class Book {
         this.bookSalePrice = bookSalePrice; 
         this.bookDescription = bookDescription; 
         this.bookID = ++nextID;
+    } 
+    
+    public Book(int bookID,String bookTitle, String bookAuthor, double bookCost, double bookSalePrice, String bookDescription){ 
+        this.bookTitle = bookTitle; 
+        this.bookAuthor = bookAuthor; 
+        this.bookCost = bookCost; 
+        this.bookSalePrice = bookSalePrice; 
+        this.bookDescription = bookDescription; 
+        this.bookID = bookID; 
+        // Ensures the nextID is equal to the largest current bookID when being 
+        // completely loaded from the database. This setup allows for an easy 
+        // assignment of the next bookID in the constructor above
+        if(bookID>nextID){ 
+            nextID = bookID;
+        }
     }
     
     
