@@ -11,7 +11,22 @@ public class Book {
     private double bookSalePrice; 
     private String bookDescription; 
 
+    public Book(){ 
+        this.bookID = 0; 
+        this.bookTitle=""; 
+        this.bookAuthor=""; 
+        this.bookCost=0.0; 
+        this.bookSalePrice=0.0; 
+        this.bookDescription ="";
+    } 
     
+    public Book(String bookTitle, String bookAuthor, double bookCost, double bookSalePrice, String bookDescription){ 
+        this.bookTitle = bookTitle; 
+        this.bookAuthor = bookAuthor; 
+        this.bookCost = bookCost; 
+        this.bookSalePrice = bookSalePrice; 
+        this.bookDescription = bookDescription;
+    }
     
     
     
