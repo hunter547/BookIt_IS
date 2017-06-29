@@ -2,9 +2,27 @@ package BookIt_IS;
 
 public class Consumable {
     private int conID; 
+    private static int nextID = 0;
     private String conName; 
     private double conCost; 
-    private String conDesc; 
+    private double conSalePrice;
+    private String conDesc;  
+    
+    public Consumable(){ 
+        this.conID=0; 
+        this.conName="";  
+        this.conCost=0.0; 
+        this.conSalePrice=0.0;
+        this.conDesc="";
+    } 
+    
+    public Consumable(String conName,double conCost,double conSalePrice,String conDesc){ 
+        this.conID= ++nextID; 
+        this.conName=conName; 
+        this.conCost=conCost; 
+        this.conSalePrice = conSalePrice;
+        this.conDesc=conDesc;
+    }
 
     public int getConID() {
         return conID;

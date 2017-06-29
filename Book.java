@@ -25,7 +25,8 @@ public class Book {
         this.bookAuthor = bookAuthor; 
         this.bookCost = bookCost; 
         this.bookSalePrice = bookSalePrice; 
-        this.bookDescription = bookDescription;
+        this.bookDescription = bookDescription; 
+        this.bookID = ++nextID;
     }
     
     
