@@ -7,7 +7,14 @@ public class Account_Transaction {
     private int tranID; 
     private Date tranDate; 
     private double tranAmount; 
-    private char tranIdentifier; 
+    private char tranIdentifier;  
+    
+    public Account_Transaction(){ 
+        tranID = 0; 
+        tranDate = new Date(); 
+        tranAmount = 0.0; 
+        tranIdentifier = ' ';             
+    } 
 
     public int getTranID() {
         return tranID;
