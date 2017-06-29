@@ -14,13 +14,6 @@ public class Account_Transaction {
         tranDate = new Date(); 
         tranAmount = 0.0; 
         tranIdentifier = ' ';             
-    } 
-    
-    public Account_Transaction(int tranID, Date tranDate, double tranAmount, char tranIdentifier){ 
-        this.tranID= tranID; 
-        this.tranDate = tranDate; 
-        this.tranAmount = tranAmount; 
-        this.tranIdentifier = tranIdentifier;             
     }
 
     public int getTranID() {
