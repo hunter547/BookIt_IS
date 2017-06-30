@@ -54,6 +54,6 @@ public class Employee {
     public void setEmployPayrate(String employPayrate) {
         this.employPayrate = employPayrate;
     }
-    // Cole's Test
+    // Cole's Test Pull
     
 }
