@@ -5,7 +5,15 @@ public class Employee {
     private String employFirstName; 
     private String employLastName; 
     private String employPhone; 
-    private String employPayrate; 
+    private double employPayrate; 
+    
+    public Employee(){ 
+        this.employID=0; 
+        this.employFirstName=""; 
+        this.employLastName=""; 
+        this.employPhone=""; 
+        this.employPayrate=0.0;
+    }
 
     public int getEmployID() {
         return employID;
