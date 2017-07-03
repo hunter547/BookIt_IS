@@ -80,7 +80,8 @@ public class Supplier {
                 s.setSuppAddress(suppAddress); 
             }
         }
-    }  
+    }
+    
     public static Supplier getSupplier(int suppID){ 
         Supplier bob = new Supplier();
         for(Supplier s: suppArray){ 

@@ -1,10 +1,12 @@
 package BookIt_IS;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.*;
 import static javafx.geometry.Pos.*;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import javafx.scene.text.*;
@@ -106,19 +108,49 @@ public class MainDashboard
 
         overallPane.add(tbPane, 0, 0);
         
-        //Adding items to inventory tab
+        //INVENTORY TAB INFORMATION
         
-        Label lblInventoryHeader = new Label ("    Inventory");
+        Label lblInventoryHeader = new Label ("Inventory");
         lblInventoryHeader.setFont(Font.font("Times New Roman", FontWeight.BOLD, 50));
+        GridPane.setHalignment(lblInventoryHeader, HPos.CENTER);
+        
         
         Pane blankSpace = new Pane();
-        blankSpace.setMinHeight(70);
-
-        invPane.add(lblInventoryHeader, 1, 0);
-        invPane.add(blankSpace, 0, 1);
+        blankSpace.setMinHeight(50);
         
-        TableView<Book> technicianView;
-        ObservableList<Book> technicianTableData;
+        TableView<Book> bookInventoryView = new TableView<>();
+        ObservableList<Book> bookInventoryTableData = 
+                FXCollections.observableArrayList(Book.getBookArray());
+        bookInventoryView.setItems(bookInventoryTableData);
+        
+        //Create Table Columns For bookInventoryView    
+        TableColumn tblcBookInvID = new TableColumn("Book ID");
+        TableColumn tblcBookInvTitle = new TableColumn("Title");
+        TableColumn tblcBookQuantity = new TableColumn("Quantity");
+        TableColumn tblcBookPrice = new TableColumn("Sale Price");
+        TableColumn tblcBookCost = new TableColumn("Aquisition Cost");
+        TableColumn tblcBookTotalCost = new TableColumn("Total Inventory Value");
+        
+        bookInventoryView.setMinWidth(1000);
+        bookInventoryView.setMaxHeight(400);
+        bookInventoryView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        
+//        tblcBookInvID.setCellValueFactory(new PropertyValueFactory<Customer, String>("custIDString"));
+//        tblcBookInvTitle.setCellValueFactory(new PropertyValueFactory<Customer, String>("custName"));
+//        tblcBookQuantity.setCellValueFactory(new PropertyValueFactory<Customer, String>("custPhone"));
+//        tblcBookPrice.setCellValueFactory(new PropertyValueFactory<Customer, String>("custAddress"));
+//        tblcBookCost.setCellValueFactory(new PropertyValueFactory<Customer, String>("custPhone"));
+//        tblcBookTotalCost.setCellValueFactory(new PropertyValueFactory<Customer, String>("custAddress"));
+        
+        bookInventoryView.getColumns().addAll(tblcBookInvID, tblcBookInvTitle, tblcBookQuantity, 
+                tblcBookPrice, tblcBookCost, tblcBookTotalCost);
+        
+        invPane.add(lblInventoryHeader, 1, 0);
+        invPane.add(blankSpace, 1, 1);
+        invPane.add(bookInventoryView, 1,2);
+        
+        TableView<Consumable> consumableInventoryView = new TableView<>();
+        ObservableList<Consumable> consumableInventoryTableData;
           
     }
 }
