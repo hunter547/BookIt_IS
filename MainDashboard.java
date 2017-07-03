@@ -1,22 +1,17 @@
 package BookIt_IS;
 
-import java.time.format.DateTimeFormatter;
-import java.util.*;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.*;
+import static javafx.geometry.Pos.*;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.scene.text.*;
 
-public class MainDashboard 
+public class MainDashboard
 {
     //Creating Panes
     GridPane overallPane = new GridPane();
@@ -26,7 +21,8 @@ public class MainDashboard
     GridPane employeePane = new GridPane(); 
     GridPane bookPane = new GridPane(); 
     GridPane profitPane = new GridPane();
-    GridPane invPane = new GridPane();   
+    GridPane invPane = new GridPane(); 
+    GridPane invHeaderPane = new GridPane();
     GridPane createPane = new GridPane(); 
     
     //Creating Tabs
@@ -52,24 +48,31 @@ public class MainDashboard
         overallPane.setAlignment(Pos.CENTER);
         overallPane.setHgap(20);
         overallPane.setMinSize(primaryScene.getWidth(), primaryScene.getHeight());
+        
         salesPane.setAlignment(Pos.CENTER);
         salesPane.setHgap(20);
         salesPane.setMinSize(primaryScene.getWidth(), primaryScene.getHeight());
+        
         customerPane.setAlignment(Pos.CENTER);
         customerPane.setHgap(20);
         customerPane.setMinSize(primaryScene.getWidth(), primaryScene.getHeight());
+        
         employeePane.setAlignment(Pos.CENTER);
         employeePane.setHgap(20);
         employeePane.setMinSize(primaryScene.getWidth(), primaryScene.getHeight());
+        
         bookPane.setAlignment(Pos.CENTER);
         bookPane.setHgap(20);
         bookPane.setMinSize(primaryScene.getWidth(), primaryScene.getHeight());
+        
         profitPane.setAlignment(Pos.CENTER);
         profitPane.setHgap(20);
         profitPane.setMinSize(primaryScene.getWidth(), primaryScene.getHeight());
-        invPane.setAlignment(Pos.CENTER);
+        
+        invPane.setAlignment(Pos.TOP_CENTER);
         invPane.setHgap(20);
         invPane.setMinSize(primaryScene.getWidth(), primaryScene.getHeight());
+        
         createPane.setAlignment(Pos.CENTER);
         createPane.setHgap(20);
         createPane.setMinSize(primaryScene.getWidth(), primaryScene.getHeight());
@@ -104,6 +107,50 @@ public class MainDashboard
         createTab.setClosable(false);
 
         overallPane.add(tbPane, 0, 0);
-    
+        
+        //INVENTORY TAB INFORMATION
+        
+        Label lblInventoryHeader = new Label ("Inventory");
+        lblInventoryHeader.setFont(Font.font("Times New Roman", FontWeight.BOLD, 50));
+        GridPane.setHalignment(lblInventoryHeader, HPos.CENTER);
+        
+        
+        Pane blankSpace = new Pane();
+        blankSpace.setMinHeight(50);
+        
+        TableView<Book> bookInventoryView = new TableView<>();
+        ObservableList<Book> bookInventoryTableData = 
+                FXCollections.observableArrayList(Book.getBookArray());
+        bookInventoryView.setItems(bookInventoryTableData);
+        
+        //Create Table Columns For bookInventoryView    
+        TableColumn tblcBookInvID = new TableColumn("Book ID");
+        TableColumn tblcBookInvTitle = new TableColumn("Title");
+        TableColumn tblcBookQuantity = new TableColumn("Quantity");
+        TableColumn tblcBookPrice = new TableColumn("Sale Price");
+        TableColumn tblcBookCost = new TableColumn("Aquisition Cost");
+        TableColumn tblcBookTotalCost = new TableColumn("Total Inventory Value");
+        
+        bookInventoryView.setMinWidth(1000);
+        bookInventoryView.setMaxHeight(400);
+        bookInventoryView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        
+//        tblcBookInvID.setCellValueFactory(new PropertyValueFactory<Customer, String>("custIDString"));
+//        tblcBookInvTitle.setCellValueFactory(new PropertyValueFactory<Customer, String>("custName"));
+//        tblcBookQuantity.setCellValueFactory(new PropertyValueFactory<Customer, String>("custPhone"));
+//        tblcBookPrice.setCellValueFactory(new PropertyValueFactory<Customer, String>("custAddress"));
+//        tblcBookCost.setCellValueFactory(new PropertyValueFactory<Customer, String>("custPhone"));
+//        tblcBookTotalCost.setCellValueFactory(new PropertyValueFactory<Customer, String>("custAddress"));
+        
+        bookInventoryView.getColumns().addAll(tblcBookInvID, tblcBookInvTitle, tblcBookQuantity, 
+                tblcBookPrice, tblcBookCost, tblcBookTotalCost);
+        
+        invPane.add(lblInventoryHeader, 1, 0);
+        invPane.add(blankSpace, 1, 1);
+        invPane.add(bookInventoryView, 1,2);
+        
+        TableView<Consumable> consumableInventoryView = new TableView<>();
+        ObservableList<Consumable> consumableInventoryTableData;
+          
     }
 }

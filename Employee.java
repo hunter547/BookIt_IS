@@ -47,13 +47,11 @@ public class Employee {
         this.employPhone = employPhone;
     }
 
-    public String getEmployPayrate() {
+    public double getEmployPayrate() {
         return employPayrate;
     }
 
-    public void setEmployPayrate(String employPayrate) {
+    public void setEmployPayrate(double employPayrate) {
         this.employPayrate = employPayrate;
-    }
-    // Cole's Test Pull
-    
+    }    
 }

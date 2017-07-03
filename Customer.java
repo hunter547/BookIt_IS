@@ -52,7 +52,6 @@ public class Customer {
         }
     }  
     
-    
     public static void newCustomer(String custFirstName, String custLastName, 
                     String custPhone, String custAddress) 
     {  
@@ -210,7 +209,7 @@ public class Customer {
         String userID = "javauser"; 
         //<editor-fold defaultstate="collapsed" desc="password">
         String userPASS = "javapass"; // Change to YOUR Oracle password
-//</editor-fold>
+        //</editor-fold>
         OracleDataSource ds;
         System.out.println(sqlQuery);
         try {
@@ -224,5 +223,3 @@ public class Customer {
         }
     }
 }
-
-//TEST COMMENT
