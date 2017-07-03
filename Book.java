@@ -1,8 +1,17 @@
 
 package BookIt_IS;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import oracle.jdbc.pool.OracleDataSource;
 
-public class Book {
+
+public class Book 
+{
+    private static ArrayList<Book> bookArray = new ArrayList<>();
     private int bookID; 
     private static int nextID = 0;
     private String bookTitle; 
@@ -10,6 +19,9 @@ public class Book {
     private double bookCost; 
     private double bookSalePrice; 
     private String bookDescription; 
+    private static Connection dbConn;
+    private static Statement commStmt;
+    private static ResultSet dbResults;
 
     public Book(){ 
         this.bookID = 0; 
@@ -43,8 +55,6 @@ public class Book {
             nextID = bookID;
         }
     }
-    
-    
     
     public int getBookID() {
         return bookID;
@@ -94,5 +104,83 @@ public class Book {
         this.bookDescription = bookDescription;
     }
     
+    public static void newBook (String bookTitle, String bookAuthor, 
+            double bookCost, double bookSalePrice, String bookDescription)
+    {
+        bookArray.add
+        (new Book(bookTitle, bookAuthor, bookCost, bookSalePrice, bookDescription));
+    }
     
+    public static void newBookFromDatabase (String bookTitle, String bookAuthor, 
+            double bookCost, double bookSalePrice, String bookDescription)
+    {
+        bookArray.add
+        (new Book(bookTitle, bookAuthor, bookCost, bookSalePrice, bookDescription));
+    }
+    
+    public static void fillBookArray() { 
+       String sqlQuery = "";
+       sqlQuery = "SELECT * FROM JAVAUSER.BOOK";
+       sendDBCommand(sqlQuery);
+
+        try {
+            while (dbResults.next()) {
+
+                Book.newBookFromDatabase(
+                                    dbResults.getString(1),
+                                    dbResults.getString(2), 
+                                    dbResults.getDouble(3), 
+                                    dbResults.getDouble(4), 
+                                    dbResults.getString(5));
+
+            }
+        } catch (SQLException e) {
+            System.out.println(e.toString());
+        } 
+    } 
+    
+    public static void clearBookTable() {
+        String sqlQuery = "";
+        sqlQuery = "DELETE FROM JAVAUSER.BOOK";
+        sendDBCommand(sqlQuery);
+    } 
+    
+    public static void insertAllBooks() { 
+       for(Book b: bookArray)
+       {  
+        String sqlQuery = "";
+        sqlQuery += "INSERT INTO JAVAUSER.BOOK (BOOKID, BOOKTITLE, "
+                 +  "BOOKAUTHOR, BOOKCOST, BOOKSALEPRICE, BOOKDESCRIPTION) VALUES (";
+        sqlQuery += b.getBookID() + " , '";
+        sqlQuery += b.getBookTitle() + "', '";
+        sqlQuery += b.getBookAuthor() + "', '"; 
+        sqlQuery += b.getBookCost() + "', '";
+        sqlQuery += b.getBookSalePrice() + "', '";
+        sqlQuery += b.getBookDescription() + "')";
+
+        sendDBCommand(sqlQuery);        
+      } 
+    }   
+   
+    public static ArrayList getBookArray(){ 
+        return bookArray;
+    }
+    
+    private static void sendDBCommand(String sqlQuery) {
+        String URL = "jdbc:oracle:thin:@localhost:1521:XE";
+        String userID = "javauser"; 
+        String userPASS = "javapass";
+        
+        OracleDataSource ds;
+        System.out.println(sqlQuery);
+        try {
+            ds = new OracleDataSource();
+            ds.setURL(URL);
+            dbConn = ds.getConnection(userID, userPASS);
+            commStmt = dbConn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            dbResults = commStmt.executeQuery(sqlQuery); // Sends the Query to the DB
+        } catch (SQLException e) {
+            System.out.println(e.toString());
+        }
+    }
 }
