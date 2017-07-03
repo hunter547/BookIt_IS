@@ -114,14 +114,36 @@ public class MainDashboard
         lblInventoryHeader.setFont(Font.font("Times New Roman", FontWeight.BOLD, 50));
         GridPane.setHalignment(lblInventoryHeader, HPos.CENTER);
         
+        Label lblBookInvHeader = new Label ("Book Inventory");
+        lblBookInvHeader.setFont(Font.font("Times New Roman", FontWeight.BOLD, 30));
+        GridPane.setHalignment(lblBookInvHeader, HPos.CENTER);
         
-        Pane blankSpace = new Pane();
-        blankSpace.setMinHeight(50);
+        Label lblConsInvHeader = new Label ("Consumable Inventory");
+        lblConsInvHeader.setFont(Font.font("Times New Roman", FontWeight.BOLD, 30));
+        GridPane.setHalignment(lblConsInvHeader, HPos.CENTER);
         
+        Label lblInvChooseStore = new Label ("Choose a Store: ");
+        GridPane.setHalignment(lblInvChooseStore, HPos.CENTER);
+        
+        ComboBox cmboInvChooseStore = new ComboBox();
+        GridPane.setHalignment(cmboInvChooseStore, HPos.CENTER);
+        
+        //Filler Panes
+        Pane invBlankSpace1 = new Pane();
+        invBlankSpace1.setMinHeight(50);
+        Pane invBlankSpace2 = new Pane();
+        invBlankSpace2.setMinHeight(50);
+        
+        //TableView Setups
         TableView<Book> bookInventoryView = new TableView<>();
         ObservableList<Book> bookInventoryTableData = 
                 FXCollections.observableArrayList(Book.getBookArray());
         bookInventoryView.setItems(bookInventoryTableData);
+        
+        TableView<Consumable> consumableInventoryView = new TableView<>();
+        ObservableList<Consumable> consumableInventoryTableData = 
+                FXCollections.observableArrayList(Consumable.getConsumableArray());
+        consumableInventoryView.setItems(consumableInventoryTableData);
         
         //Create Table Columns For bookInventoryView    
         TableColumn tblcBookInvID = new TableColumn("Book ID");
@@ -131,26 +153,54 @@ public class MainDashboard
         TableColumn tblcBookCost = new TableColumn("Aquisition Cost");
         TableColumn tblcBookTotalCost = new TableColumn("Total Inventory Value");
         
+        //Create Table Columns for consumableInventoryView
+        TableColumn tblcConsInvID = new TableColumn("Consumable ID");
+        TableColumn tblcConsInvName = new TableColumn("Name");
+        TableColumn tblcConsQuantity = new TableColumn("Quantity");
+        TableColumn tblcConsPrice = new TableColumn("Sale Price");
+        TableColumn tblcConsCost = new TableColumn("Aquisition Cost");
+        TableColumn tblcConsTotalCost = new TableColumn("Total Inventory Value");
+
+        //Formatting TableViews
         bookInventoryView.setMinWidth(1000);
-        bookInventoryView.setMaxHeight(400);
+        bookInventoryView.setMaxHeight(320);
         bookInventoryView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         
+        consumableInventoryView.setMinWidth(1000);
+        consumableInventoryView.setMaxHeight(320);
+        consumableInventoryView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+               
 //        tblcBookInvID.setCellValueFactory(new PropertyValueFactory<Customer, String>("custIDString"));
 //        tblcBookInvTitle.setCellValueFactory(new PropertyValueFactory<Customer, String>("custName"));
 //        tblcBookQuantity.setCellValueFactory(new PropertyValueFactory<Customer, String>("custPhone"));
 //        tblcBookPrice.setCellValueFactory(new PropertyValueFactory<Customer, String>("custAddress"));
 //        tblcBookCost.setCellValueFactory(new PropertyValueFactory<Customer, String>("custPhone"));
 //        tblcBookTotalCost.setCellValueFactory(new PropertyValueFactory<Customer, String>("custAddress"));
+
+//        tblcConsInvID.setCellValueFactory(new PropertyValueFactory<Customer, String>("custIDString"));
+//        tblcConsInvTitle.setCellValueFactory(new PropertyValueFactory<Customer, String>("custName"));
+//        tblcConsQuantity.setCellValueFactory(new PropertyValueFactory<Customer, String>("custPhone"));
+//        tblcConsPrice.setCellValueFactory(new PropertyValueFactory<Customer, String>("custAddress"));
+//        tblcConsCost.setCellValueFactory(new PropertyValueFactory<Customer, String>("custPhone"));
+//        tblcConsTotalCost.setCellValueFactory(new PropertyValueFactory<Customer, String>("custAddress"));
         
+        //Adding Columns to TableViews
         bookInventoryView.getColumns().addAll(tblcBookInvID, tblcBookInvTitle, tblcBookQuantity, 
                 tblcBookPrice, tblcBookCost, tblcBookTotalCost);
         
-        invPane.add(lblInventoryHeader, 1, 0);
-        invPane.add(blankSpace, 1, 1);
-        invPane.add(bookInventoryView, 1,2);
+        consumableInventoryView.getColumns().addAll(tblcConsInvID, tblcConsInvName, tblcConsQuantity, 
+                tblcConsPrice, tblcConsCost, tblcConsTotalCost);
         
-        TableView<Consumable> consumableInventoryView = new TableView<>();
-        ObservableList<Consumable> consumableInventoryTableData;
+        //Adding Items to invPane
+        invPane.add(lblInventoryHeader, 1, 0);
+        invPane.add(invBlankSpace1, 1, 1);
+        invPane.add(lblInvChooseStore, 1, 2);
+        invPane.add(cmboInvChooseStore, 1, 3);
+        invPane.add(lblBookInvHeader, 1, 4);
+        invPane.add(bookInventoryView, 1, 5);
+        invPane.add(invBlankSpace2, 1, 6);
+        invPane.add(lblConsInvHeader, 1, 7);
+        invPane.add(consumableInventoryView, 1,8);
           
     }
 }
