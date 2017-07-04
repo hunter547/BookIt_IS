@@ -14,7 +14,6 @@ public class Store {
     private String storeName;
     private String storeAddress; 
     private String storePhone; 
-    private int areaID; 
     private static Connection dbConn;
     private static Statement commStmt;
     private static ResultSet dbResults;    
@@ -23,38 +22,35 @@ public class Store {
         this.storeID = 0; 
         this.storeAddress = ""; 
         this.storePhone = ""; 
-        this.areaID = 0; 
         this.storeName = "";
     } 
     
-    public Store(String storeName,String storeAddress,String storePhone,int areaID) { 
+    public Store(String storeName,String storeAddress,String storePhone) { 
         this.storeName = storeName;
         this.storeAddress = storeAddress; 
         this.storePhone = storePhone; 
-        this.areaID = areaID; 
         this.storeID = ++nextID;
     } 
     
-    public Store(int storeID,String storeName,String storeAddress,String storePhone,int areaID) { 
+    public Store(int storeID,String storeName,String storeAddress,String storePhone) { 
         this.storeID = storeID;
         this.storeName = storeName;
         this.storeAddress = storeAddress; 
         this.storePhone = storePhone; 
-        this.areaID = areaID; 
         if(storeID>nextID){ 
             nextID = storeID;
         }
     }
     
-    public static void newStore(String storeName,String storeAddress,String storePhone,int areaID) { 
+    public static void newStore(String storeName,String storeAddress,String storePhone) { 
         
-        storeArray.add(new Store(storeName,storeAddress,storePhone,areaID));
+        storeArray.add(new Store(storeName,storeAddress,storePhone));
         
     } 
     
-    public static void newStorefromDatabase(int storeID,String storeName,String storeAddress,String storePhone,int areaID) { 
+    public static void newStorefromDatabase(int storeID,String storeName,String storeAddress,String storePhone) { 
         
-        storeArray.add(new Store(storeID,storeName,storeAddress,storePhone,areaID));
+        storeArray.add(new Store(storeID,storeName,storeAddress,storePhone));
         
     } 
     
@@ -71,8 +67,7 @@ public class Store {
                                     dbResults.getInt(1),
                                     dbResults.getString(2), 
                                     dbResults.getString(3), 
-                                    dbResults.getString(4), 
-                                    dbResults.getInt(5));
+                                    dbResults.getString(4));
             }
             
         } catch (SQLException e) {
@@ -94,8 +89,7 @@ public class Store {
         sqlQuery += s.getStoreID() + " , '";
         sqlQuery += s.getStoreName() + "', '";
         sqlQuery += s.getStoreAddress() + "', '"; 
-        sqlQuery += s.getStorePhone() + "', ";
-        sqlQuery += s.getAreaID() + ")";
+        sqlQuery += s.getStorePhone() + "')";
 
         sendDBCommand(sqlQuery);        
       } 
@@ -113,9 +107,6 @@ public class Store {
         return this.storePhone;
     } 
     
-    public int getAreaID(){ 
-        return this.areaID;
-    }  
     
     public String getStoreName(){ 
         return this.storeName;
@@ -143,10 +134,7 @@ public class Store {
     public void setStorePhone(String storePhone) { 
         this.storePhone = storePhone;
     } 
-    
-    public void setAreaID(int areaID){ 
-        this.areaID = areaID;
-    } 
+
     
     public void setStoreName(String storeName){ 
         this.storeName = storeName;
