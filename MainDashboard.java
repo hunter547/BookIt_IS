@@ -73,7 +73,7 @@ public class MainDashboard
         invPane.setHgap(20);
         invPane.setMinSize(primaryScene.getWidth(), primaryScene.getHeight());
         
-        createPane.setAlignment(Pos.CENTER);
+        createPane.setAlignment(Pos.TOP_CENTER);
         createPane.setHgap(20);
         createPane.setMinSize(primaryScene.getWidth(), primaryScene.getHeight());
         
@@ -129,11 +129,13 @@ public class MainDashboard
         GridPane.setHalignment(cmboInvChooseStore, HPos.CENTER);
         
         //Filler Panes
-        Pane invBlankSpace1 = new Pane();
-        invBlankSpace1.setMinHeight(50);
-        Pane invBlankSpace2 = new Pane();
-        invBlankSpace2.setMinHeight(50);
-        
+        Pane blankSpace1 = new Pane();
+        blankSpace1.setMinHeight(50);
+        Pane blankSpace2 = new Pane();
+        blankSpace2.setMinHeight(50);
+        Pane blankSpace3 = new Pane();
+        blankSpace3.setMinHeight(50);
+                
         //TableView Setups
         TableView<Book> bookInventoryView = new TableView<>();
         ObservableList<Book> bookInventoryTableData = 
@@ -193,14 +195,208 @@ public class MainDashboard
         
         //Adding Items to invPane
         invPane.add(lblInventoryHeader, 1, 0);
-        invPane.add(invBlankSpace1, 1, 1);
+        invPane.add(blankSpace1, 1, 1);
         invPane.add(lblInvChooseStore, 1, 2);
         invPane.add(cmboInvChooseStore, 1, 3);
         invPane.add(lblBookInvHeader, 1, 4);
         invPane.add(bookInventoryView, 1, 5);
-        invPane.add(invBlankSpace2, 1, 6);
+        invPane.add(blankSpace2, 1, 6);
         invPane.add(lblConsInvHeader, 1, 7);
         invPane.add(consumableInventoryView, 1,8);
+        
+        //CREATE TAB INFORMATION
+
+        Label lblCreateHeader = new Label ("Create New Object");
+        lblCreateHeader.setFont(Font.font("Times New Roman", FontWeight.BOLD, 50));
+        GridPane.setHalignment(lblInventoryHeader, HPos.CENTER);
+        
+        Label lblCreateSubHeader2 = new Label ("Individual");
+        lblCreateSubHeader2.setFont(Font.font("Times New Roman", FontWeight.BOLD, 30));
+        GridPane.setHalignment(lblCreateSubHeader2, HPos.CENTER);
+        
+        Label lblCreateSubHeader3 = new Label ("Business Entities");
+        lblCreateSubHeader3.setFont(Font.font("Times New Roman", FontWeight.BOLD, 30));
+        GridPane.setHalignment(lblCreateSubHeader3, HPos.CENTER);
+        
+        Label lblCreateSubHeader4 = new Label ("Orders");
+        lblCreateSubHeader4.setFont(Font.font("Times New Roman", FontWeight.BOLD, 30));
+        GridPane.setHalignment(lblCreateSubHeader4, HPos.CENTER);
+        
+        //Adding buttons and labels for choosing which entity to create
+        RadioButton rdoCreateCustomer = new RadioButton();
+        RadioButton rdoCreateEmployee = new RadioButton();
+        RadioButton rdoCreateStore = new RadioButton();
+        RadioButton rdoCreateSupplier = new RadioButton();
+        RadioButton rdoCreateCustomerOrder = new RadioButton();
+        RadioButton rdoCreateAquisitionOrder = new RadioButton();
+        
+        Label lblCreateCustomer = new Label ("Customer");
+        Label lblCreateEmployee = new Label ("Employee");
+        Label lblCreateStore = new Label ("Store");
+        Label lblCreateSupplier = new Label ("Supplier");
+        Label lblCreateCustomerOrder = new Label ("Customer Order");
+        Label lblCreateAquisitionOrder = new Label ("Aquisition Order");
+        
+        //This will be the GridPane that contains the first half of the page,
+        //the radio buttons and labels.
+        GridPane createPane1 = new GridPane();
+       
+        //Formatting columns for createPane1
+        ColumnConstraints clmn1 = new ColumnConstraints();
+        ColumnConstraints clmn2 = new ColumnConstraints();
+        ColumnConstraints clmn3 = new ColumnConstraints();
+        ColumnConstraints clmn4 = new ColumnConstraints();
+        ColumnConstraints clmn5 = new ColumnConstraints();
+        ColumnConstraints clmn6 = new ColumnConstraints();
+        ColumnConstraints clmn7 = new ColumnConstraints();
+        
+        createPane1.getColumnConstraints().addAll(clmn1, clmn2, clmn3, clmn4, clmn5, clmn6);
+        
+        clmn1.setPercentWidth(16.67);
+        clmn2.setPercentWidth(16.67);
+        clmn3.setPercentWidth(16.67);
+        clmn4.setPercentWidth(16.67);
+        clmn5.setPercentWidth(16.67);
+        clmn6.setPercentWidth(16.67);
+        clmn7.setPercentWidth(100);
+        
+        createPane.getColumnConstraints().addAll(clmn7);
+ 
+        //Adding the first half of the page to the main createPane
+        createPane.add(createPane1, 0, 0);
+        createPane1.setHgap(20);
+        
+        createPane1.add(lblCreateHeader, 2, 0, 3, 1);
+        createPane1.add(blankSpace1, 2, 1);
+        
+        createPane1.add(lblCreateSubHeader2, 0, 4, 2, 1);
+        createPane1.add(lblCreateSubHeader3, 2, 4, 2, 1);
+        createPane1.add(lblCreateSubHeader4, 4, 4, 2, 1);
+        
+        createPane1.add(blankSpace2, 1, 5);
+        
+        createPane1.add(lblCreateCustomer, 0, 5);
+        createPane1.add(rdoCreateCustomer, 1, 5);
+        createPane1.add(lblCreateEmployee, 0, 6);
+        createPane1.add(rdoCreateEmployee, 1, 6);
+        
+        //Adding and formatting Labels and Radio Buttons for first half of page
+        GridPane.setHalignment(lblCreateCustomer, HPos.RIGHT);
+        GridPane.setHalignment(rdoCreateCustomer, HPos.LEFT);
+        GridPane.setHalignment(lblCreateEmployee, HPos.RIGHT);
+        GridPane.setHalignment(rdoCreateEmployee, HPos.LEFT);
+        
+        createPane1.add(lblCreateStore, 2, 5);
+        createPane1.add(rdoCreateStore, 3, 5);
+        createPane1.add(lblCreateSupplier, 2, 6);
+        createPane1.add(rdoCreateSupplier, 3, 6);
+        
+        GridPane.setHalignment(lblCreateStore, HPos.RIGHT);
+        GridPane.setHalignment(rdoCreateStore, HPos.LEFT);
+        GridPane.setHalignment(lblCreateSupplier, HPos.RIGHT);
+        GridPane.setHalignment(rdoCreateSupplier, HPos.LEFT);
+        
+        createPane1.add(lblCreateCustomerOrder, 4, 5);
+        createPane1.add(rdoCreateCustomerOrder, 5, 5);
+        createPane1.add(lblCreateAquisitionOrder, 4, 6);
+        createPane1.add(rdoCreateAquisitionOrder, 5, 6);
+        
+        GridPane.setHalignment(lblCreateCustomerOrder, HPos.RIGHT);
+        GridPane.setHalignment(rdoCreateCustomerOrder, HPos.LEFT);
+        GridPane.setHalignment(lblCreateAquisitionOrder, HPos.RIGHT);
+        GridPane.setHalignment(rdoCreateAquisitionOrder, HPos.LEFT);
+        
+        //These GridPanes will make up the second half of the page, where
+        //the user will be able to add an entity
+        GridPane addCustPane = new GridPane();
+        GridPane addEmployeePane = new GridPane();
+        GridPane addStorePane = new GridPane();
+        GridPane addSupplierPane = new GridPane();
+        GridPane addCustomerOrderPane = new GridPane();
+        GridPane addAqOrderPane = new GridPane();
+        
+        addCustPane.setVisible(false);
+        addEmployeePane.setVisible(true);
+        addStorePane.setVisible(false);
+        addSupplierPane.setVisible(false);
+        addCustomerOrderPane.setVisible(false);
+        addAqOrderPane.setVisible(false);
           
+        //Never-ending formatting
+        addCustPane.setAlignment(Pos.TOP_CENTER);
+        addCustPane.setHgap(20);
+        addCustPane.setVgap(20);
+        
+        addEmployeePane.setAlignment(Pos.TOP_CENTER);
+        addEmployeePane.setHgap(20);
+        addStorePane.setAlignment(Pos.TOP_CENTER);
+        addStorePane.setHgap(20);
+        addSupplierPane.setAlignment(Pos.TOP_CENTER);
+        addSupplierPane.setHgap(20);
+        addCustomerOrderPane.setAlignment(Pos.TOP_CENTER);
+        addCustomerOrderPane.setHgap(20);
+        addAqOrderPane.setAlignment(Pos.TOP_CENTER);
+        addAqOrderPane.setHgap(20);
+        
+        createPane.add(blankSpace3, 0, 1);
+        
+        //Adding the lower panes to the main createPane
+        createPane.add(addCustPane, 0, 2);
+        createPane.add(addEmployeePane, 0, 3);
+        
+        //Setting up add customer pane for second half of page
+        Label lblAddCust = new Label ("Add New Customer");
+        lblAddCust.setFont(Font.font("Times New Roman", FontWeight.BOLD, 30));
+        GridPane.setHalignment(lblAddCust, HPos.RIGHT);
+        
+        Label lblAddCustFN = new Label ("First Name: ");
+        Label lblAddCustLN = new Label ("Last Name: ");
+        Label lblAddCustPhone = new Label ("Phone Number: ");
+        Label lblAddCustAddress = new Label ("Address: ");
+        
+        TextField txtAddCustFN = new TextField();
+        TextField txtAddCustLN = new TextField();
+        TextField txtAddCustPhone = new TextField();
+        TextField txtAddCustAddress = new TextField();
+        
+        addCustPane.add(lblAddCust, 0, 0);
+        addCustPane.add(lblAddCustFN, 0, 1);
+        addCustPane.add(lblAddCustLN, 0, 2);
+        addCustPane.add(lblAddCustPhone, 0, 3);
+        addCustPane.add(lblAddCustAddress, 0, 4);
+        
+        addCustPane.add(txtAddCustFN, 1, 1);
+        addCustPane.add(txtAddCustLN, 1, 2);
+        addCustPane.add(txtAddCustPhone, 1, 3);
+        addCustPane.add(txtAddCustAddress, 1, 4);
+        
+        //Setting up add employee pane for second half of page
+        Label lblAddEmployee = new Label ("Add New Employee");
+        lblAddEmployee.setFont(Font.font("Times New Roman", FontWeight.BOLD, 30));
+        GridPane.setHalignment(lblAddEmployee, HPos.RIGHT);
+        
+        Label lblAddEmployeeFN = new Label ("First Name: ");
+        Label lblAddEmployeeLN = new Label ("Last Name: ");
+        Label lblAddEmployeePhone = new Label ("Phone Number: ");
+        Label lblAddEmployeePay = new Label ("Pay Rate: ");
+        
+        TextField txtAddEmployeeFN = new TextField();
+        TextField txtAddEmployeeLN = new TextField();
+        TextField txtAddEmployeePhone = new TextField();
+        TextField txtAddEmployeePay = new TextField();
+        
+        addEmployeePane.add(lblAddEmployee, 0, 0);
+        addEmployeePane.add(lblAddEmployeeFN, 0, 1);
+        addEmployeePane.add(lblAddEmployeeLN, 0, 2);
+        addEmployeePane.add(lblAddEmployeePhone, 0, 3);
+        addEmployeePane.add(lblAddEmployeePay, 0, 4);
+        
+        addEmployeePane.add(txtAddEmployeeFN, 1, 1);
+        addEmployeePane.add(txtAddEmployeeLN, 1, 2);
+        addEmployeePane.add(txtAddEmployeePhone, 1, 3);
+        addEmployeePane.add(txtAddEmployeePay, 1, 4);
+        
+        
+        
     }
 }
