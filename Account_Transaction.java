@@ -46,7 +46,7 @@ public class Account_Transaction {
         this.tranIdentifier = tranIdentifier;             
     } 
     
-    public static void acctTransactionFromDatabase(int tranID,Date tranDate,double tranAmount,char tranIdentifier){ 
+    public static void newAcctTransactionFromDatabase(int tranID,Date tranDate,double tranAmount,char tranIdentifier){ 
         acctTranArray.add(
                 new Account_Transaction(tranID,tranDate,tranAmount,tranIdentifier));
     } 
@@ -64,7 +64,7 @@ public class Account_Transaction {
         try {
             while (dbResults.next()) {
 
-                Account_Transaction.acctTransactionFromDatabase(
+                Account_Transaction.newAcctTransactionFromDatabase(
                                     dbResults.getInt(1),
                                     dbResults.getDate(2), 
                                     dbResults.getDouble(3), 
@@ -88,8 +88,8 @@ public class Account_Transaction {
         String sqlQuery = "";
         sqlQuery += "INSERT INTO JAVAUSER.ACCOUNT_TRANSACTION (TRAN_ID, TRAN_DATE, AMOUNT, IDENTIFIER) VALUES (";
         sqlQuery += at.getTranID()+ " , '";
-        sqlQuery += at.getTranDate()+ "', '";
-        sqlQuery += at.getTranAmount()+ "', '"; 
+        sqlQuery += at.getTranDate()+ "', ";
+        sqlQuery += at.getTranAmount()+ ", '"; 
         sqlQuery += at.getTranIdentifier()+ "')";
 
         sendDBCommand(sqlQuery);        
