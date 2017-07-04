@@ -1,17 +1,42 @@
 package BookIt_IS;
 
 public class POS_Line_Item {
-    private int posliLineItemID; 
+    private int posliID; 
+    private static int nextID = 0;
     private int orderID; 
     private int productID; 
     private int posliQuantity; 
 
-    public int getPosliLineItemID() {
-        return posliLineItemID;
+    public POS_Line_Item() {
+        this.posliID = 0;
+        this.orderID = 0;
+        this.productID = 0;
+        this.posliQuantity = 0;
     }
 
-    public void setPosliLineItemID(int posliLineItemID) {
-        this.posliLineItemID = posliLineItemID;
+    public POS_Line_Item(int orderID, int productID, int posliQuantity) {
+        this.posliID = ++nextID;
+        this.orderID = orderID;
+        this.productID = productID;
+        this.posliQuantity = posliQuantity;
+    }  
+
+    public POS_Line_Item(int posliID, int orderID, int productID, int posliQuantity) {
+        this.posliID = posliID;
+        this.orderID = orderID;
+        this.productID = productID;
+        this.posliQuantity = posliQuantity; 
+        if(posliID>nextID){ 
+            nextID = posliID;
+        }
+    }
+
+    public int getPosliLineItemID() {
+        return posliID;
+    }
+
+    public void setPosliLineItemID(int posliID) {
+        this.posliID = posliID;
     }
 
     public int getOrderID() {
