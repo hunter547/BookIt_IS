@@ -25,6 +25,16 @@ public class MainDashboard
     GridPane invHeaderPane = new GridPane();
     GridPane createPane = new GridPane(); 
     
+    //These panes are used in the Add Entity page. They make up the second 
+    //half of the page, and are where a user can enter information for the new 
+    //entity.
+    GridPane addCustPane = new GridPane();
+    GridPane addEmployeePane = new GridPane();
+    GridPane addStorePane = new GridPane();
+    GridPane addSupplierPane = new GridPane();
+    GridPane addBookPane = new GridPane();
+    GridPane addConsumablePane = new GridPane();
+    
     //Creating Tabs
     TabPane tbPane = new TabPane();
     Tab salesTab = new Tab("Sales");
@@ -71,6 +81,7 @@ public class MainDashboard
         
         invPane.setAlignment(Pos.TOP_CENTER);
         invPane.setHgap(20);
+        invPane.setVgap(5);
         invPane.setMinSize(primaryScene.getWidth(), primaryScene.getHeight());
         
         createPane.setAlignment(Pos.TOP_CENTER);
@@ -403,24 +414,34 @@ public class MainDashboard
         lblCreateSubHeader3.setFont(Font.font("Times New Roman", FontWeight.BOLD, 30));
         GridPane.setHalignment(lblCreateSubHeader3, HPos.CENTER);
         
-        Label lblCreateSubHeader4 = new Label ("Orders");
+        Label lblCreateSubHeader4 = new Label ("Items");
         lblCreateSubHeader4.setFont(Font.font("Times New Roman", FontWeight.BOLD, 30));
         GridPane.setHalignment(lblCreateSubHeader4, HPos.CENTER);
         
         //Adding buttons and labels for choosing which entity to create
+        ToggleGroup createGroup = new ToggleGroup();
+        
         RadioButton rdoCreateCustomer = new RadioButton();
         RadioButton rdoCreateEmployee = new RadioButton();
         RadioButton rdoCreateStore = new RadioButton();
         RadioButton rdoCreateSupplier = new RadioButton();
-        RadioButton rdoCreateCustomerOrder = new RadioButton();
-        RadioButton rdoCreateAquisitionOrder = new RadioButton();
+        RadioButton rdoCreateBook = new RadioButton();
+        RadioButton rdoCreateConsumable = new RadioButton();
+
+        rdoCreateCustomer.setToggleGroup(createGroup);
+        rdoCreateEmployee.setToggleGroup(createGroup);
+        rdoCreateStore.setToggleGroup(createGroup);
+        rdoCreateSupplier.setToggleGroup(createGroup);
+        rdoCreateBook.setToggleGroup(createGroup);
+        rdoCreateConsumable.setToggleGroup(createGroup);
+        
         
         Label lblCreateCustomer = new Label ("Customer");
         Label lblCreateEmployee = new Label ("Employee");
         Label lblCreateStore = new Label ("Store");
         Label lblCreateSupplier = new Label ("Supplier");
-        Label lblCreateCustomerOrder = new Label ("Customer Order");
-        Label lblCreateAquisitionOrder = new Label ("Aquisition Order");
+        Label lblCreateBook = new Label ("Book");
+        Label lblCreateConsumable = new Label ("Consumable");
         
         //This will be the GridPane that contains the first half of the page,
         //the radio buttons and labels.
@@ -481,53 +502,56 @@ public class MainDashboard
         GridPane.setHalignment(lblCreateSupplier, HPos.RIGHT);
         GridPane.setHalignment(rdoCreateSupplier, HPos.LEFT);
         
-        createPane1.add(lblCreateCustomerOrder, 4, 5);
-        createPane1.add(rdoCreateCustomerOrder, 5, 5);
-        createPane1.add(lblCreateAquisitionOrder, 4, 6);
-        createPane1.add(rdoCreateAquisitionOrder, 5, 6);
+        createPane1.add(lblCreateBook, 4, 5);
+        createPane1.add(rdoCreateBook, 5, 5);
+        createPane1.add(lblCreateConsumable, 4, 6);
+        createPane1.add(rdoCreateConsumable, 5, 6);
         
-        GridPane.setHalignment(lblCreateCustomerOrder, HPos.RIGHT);
-        GridPane.setHalignment(rdoCreateCustomerOrder, HPos.LEFT);
-        GridPane.setHalignment(lblCreateAquisitionOrder, HPos.RIGHT);
-        GridPane.setHalignment(rdoCreateAquisitionOrder, HPos.LEFT);
+        GridPane.setHalignment(lblCreateBook, HPos.RIGHT);
+        GridPane.setHalignment(rdoCreateBook, HPos.LEFT);
+        GridPane.setHalignment(lblCreateConsumable, HPos.RIGHT);
+        GridPane.setHalignment(rdoCreateConsumable, HPos.LEFT);
         
         //These GridPanes will make up the second half of the page, where
         //the user will be able to add an entity
-        GridPane addCustPane = new GridPane();
-        GridPane addEmployeePane = new GridPane();
-        GridPane addStorePane = new GridPane();
-        GridPane addSupplierPane = new GridPane();
-        GridPane addCustomerOrderPane = new GridPane();
-        GridPane addAqOrderPane = new GridPane();
         
-        addCustPane.setVisible(true);
-        addEmployeePane.setVisible(true);
+        addCustPane.setVisible(false);
+        addEmployeePane.setVisible(false);
         addStorePane.setVisible(false);
         addSupplierPane.setVisible(false);
-        addCustomerOrderPane.setVisible(false);
-        addAqOrderPane.setVisible(false);
+        addBookPane.setVisible(false);
+        addConsumablePane.setVisible(false);
+        
           
         //Never-ending formatting
         addCustPane.setAlignment(Pos.TOP_CENTER);
         addCustPane.setHgap(20);
-        addCustPane.setVgap(20);
-        
+        addCustPane.setVgap(5);
         addEmployeePane.setAlignment(Pos.TOP_CENTER);
         addEmployeePane.setHgap(20);
+        addEmployeePane.setVgap(5);
         addStorePane.setAlignment(Pos.TOP_CENTER);
         addStorePane.setHgap(20);
+        addStorePane.setVgap(5);
         addSupplierPane.setAlignment(Pos.TOP_CENTER);
         addSupplierPane.setHgap(20);
-        addCustomerOrderPane.setAlignment(Pos.TOP_CENTER);
-        addCustomerOrderPane.setHgap(20);
-        addAqOrderPane.setAlignment(Pos.TOP_CENTER);
-        addAqOrderPane.setHgap(20);
+        addSupplierPane.setVgap(5);
+        addBookPane.setAlignment(Pos.TOP_CENTER);
+        addBookPane.setHgap(20);
+        addBookPane.setVgap(5);
+        addConsumablePane.setAlignment(Pos.TOP_CENTER);
+        addConsumablePane.setHgap(20);
+        addConsumablePane.setVgap(5);
         
         createPane.add(blankSpace3, 0, 1);
         
         //Adding the lower panes to the main createPane
         createPane.add(addCustPane, 0, 2);
-        createPane.add(addEmployeePane, 0, 3);
+        createPane.add(addEmployeePane, 0, 2);
+        createPane.add(addStorePane, 0, 2);
+        createPane.add(addSupplierPane, 0, 2);
+        createPane.add(addBookPane, 0, 2);
+        createPane.add(addConsumablePane, 0, 2);
         
         //Setting up add customer pane for second half of page
         Label lblAddCust = new Label ("Add New Customer");
@@ -544,6 +568,8 @@ public class MainDashboard
         TextField txtAddCustPhone = new TextField();
         TextField txtAddCustAddress = new TextField();
         
+        Button btnAddCust = new Button ("Add Customer");
+        
         addCustPane.add(lblAddCust, 0, 0);
         addCustPane.add(lblAddCustFN, 0, 1);
         addCustPane.add(lblAddCustLN, 0, 2);
@@ -554,6 +580,8 @@ public class MainDashboard
         addCustPane.add(txtAddCustLN, 1, 2);
         addCustPane.add(txtAddCustPhone, 1, 3);
         addCustPane.add(txtAddCustAddress, 1, 4);
+        
+        addCustPane.add(btnAddCust, 1, 5);
         
         //Setting up add employee pane for second half of page
         Label lblAddEmployee = new Label ("Add New Employee");
@@ -570,6 +598,8 @@ public class MainDashboard
         TextField txtAddEmployeePhone = new TextField();
         TextField txtAddEmployeePay = new TextField();
         
+        Button btnAddEmployee = new Button ("Add Employee");
+        
         addEmployeePane.add(lblAddEmployee, 0, 0);
         addEmployeePane.add(lblAddEmployeeFN, 0, 1);
         addEmployeePane.add(lblAddEmployeeLN, 0, 2);
@@ -581,7 +611,192 @@ public class MainDashboard
         addEmployeePane.add(txtAddEmployeePhone, 1, 3);
         addEmployeePane.add(txtAddEmployeePay, 1, 4);
         
+        addEmployeePane.add(btnAddEmployee, 1, 5);
         
+        //Setting up add Store pane for second half of page
+        Label lblAddStore = new Label ("Add New Store");
+        lblAddStore.setFont(Font.font("Times New Roman", FontWeight.BOLD, 30));
+        GridPane.setHalignment(lblAddStore, HPos.RIGHT);
         
+        Label lblAddStoreName = new Label("Store Name: ");
+        Label lblAddStoreAddress = new Label("Store Address: ");
+        Label lblAddStorePhone = new Label("Store Phone Number: ");
+        Label lblAddStoreAreaID = new Label("Store Area ID: ");
+        
+        TextField txtAddStoreName = new TextField();
+        TextField txtAddStoreAddress = new TextField();
+        TextField txtAddStorePhone = new TextField();
+        TextField txtAddStoreAreaID = new TextField();
+        
+        Button btnAddStore = new Button("Add Store");
+        
+        addStorePane.add(lblAddStore, 0, 0);
+        
+        addStorePane.add(lblAddStoreName, 0, 1);
+        addStorePane.add(lblAddStoreAddress, 0, 2);
+        addStorePane.add(lblAddStorePhone, 0, 3);
+        addStorePane.add(lblAddStoreAreaID, 0, 4);
+        
+        addStorePane.add(txtAddStoreName, 1, 1);
+        addStorePane.add(txtAddStoreAddress, 1, 2);
+        addStorePane.add(txtAddStorePhone, 1, 3);
+        addStorePane.add(txtAddStoreAreaID, 1, 4);
+        
+        addStorePane.add(btnAddStore, 1, 5);
+        
+        //Setting up add Supplier pane for second half of page
+        Label lblAddSupplier = new Label ("Add New Supplier");
+        lblAddSupplier.setFont(Font.font("Times New Roman", FontWeight.BOLD, 30));
+        GridPane.setHalignment(lblAddSupplier, HPos.RIGHT);
+        
+        Label lblAddSupplierName = new Label("Supplier Name: ");
+        Label lblAddSupplierAddress = new Label("Supplier Address: ");
+        Label lblAddSupplierRep = new Label ("Supplier Contact: ");
+        
+        TextField txtAddSupplierName = new TextField ();
+        TextField txtAddSupplierAddress = new TextField ();
+        
+        ComboBox cmboAddSupplierRep = new ComboBox();
+        
+        Button btnAddSupplier = new Button ("Add Supplier");
+        
+        addSupplierPane.add(lblAddSupplier, 0, 0);
+        
+        addSupplierPane.add(lblAddSupplierName, 0, 1);
+        addSupplierPane.add(lblAddSupplierAddress, 0, 2);
+        addSupplierPane.add(lblAddSupplierRep, 0, 3);
+        
+        addSupplierPane.add(txtAddSupplierName, 1, 1);
+        addSupplierPane.add(txtAddSupplierAddress, 1, 2);
+        addSupplierPane.add(cmboAddSupplierRep, 1, 3);
+        
+        addSupplierPane.add(btnAddSupplier, 1, 4);
+        
+        //Setting up add Book pane for second half of page
+        Label lblAddBook = new Label ("Add New Book");
+        lblAddBook.setFont(Font.font("Times New Roman", FontWeight.BOLD, 30));
+        GridPane.setHalignment(lblAddBook, HPos.RIGHT);
+        
+        Label lblAddBookTitle = new Label ("Title: ");
+        Label lblAddBookAuthor = new Label ("Author: ");
+        Label lblAddBookDesc = new Label ("Description ");
+        Label lblAddBookCost = new Label ("Aquisition Cost: ");
+        Label lblAddBookSalePrice = new Label ("Sale Price: ");
+        
+        TextField txtAddBookTitle = new TextField();
+        TextField txtAddBookAuthor = new TextField();
+        TextField txtAddBookDesc = new TextField();
+        TextField txtAddBookCost = new TextField();
+        TextField txtAddBookSalePrice = new TextField();
+        
+        Button btnAddBook = new Button ("Add Book");
+        
+        addBookPane.add(lblAddBook, 0, 0);
+        
+        addBookPane.add(lblAddBookTitle, 0, 1);
+        addBookPane.add(lblAddBookAuthor, 0, 2);
+        addBookPane.add(lblAddBookDesc, 0, 3);
+        addBookPane.add(lblAddBookCost, 0, 4);
+        addBookPane.add(lblAddBookSalePrice, 0, 5);
+        
+        addBookPane.add(txtAddBookTitle, 1, 1);
+        addBookPane.add(txtAddBookAuthor, 1, 2);
+        addBookPane.add(txtAddBookDesc, 1, 3);
+        addBookPane.add(txtAddBookCost, 1, 4);
+        addBookPane.add(txtAddBookSalePrice, 1, 5);
+        
+        addBookPane.add(btnAddBook, 1, 6);
+        
+        //Setting up add Consumable pane for second half of page
+        Label lblAddConsumable = new Label ("Add New Consumable");
+        lblAddConsumable.setFont(Font.font("Times New Roman", FontWeight.BOLD, 30));
+        GridPane.setHalignment(lblAddConsumable, HPos.RIGHT);
+        
+        Label lblAddConsName = new Label ("Name: ");
+        Label lblAddConsDesc = new Label ("Description: ");
+        Label lblAddConsCost = new Label ("Aquisition Cost: ");
+        Label lblAddConsSalePrice= new Label ("Sale Price: ");
+        
+        TextField txtAddConsName = new TextField ();
+        TextField txtAddConsDesc = new TextField ();
+        TextField txtAddConsCost = new TextField ();
+        TextField txtAddConsSalePrice = new TextField ();
+        
+        Button btnAddConsumable = new Button("Add Consumable");
+        
+        addConsumablePane.add(lblAddConsumable, 0, 0);
+        
+        addConsumablePane.add(lblAddConsName, 0, 1);
+        addConsumablePane.add(lblAddConsDesc, 0, 2);
+        addConsumablePane.add(lblAddConsCost, 0, 3);
+        addConsumablePane.add(lblAddConsSalePrice, 0, 4);
+        
+        addConsumablePane.add(txtAddConsName, 1, 1);
+        addConsumablePane.add(txtAddConsDesc, 1, 2);
+        addConsumablePane.add(txtAddConsCost, 1, 3);
+        addConsumablePane.add(txtAddConsSalePrice, 1, 4);
+        
+        addConsumablePane.add(btnAddConsumable, 1, 5);
+       
+        //Radio Button Handlers to hide or display the desired pane to add objects
+        
+        rdoCreateCustomer.setOnAction (e -> {
+            if (rdoCreateCustomer.isSelected())
+            {   
+                hideAddPanes();
+                addCustPane.setVisible(true);
+            }
+        });
+        
+        rdoCreateEmployee.setOnAction (e -> {
+            if (rdoCreateEmployee.isSelected())
+            {       
+                hideAddPanes();
+                addEmployeePane.setVisible(true);
+            }
+        }); 
+        
+        rdoCreateStore.setOnAction (e -> {
+            if (rdoCreateStore.isSelected())
+            {       
+                hideAddPanes();
+                addStorePane.setVisible(true);
+            }
+        });   
+        
+        rdoCreateSupplier.setOnAction (e -> {
+            if (rdoCreateSupplier.isSelected())
+            {       
+                hideAddPanes();
+                addSupplierPane.setVisible(true);
+            }
+        });  
+        
+        rdoCreateBook.setOnAction (e -> {
+            if (rdoCreateBook.isSelected())
+            {       
+                hideAddPanes();
+                addBookPane.setVisible(true);
+            }
+        });
+        
+        rdoCreateConsumable.setOnAction (e -> {
+            if (rdoCreateConsumable.isSelected())
+            {       
+                hideAddPanes();
+                addConsumablePane.setVisible(true);
+            }
+        });  
+    } 
+    
+    public void hideAddPanes()
+    {
+        addCustPane.setVisible(false);
+        addEmployeePane.setVisible(false);
+        addStorePane.setVisible(false);
+        addSupplierPane.setVisible(false);
+        addBookPane.setVisible(false);
+        addConsumablePane.setVisible(false);
     }
 }
+
