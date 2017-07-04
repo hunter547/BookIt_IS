@@ -19,15 +19,14 @@ import javafx.stage.Stage;
  * @author lxpee
  */
 public class launchWindow extends Application {
-    
+
     @Override
-    public void start(Stage primaryStage) 
-    {
+    public void start(Stage primaryStage) {
         MainDashboard mainDashboard = new MainDashboard();
     }
 
     public static void main(String[] args) {
         launch(args);
     }
-    
+
 }
