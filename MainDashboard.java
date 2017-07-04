@@ -108,6 +108,191 @@ public class MainDashboard
 
         overallPane.add(tbPane, 0, 0);
         
+        //BOOK TAB INFORMATION
+        
+        // Book Header
+        Label lblBookHeader = new Label ("Book Report:");
+        lblBookHeader.setFont(Font.font("Times New Roman", FontWeight.BOLD, 50));
+        GridPane.setHalignment(lblBookHeader, HPos.CENTER);
+        
+        // book tab labels
+        Label lblTopFive = new Label("Top 5 Sellers: ");
+        GridPane.setHalignment(lblTopFive, HPos.CENTER);
+        
+        Label lblBookDesc = new Label("Product Description: ");
+        GridPane.setHalignment(lblBookDesc, HPos.CENTER);
+        
+        Label lblBookHist = new Label("Transaction History ");
+        GridPane.setHalignment(lblBookHist, HPos.CENTER);
+        
+        // Text Area outout for product description
+        TextArea txtAreaDesc = new TextArea();
+        txtAreaDesc.setMaxSize(300, 400);
+
+        
+        // Book Buttons
+        Button btnModBook = new Button("Modify Book ->");
+        btnModBook.setScaleX(1);
+        Button btnRemoveBook = new Button("Remove Book ->");
+        btnRemoveBook.setScaleX(1);
+        
+        // create and add to book tableview for initial
+        TableView<Book> bookView = new TableView<>();
+        ObservableList<Book> bookTableData = 
+                FXCollections.observableArrayList(Book.getBookArray());
+        bookView.setItems(bookTableData);
+        
+        // create and add to book top 5 sellers
+        TableView<Book> topSellerView = new TableView<>();
+        ObservableList<Book> topSellerTableData = 
+                FXCollections.observableArrayList(Book.getBookArray());
+        bookView.setItems(topSellerTableData);
+        
+        // create and add to book Transactions
+        TableView<Book> bookTransView = new TableView<>();
+        ObservableList<Book> bookTransTableData = 
+                FXCollections.observableArrayList(Book.getBookArray());
+        bookView.setItems(bookTransTableData);
+        
+        
+        //Create Table Columns For tableView(s)    
+        TableColumn tblcBookID = new TableColumn("Book ID");
+        TableColumn tblcBookTitle = new TableColumn("Title");
+        TableColumn tblcBookAuthor = new TableColumn("Author");
+        TableColumn tblcBookSold = new TableColumn("Units Sold");
+        
+        // Table Columns for report
+        TableColumn tblcBookAcOrder = new TableColumn("Acq. Order(s)");
+        TableColumn tblcBookCustOrder = new TableColumn("Cust. Order(s)");
+        TableColumn tblcBookStore = new TableColumn("Store ID");
+        TableColumn tblcBookInStock = new TableColumn("Store Inventory");
+        
+        
+        // format and add columns to bookView
+        bookView.setMinWidth(200);
+        bookView.setMaxHeight(400);
+        bookView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        bookView.getColumns().addAll(tblcBookID, tblcBookTitle, tblcBookAuthor);
+        
+        // Format and add columns to topSellerView
+        topSellerView.setMinWidth(300);
+        topSellerView.setMaxHeight(400);
+        topSellerView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        topSellerView.getColumns().addAll(tblcBookID, tblcBookTitle, tblcBookAuthor, tblcBookSold);
+        
+        // Format and add columns to bookTransView
+        bookTransView.setMinWidth(500);
+        bookTransView.setMaxHeight(400);
+        bookTransView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        bookTransView.getColumns().addAll(tblcBookAcOrder, tblcBookCustOrder, tblcBookStore, tblcBookInStock);
+ 
+        // add labels to bookPane
+        bookPane.add(lblBookHeader,0,0,3,1);
+        bookPane.add(lblTopFive,1,2);
+        bookPane.add(bookView,0,3);
+        bookPane.add(topSellerView,1,3);
+        bookPane.add(lblBookHist,2,2);
+        bookPane.add(bookTransView,2,3);
+        bookPane.add(lblBookDesc,0,5);
+        bookPane.add(txtAreaDesc,0,6);
+        bookPane.add(btnModBook,0,7);         
+        bookPane.add(btnRemoveBook,0,9);
+        
+        //CUSTOMER TAB INFORMATION
+        
+        // Cust Header
+        Label lblCustHeader = new Label ("Customer Report:");
+        lblCustHeader.setFont(Font.font("Times New Roman", FontWeight.BOLD, 50));
+        GridPane.setHalignment(lblCustHeader, HPos.CENTER);
+        
+        // cust tab labels
+        Label lblCustDesc = new Label("Customer Description: ");
+        GridPane.setHalignment(lblCustDesc, HPos.CENTER);
+        
+        Label lblCustHist = new Label("Transaction History: ");
+        GridPane.setHalignment(lblCustHist, HPos.CENTER);
+        
+        Label lblCustEnroll = new Label("Enrolled in Loyalty Program: ");
+        GridPane.setHalignment(lblCustEnroll, HPos.CENTER);
+        
+        // Text Area outout for product description
+        TextArea txtAreaCustDesc = new TextArea();
+        txtAreaCustDesc.setMaxSize(300, 400);
+        
+        // Label Blank
+
+        
+        // Cust Buttons
+        Button btnModCust = new Button("Modify Customer ->");
+        btnModCust.setScaleX(1);
+        Button btnRemoveCust = new Button("Remove Customer ->");
+        btnRemoveCust.setScaleX(1);
+        Button btnEnrollCust = new Button("Enroll Customer ->");
+        btnEnrollCust.setScaleX(1);
+        
+        // create and add to cust tableview for initial
+        TableView<Customer> custView = new TableView<>();
+        ObservableList<Customer> custTableData = 
+                FXCollections.observableArrayList(Customer.getCustArray());
+        custView.setItems(custTableData);
+        
+        // create and add to cust loyalaty
+        TableView<Customer> custLoyaltyView = new TableView<>();
+        ObservableList<Customer> custLoyaltyTableData = 
+                FXCollections.observableArrayList(Customer.getCustArray());
+        custView.setItems(custLoyaltyTableData);
+        
+        
+        // create and add to cust trans history
+        TableView<Customer> custTransView = new TableView<>();
+        ObservableList<Customer> custTransTableData = 
+                FXCollections.observableArrayList(Customer.getCustArray());
+        custTransView.setItems(custTransTableData);
+        
+        
+        //Create Table Columns For tableView(s)    
+        TableColumn tblcCustID = new TableColumn("Customer ID");
+        TableColumn tblcCustFirstName = new TableColumn("First");
+        TableColumn tblcCustLastName = new TableColumn("Last");
+        
+        // Table Columns for report
+        TableColumn tblcCustOrderID = new TableColumn("Order ID");
+        TableColumn tblcCustOrderQty = new TableColumn("Order Qty");
+        TableColumn tblcCustStore = new TableColumn("Store ID");
+        TableColumn tblcCustOrderDate = new TableColumn("Order Date");
+        
+        
+        // format and add columns to custView
+        custView.setMinWidth(300);
+        custView.setMaxHeight(400);
+        custView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        custView.getColumns().addAll(tblcCustID, tblcCustFirstName, tblcCustLastName);
+        
+        // Format and add columns to custloyaltyView
+        custLoyaltyView.setMinWidth(300);
+        custLoyaltyView.setMaxHeight(400);
+        custLoyaltyView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        custLoyaltyView.getColumns().addAll(tblcCustID, tblcCustFirstName, tblcCustLastName);
+        
+        // Format and add columns to custTransView
+        custTransView.setMinWidth(500);
+        custTransView.setMaxHeight(400);
+        custTransView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        custTransView.getColumns().addAll(tblcCustID, tblcCustOrderID, tblcCustOrderQty, tblcCustStore, tblcCustOrderDate);
+ 
+        // add labels to custPane
+        customerPane.add(lblCustHeader,0,0,3,1);
+        customerPane.add(lblCustEnroll,1,1);
+        customerPane.add(lblCustHist,2,1);
+        customerPane.add(custView,0,2);
+        customerPane.add(custLoyaltyView,1,2);
+        customerPane.add(custTransView,2,2);
+        customerPane.add(lblCustDesc,0,5);
+        customerPane.add(txtAreaCustDesc,0,6);
+        customerPane.add(btnModCust,0,7);
+        customerPane.add(btnRemoveCust,0,8);
+        customerPane.add(btnEnrollCust,0,9);
+        
         //INVENTORY TAB INFORMATION
         
         Label lblInventoryHeader = new Label ("Inventory");
@@ -315,7 +500,7 @@ public class MainDashboard
         GridPane addCustomerOrderPane = new GridPane();
         GridPane addAqOrderPane = new GridPane();
         
-        addCustPane.setVisible(false);
+        addCustPane.setVisible(true);
         addEmployeePane.setVisible(true);
         addStorePane.setVisible(false);
         addSupplierPane.setVisible(false);
