@@ -15,6 +15,7 @@ public class Consumable {
     private double conCost; 
     private double conSalePrice;
     private String conDesc; 
+    private int conQuantity;
     private static Connection dbConn;
     private static Statement commStmt;
     private static ResultSet dbResults;
@@ -25,33 +26,38 @@ public class Consumable {
         this.conCost=0.0; 
         this.conSalePrice=0.0;
         this.conDesc="";
+        this.conQuantity = 0;
     } 
     
-    public Consumable(String conName,double conCost,double conSalePrice,String conDesc){ 
+    public Consumable(String conName,double conCost,double conSalePrice,String conDesc, int conQuantity){ 
         this.conID= ++nextID; 
         this.conName=conName; 
         this.conCost=conCost; 
         this.conSalePrice = conSalePrice;
         this.conDesc=conDesc;
+        this.conQuantity = conQuantity;
     } 
     
-    public Consumable(int conID,String conName,double conCost,double conSalePrice,String conDesc){ 
+    public Consumable(int conID,String conName,double conCost,double conSalePrice,String conDesc, int conQuantity){ 
         this.conID= conID; 
         this.conName=conName; 
         this.conCost=conCost; 
         this.conSalePrice = conSalePrice;
-        this.conDesc=conDesc; 
+        this.conDesc=conDesc;
+        this.conQuantity = conQuantity;
         if(conID>nextID){ 
             nextID = conID;
         }
     } 
     
-    public static void newConFromDatabase(int conID, String conName, double conCost, double conSalePrice, String conDesc){ 
-        conArray.add(new Consumable(conID,conName,conCost,conSalePrice,conDesc));
+    public static void newConFromDatabase(int conID, String conName, double conCost, 
+            double conSalePrice, String conDesc, int conQuantity)
+    { 
+        conArray.add(new Consumable(conID,conName,conCost,conSalePrice,conDesc,conQuantity));
     } 
     
-    public static void newCon(String conName,double conCost,double conSalePrice, String conDesc){ 
-        conArray.add(new Consumable(conName,conCost,conSalePrice,conDesc));
+    public static void newCon(String conName,double conCost,double conSalePrice, String conDesc, int conQuantity){ 
+        conArray.add(new Consumable(conName,conCost,conSalePrice,conDesc,conQuantity));
     }
     
     public static void fillConsumableArray() { 
@@ -66,8 +72,10 @@ public class Consumable {
                                     dbResults.getInt(1),
                                     dbResults.getString(2), 
                                     dbResults.getDouble(3), 
-                                    dbResults.getDouble(4), 
-                                    dbResults.getString(5));
+                                    dbResults.getDouble(4),
+                                    dbResults.getString(5),
+                                    dbResults.getInt(6))
+                        ;
 
             }
         } catch (SQLException e) {
@@ -142,6 +150,14 @@ public class Consumable {
     
     public void setConSalePrice(double conSalePrice){ 
         this.conSalePrice=conSalePrice;
+    }
+    
+    public int getConQuantity() {
+    return conQuantity;
+    } 
+    
+    public void setConQuantity(int conQuantity){ 
+        this.conQuantity = conQuantity;
     }
     
     private static void sendDBCommand(String sqlQuery) {

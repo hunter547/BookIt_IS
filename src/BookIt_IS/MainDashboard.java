@@ -15,11 +15,11 @@ public class MainDashboard
 {
     //Creating ArrayLists
     ArrayList <Book> bookArray= Book.getBookArray();
-    ArrayList <Consumable> consumableArray;
-    ArrayList <Customer> customerArray;
-    ArrayList <Employee> employeeArray;
-    ArrayList <Store> storeArray;
-    ArrayList <Supplier> supplierArray;
+    ArrayList <Consumable> consumableArray = Consumable.getConsumableArray();
+    ArrayList <Customer> customerArray = Customer.getCustArray();
+    //ArrayList <Employee> employeeArray = Employee.getEmpArray();
+    ArrayList <Store> storeArray = Store.getStoreArray();
+    ArrayList <Supplier> supplierArray = Supplier.getSupplierArray();
     
 //Creating Panes
     GridPane overallPane = new GridPane();
@@ -104,6 +104,7 @@ public class MainDashboard
         
         createPane.setAlignment(Pos.TOP_CENTER);
         createPane.setHgap(20);
+        createPane.setVgap(5);
         createPane.setMinSize(primaryScene.getWidth(), primaryScene.getHeight());
         
         //Setting up primaryStage
@@ -342,7 +343,7 @@ public class MainDashboard
         Label lblModBookAuthor = new Label("Author: ");
         Label lblModBookDesc = new Label("Description: ");
         Label lblModAcCost = new Label("Acquistion Cost: ");
-        Label lblModSalePrice = new Label("Sale Price: ");
+        Label lblModSalePrice = new Label("Retail Price: ");
         
         TextField txtModBookTitle = new TextField();
         TextField txtModBookAuthor = new TextField();
@@ -500,17 +501,15 @@ public class MainDashboard
         TableColumn tblcBookInvTitle = new TableColumn("Title");
         TableColumn tblcBookInvAuthor = new TableColumn("Author");
         TableColumn tblcBookQuantity = new TableColumn("Quantity");
-        TableColumn tblcBookPrice = new TableColumn("Sale Price");
+        TableColumn tblcBookPrice = new TableColumn("Retail Price");
         TableColumn tblcBookCost = new TableColumn("Aquisition Cost");
-        TableColumn tblcBookTotalCost = new TableColumn("Total Inventory Value");
         
         //Create Table Columns for consumableInventoryView
         TableColumn tblcConsInvID = new TableColumn("Consumable ID");
         TableColumn tblcConsInvName = new TableColumn("Name");
         TableColumn tblcConsQuantity = new TableColumn("Quantity");
-        TableColumn tblcConsPrice = new TableColumn("Sale Price");
+        TableColumn tblcConsPrice = new TableColumn("Retail Price");
         TableColumn tblcConsCost = new TableColumn("Aquisition Cost");
-        TableColumn tblcConsTotalCost = new TableColumn("Total Inventory Value");
 
         //Formatting TableViews
         bookInventoryView.setMinWidth(1000);
@@ -527,22 +526,19 @@ public class MainDashboard
         tblcBookCost.setCellValueFactory(new PropertyValueFactory<Book, String>("bookCost"));
         tblcBookPrice.setCellValueFactory(new PropertyValueFactory<Book, Double>("bookSalePrice"));
         tblcBookQuantity.setCellValueFactory(new PropertyValueFactory<Book, Integer>("bookQuantity"));
-        
-        //tblcBookTotalCost.setCellValueFactory(new PropertyValueFactory<Customer, String>("custAddress"));
-
-//        tblcConsInvID.setCellValueFactory(new PropertyValueFactory<Customer, String>("custIDString"));
-//        tblcConsInvTitle.setCellValueFactory(new PropertyValueFactory<Customer, String>("custName"));
-//        tblcConsQuantity.setCellValueFactory(new PropertyValueFactory<Customer, String>("custPhone"));
-//        tblcConsPrice.setCellValueFactory(new PropertyValueFactory<Customer, String>("custAddress"));
-//        tblcConsCost.setCellValueFactory(new PropertyValueFactory<Customer, String>("custPhone"));
-//        tblcConsTotalCost.setCellValueFactory(new PropertyValueFactory<Customer, String>("custAddress"));
+       
+        tblcConsInvID.setCellValueFactory(new PropertyValueFactory<Consumable, Integer>("conID"));
+        tblcConsInvName.setCellValueFactory(new PropertyValueFactory<Consumable, String>("conName"));
+        tblcConsQuantity.setCellValueFactory(new PropertyValueFactory<Consumable, Integer>("conQuantity"));
+        tblcConsPrice.setCellValueFactory(new PropertyValueFactory<Consumable, Double>("conSalePrice"));
+        tblcConsCost.setCellValueFactory(new PropertyValueFactory<Consumable, Double>("conCost"));
         
         //Adding Columns to TableViews
         bookInventoryView.getColumns().addAll(tblcBookInvID, tblcBookInvTitle, tblcBookAuthor,
-                tblcBookQuantity, tblcBookPrice, tblcBookCost, tblcBookTotalCost);
+                tblcBookQuantity, tblcBookCost, tblcBookPrice);
         
         consumableInventoryView.getColumns().addAll(tblcConsInvID, tblcConsInvName, tblcConsQuantity, 
-                tblcConsPrice, tblcConsCost, tblcConsTotalCost);
+                tblcConsCost, tblcConsPrice);
         
         //Adding Items to invPane
         invPane.add(lblInventoryHeader, 1, 0);
@@ -838,6 +834,13 @@ public class MainDashboard
         
         createPane.add(blankSpace3, 0, 1);
         
+        //TextArea Field for error notification       
+        TextArea addOutput = new TextArea();
+        addOutput.setMaxSize(500, 50);
+        GridPane.setHalignment(addOutput, HPos.CENTER);
+        addOutput.setVisible(false);
+        addOutput.setEditable(false);
+             
         //Adding the lower panes to the main createPane
         createPane.add(addCustPane, 0, 2);
         createPane.add(addEmployeePane, 0, 2);
@@ -845,6 +848,9 @@ public class MainDashboard
         createPane.add(addSupplierPane, 0, 2);
         createPane.add(addBookPane, 0, 2);
         createPane.add(addConsumablePane, 0, 2);
+        
+        createPane.add(blankSpace1, 0, 3);
+        createPane.add(addOutput, 0, 4);
         
         //Setting up add customer pane for second half of page
         Label lblAddCust = new Label ("Add New Customer");
@@ -974,7 +980,7 @@ public class MainDashboard
         Label lblAddBookAuthor = new Label ("Author: ");
         Label lblAddBookDesc = new Label ("Description ");
         Label lblAddBookCost = new Label ("Aquisition Cost: ");
-        Label lblAddBookSalePrice = new Label ("Sale Price: ");
+        Label lblAddBookSalePrice = new Label ("Retail Price: ");
         Label lblAddBookQuantity = new Label ("Quantity to add: ");
         
         TextField txtAddBookTitle = new TextField();
@@ -1005,25 +1011,36 @@ public class MainDashboard
         addBookPane.add(btnAddBook, 1, 7);
         
         btnAddBook.setOnAction (e -> {
-            int newQuantity = 0;
             try
             { 
-//                for (Book b: bookArray)
-//                {
-//                    if (txtAddBookTitle.getText().matches(b.getBookTitle()) && txtAddBookAuthor.getText().matches(b.getBookAuthor()))
-//                    {
-//                        newQuantity = b.getBookQuantity();
-//                        ++newQuantity;
-//                        b.setBookQuantity(newQuantity);
-//                    }
-//                else
+                boolean toAddFlag = true;
+                addOutput.setVisible(true);
+
+                for (Book b: bookArray)
+                {
+                    if (txtAddBookTitle.getText().matches(b.getBookTitle()) 
+                            && txtAddBookAuthor.getText().matches(b.getBookAuthor()))
+                    {
+                        addOutput.setText("Book is already in inventory. Updating quantity.");
+                        int newQuantity = b.getBookQuantity();
+                        newQuantity = newQuantity + Integer.parseInt(txtAddBookQuantity.getText());
+                        b.setBookQuantity(newQuantity);
                         
+                        toAddFlag = false;
+                    }
+                }
+                    
+                if (toAddFlag == true)
+                {
                     Book.newBook(txtAddBookTitle.getText(), txtAddBookAuthor.getText(),
                     Double.parseDouble(txtAddBookCost.getText()),
                     Double.parseDouble(txtAddBookSalePrice.getText()), 
                     txtAddBookDesc.getText(), Integer.parseInt(txtAddBookQuantity.getText()));
-                //}
-               
+                   
+                    addOutput.setText("Book successfully added.");
+                    
+                }
+
                 txtAddBookTitle.clear();
                 txtAddBookAuthor.clear();
                 txtAddBookCost.clear();
@@ -1041,10 +1058,10 @@ public class MainDashboard
             
             catch(NumberFormatException n)
             {
-                System.out.println("Please ensure that Aquisition Cost and Sale Price"
-                        + "are numbers.");
+                addOutput.setVisible(true);
+                addOutput.setText("Please ensure that Aquisition Cost, Retail Price"
+                        + ", and quantity are numbers.");
             }
-        
         });
         
         //Setting up add Consumable pane for second half of page
@@ -1055,12 +1072,14 @@ public class MainDashboard
         Label lblAddConsName = new Label ("Name: ");
         Label lblAddConsDesc = new Label ("Description: ");
         Label lblAddConsCost = new Label ("Aquisition Cost: ");
-        Label lblAddConsSalePrice= new Label ("Sale Price: ");
+        Label lblAddConsSalePrice= new Label ("Retail Price: ");
+        Label lblAddConsQuantity = new Label ("Quantity to add: ");
         
         TextField txtAddConsName = new TextField ();
         TextField txtAddConsDesc = new TextField ();
         TextField txtAddConsCost = new TextField ();
         TextField txtAddConsSalePrice = new TextField ();
+        TextField txtAddConsQuantity = new TextField ();
         
         Button btnAddConsumable = new Button("Add Consumable");
         
@@ -1070,21 +1089,77 @@ public class MainDashboard
         addConsumablePane.add(lblAddConsDesc, 0, 2);
         addConsumablePane.add(lblAddConsCost, 0, 3);
         addConsumablePane.add(lblAddConsSalePrice, 0, 4);
+        addConsumablePane.add(lblAddConsQuantity, 0, 5);
         
         addConsumablePane.add(txtAddConsName, 1, 1);
         addConsumablePane.add(txtAddConsDesc, 1, 2);
         addConsumablePane.add(txtAddConsCost, 1, 3);
         addConsumablePane.add(txtAddConsSalePrice, 1, 4);
+        addConsumablePane.add(txtAddConsQuantity, 1, 5);
         
-        addConsumablePane.add(btnAddConsumable, 1, 5);
+        addConsumablePane.add(btnAddConsumable, 1, 6);
         
-       
+        btnAddConsumable.setOnAction (e -> {
+            try
+            { 
+                addOutput.setVisible(true);
+                boolean toAddFlag = true;
+
+                for (Consumable c: consumableArray)
+                {
+                    if (txtAddConsName.getText().matches(c.getConName()) 
+                            && txtAddConsDesc.getText().matches(c.getConDesc()))
+                    {
+                        addOutput.setText("Consumable is already in inventory. Updating quantity.");
+                        int newQuantity = c.getConQuantity();
+                        newQuantity = newQuantity + Integer.parseInt(txtAddConsQuantity.getText());
+                        c.setConQuantity(newQuantity);
+                        
+                        toAddFlag = false;
+                    }
+                }
+                    
+                if (toAddFlag == true)
+                {
+                    Consumable.newCon(txtAddConsName.getText(), Double.parseDouble(txtAddConsCost.getText()),
+                    Double.parseDouble(txtAddConsSalePrice.getText()), 
+                    txtAddConsDesc.getText(), Integer.parseInt(txtAddConsQuantity.getText()));
+                    
+                    addOutput.setText("Consumable successfully added.");
+                }
+
+                txtAddConsName.clear();
+                txtAddConsCost.clear();
+                txtAddConsSalePrice.clear();
+                txtAddConsDesc.clear();
+                txtAddConsQuantity.clear();
+                
+                consumableInventoryTableData.clear();
+                
+                for (Consumable c: consumableArray)
+                {
+                    consumableInventoryTableData.add(c);
+                    System.out.println(consumableInventoryTableData);
+                }
+                
+                consumableInventoryView.setItems(consumableInventoryTableData);
+            }
+            
+            catch(NumberFormatException n)
+            {
+                addOutput.setText("Please ensure that Aquisition Cost, Retail Price"
+                        + ", and quantity are numbers.");
+            }
+        
+        });
+              
         //Radio Button Handlers to hide or display the desired pane to add objects
         rdoCreateCustomer.setOnAction (e -> {
             if (rdoCreateCustomer.isSelected())
             {   
                 hideAddPanes();
                 addCustPane.setVisible(true);
+                addOutput.setVisible(false);
             }
         });
         
@@ -1093,6 +1168,7 @@ public class MainDashboard
             {       
                 hideAddPanes();
                 addEmployeePane.setVisible(true);
+                addOutput.setVisible(false);
             }
         }); 
         
@@ -1101,6 +1177,7 @@ public class MainDashboard
             {       
                 hideAddPanes();
                 addStorePane.setVisible(true);
+                addOutput.setVisible(false);
             }
         });   
         
@@ -1109,6 +1186,7 @@ public class MainDashboard
             {       
                 hideAddPanes();
                 addSupplierPane.setVisible(true);
+                addOutput.setVisible(false);
             }
         });  
         
@@ -1117,6 +1195,7 @@ public class MainDashboard
             {       
                 hideAddPanes();
                 addBookPane.setVisible(true);
+                addOutput.setVisible(false);
             }
         });
         
@@ -1125,6 +1204,7 @@ public class MainDashboard
             {       
                 hideAddPanes();
                 addConsumablePane.setVisible(true);
+                addOutput.setVisible(false);
             }
         });  
     } 

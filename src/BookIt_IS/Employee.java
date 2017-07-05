@@ -1,6 +1,9 @@
 package BookIt_IS;
 
+import java.util.ArrayList;
+
 public class Employee {
+    private static ArrayList<Employee> employeeArray = new ArrayList<>();
     private int employID; 
     private static int nextID = 0;
     private String employFirstName; 
