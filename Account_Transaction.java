@@ -86,7 +86,7 @@ public class Account_Transaction {
        for(Account_Transaction at: acctTranArray)
        {  
         String sqlQuery = "";
-        sqlQuery += "INSERT INTO JAVAUSER.ACCOUNT_TRANSACTION (TRAN_ID, TRAN_DATE, AMOUNT, IDENTIFIER) VALUES (";
+        sqlQuery += "INSERT INTO JAVAUSER.ACCOUNT_TRANSACTION (TRANID, TRANDATE, AMOUNT, IDENTIFIER) VALUES (";
         sqlQuery += at.getTranID()+ " , '";
         sqlQuery += at.getTranDate()+ "', ";
         sqlQuery += at.getTranAmount()+ ", '"; 

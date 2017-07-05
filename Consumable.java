@@ -85,8 +85,8 @@ public class Consumable {
        for(Consumable c: conArray)
        {  
         String sqlQuery = "";
-        sqlQuery += "INSERT INTO JAVAUSER.CONSUMABLE (CON_ID, CON_NAME, "
-                 +  "CON_COST, CON_SALE_PRICE, CON_DESC) VALUES (";
+        sqlQuery += "INSERT INTO JAVAUSER.CONSUMABLE (CONID, CONNAME, "
+                 +  "CONCOST, CONSALEPRICE, CONDESC) VALUES (";
         sqlQuery += c.getConID() + " , '";
         sqlQuery += c.getConName()+ "', ";
         sqlQuery += c.getConCost()+ ", "; 
