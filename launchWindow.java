@@ -7,19 +7,22 @@ package BookIt_IS;
 
 
 
- import javafx.application.Application;
- import javafx.event.ActionEvent;
- import javafx.event.EventHandler;
- import javafx.geometry.Pos;
- import javafx.geometry.HPos;
- import javafx.scene.Scene;
- import javafx.scene.control.Button;
- import javafx.scene.layout.StackPane;
- import javafx.scene.text.Font;
- import javafx.scene.control.Label;
- import javafx.scene.control.TextField;
- import javafx.scene.layout.GridPane;
-  import javafx.stage.Stage;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.geometry.Pos;
+import javafx.geometry.HPos;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.layout.StackPane;
+import javafx.scene.text.Font;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.GridPane;
+import javafx.stage.Stage;
+
 
 
 
@@ -56,6 +59,26 @@ public class launchWindow extends Application {
 
         GridPane.setHalignment(btLogin, HPos.LEFT);
         GridPane.setHalignment(btClear, HPos.RIGHT);
+        
+        
+      int day, month, year;
+      int second, minute, hour;
+      GregorianCalendar date = new GregorianCalendar();
+ 
+      day = date.get(Calendar.DAY_OF_MONTH);
+      month = date.get(Calendar.MONTH);
+      year = date.get(Calendar.YEAR);
+ 
+      second = date.get(Calendar.SECOND);
+      minute = date.get(Calendar.MINUTE);
+      hour = date.get(Calendar.HOUR);
+      
+      Label lblDateTime = new Label("Current Time and Date is: " + "\n" + (month+1) + "/" +
+              day +"/"+year + "         " + hour + " : " + minute + " : " + second);
+      
+      errorPane.add(lblDateTime,0,5); 
+      
+  	
 
         // Process events
         btLogin.setOnAction(e -> {
