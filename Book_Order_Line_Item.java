@@ -80,7 +80,7 @@ public class Book_Order_Line_Item {
        for(Book_Order_Line_Item boli : boliArray)
        {  
         String sqlQuery = "";
-        sqlQuery += "INSERT INTO JAVAUSER.BOOK_ORDER_LINE_ITEM (BOLI_ID, ORDER_ID, BOOK_ID, QUANTITY) VALUES (";
+        sqlQuery += "INSERT INTO JAVAUSER.BOOK_ORDER_LINE_ITEM (BOLIID, ORDERID, BOOKID, QUANTITY) VALUES (";
         sqlQuery += boli.getBoliLineItemID()+ " , ";
         sqlQuery += boli.getOrderID()+ ", ";
         sqlQuery += boli.getBookID()+ ", "; 
