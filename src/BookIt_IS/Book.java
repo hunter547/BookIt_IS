@@ -33,23 +33,24 @@ public class Book
         this.bookQuantity = 0;
     } 
     
-    public Book(String bookTitle, String bookAuthor, double bookCost, double bookSalePrice, String bookDescription){ 
+    public Book(String bookTitle, String bookAuthor, double bookCost, double bookSalePrice, String bookDescription, int bookQuantity) { 
         this.bookTitle = bookTitle; 
         this.bookAuthor = bookAuthor; 
         this.bookCost = bookCost; 
         this.bookSalePrice = bookSalePrice; 
-        this.bookDescription = bookDescription; 
+        this.bookDescription = bookDescription;
         this.bookQuantity = bookQuantity;
         this.bookID = ++nextID;
     } 
     
-    public Book(int bookID,String bookTitle, String bookAuthor, double bookCost, double bookSalePrice, String bookDescription){ 
+    public Book(int bookID,String bookTitle, String bookAuthor, double bookCost, double bookSalePrice, String bookDescription, int bookQuantity){ 
         this.bookTitle = bookTitle; 
         this.bookAuthor = bookAuthor; 
         this.bookCost = bookCost; 
         this.bookSalePrice = bookSalePrice; 
         this.bookDescription = bookDescription; 
         this.bookID = bookID; 
+        this.bookQuantity = bookQuantity;
         
         // Ensures the nextID is equal to the largest current bookID when being 
         // completely loaded from the database. This setup allows for an easy 
@@ -107,18 +108,28 @@ public class Book
         this.bookDescription = bookDescription;
     }
     
+    public int getBookQuantity()
+    {
+        return bookQuantity;
+    }
+    
+    public void setBookQuantity(int bookQuantity)
+    {
+        this.bookQuantity = bookQuantity;
+    }
+    
     public static void newBook (String bookTitle, String bookAuthor, 
-            double bookCost, double bookSalePrice, String bookDescription)
+            double bookCost, double bookSalePrice, String bookDescription, int bookQuantity)
     {
         bookArray.add
-        (new Book(bookTitle, bookAuthor, bookCost, bookSalePrice, bookDescription));
+        (new Book(bookTitle, bookAuthor, bookCost, bookSalePrice, bookDescription, bookQuantity));
     }
     
     public static void newBookFromDatabase (String bookTitle, String bookAuthor, 
-            double bookCost, double bookSalePrice, String bookDescription)
+            double bookCost, double bookSalePrice, String bookDescription, int bookQuantity)
     {
         bookArray.add
-        (new Book(bookTitle, bookAuthor, bookCost, bookSalePrice, bookDescription));
+        (new Book(bookTitle, bookAuthor, bookCost, bookSalePrice, bookDescription, bookQuantity));
     }
     
     public static void fillBookArray() { 
@@ -134,7 +145,8 @@ public class Book
                                     dbResults.getString(2), 
                                     dbResults.getDouble(3), 
                                     dbResults.getDouble(4), 
-                                    dbResults.getString(5));
+                                    dbResults.getString(5),
+                                    dbResults.getInt(6));
 
             }
         } catch (SQLException e) {
@@ -153,12 +165,13 @@ public class Book
        {  
         String sqlQuery = "";
         sqlQuery += "INSERT INTO JAVAUSER.BOOK (BOOKID, BOOKTITLE, "
-                 +  "BOOKAUTHOR, BOOKCOST, BOOKSALEPRICE, BOOKDESCRIPTION) VALUES (";
+                 +  "BOOKAUTHOR, BOOKCOST, BOOKSALEPRICE, BOOKDESCRIPTION, BOOKQUANTITY) VALUES (";
         sqlQuery += b.getBookID() + " , '";
         sqlQuery += b.getBookTitle() + "', '";
         sqlQuery += b.getBookAuthor() + "', '"; 
         sqlQuery += b.getBookCost() + "', '";
         sqlQuery += b.getBookSalePrice() + "', '";
+        sqlQuery += b.getBookQuantity() + "', '";
         sqlQuery += b.getBookDescription() + "')";
 
         sendDBCommand(sqlQuery);        
