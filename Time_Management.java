@@ -141,6 +141,11 @@ public class Time_Management {
     public void setTimeOut(Date timeOut) {
         this.timeOut = timeOut;
     } 
+
+    public static ArrayList<Time_Management> getTimeArray() {
+        return timeArray;
+    }
+    
     
     private static void sendDBCommand(String sqlQuery) {
         String URL = "jdbc:oracle:thin:@localhost:1521:XE";
