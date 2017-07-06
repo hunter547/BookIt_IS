@@ -13,7 +13,8 @@ public class Store {
     private int storeID; 
     private String storeName;
     private String storeAddress; 
-    private String storePhone; 
+    private String storePhone;
+    private String storeArea;
     private static Connection dbConn;
     private static Statement commStmt;
     private static ResultSet dbResults;    
@@ -23,37 +24,39 @@ public class Store {
         this.storeAddress = ""; 
         this.storePhone = ""; 
         this.storeName = "";
+        this.storeArea = "";
     } 
     
-    public Store(String storeName,String storeAddress,String storePhone) { 
+    public Store(String storeName,String storeAddress,String storePhone, String storeArea) { 
         this.storeName = storeName;
         this.storeAddress = storeAddress; 
         this.storePhone = storePhone; 
         this.storeID = ++nextID;
+        this.storeArea = storeArea;
     } 
     
-    public Store(int storeID,String storeName,String storeAddress,String storePhone) { 
+    public Store(int storeID,String storeName,String storeAddress,String storePhone, String storeArea) { 
         this.storeID = storeID;
         this.storeName = storeName;
         this.storeAddress = storeAddress; 
         this.storePhone = storePhone; 
+        this.storeArea = storeArea;
         if(storeID>nextID){ 
             nextID = storeID;
         }
     }
     
-    public static void newStore(String storeName,String storeAddress,String storePhone) { 
+    public static void newStore(String storeName,String storeAddress,String storePhone, String storeArea) { 
         
-        storeArray.add(new Store(storeName,storeAddress,storePhone));
-        
+        storeArray.add(new Store(storeName,storeAddress,storePhone, storeArea));        
     } 
     
-    public static void newStorefromDatabase(int storeID,String storeName,String storeAddress,String storePhone) { 
+    public static void newStorefromDatabase(int storeID,String storeName,
+            String storeAddress,String storePhone, String storeArea) { 
         
-        storeArray.add(new Store(storeID,storeName,storeAddress,storePhone));
+        storeArray.add(new Store(storeID,storeName,storeAddress,storePhone,storeArea));
         
     } 
-    
     
     public static void fillStoreArray() { 
        String sqlQuery = "";
@@ -67,7 +70,8 @@ public class Store {
                                     dbResults.getInt(1),
                                     dbResults.getString(2), 
                                     dbResults.getString(3), 
-                                    dbResults.getString(4));
+                                    dbResults.getString(4),
+                                    dbResults.getString(5));
             }
             
         } catch (SQLException e) {
@@ -89,7 +93,8 @@ public class Store {
         sqlQuery += s.getStoreID() + " , '";
         sqlQuery += s.getStoreName() + "', '";
         sqlQuery += s.getStoreAddress() + "', '"; 
-        sqlQuery += s.getStorePhone() + "')";
+        sqlQuery += s.getStorePhone() + "', '"; 
+        sqlQuery += s.getStoreArea() + "')";
 
         sendDBCommand(sqlQuery);        
       } 
@@ -107,6 +112,13 @@ public class Store {
         return this.storePhone;
     } 
     
+    public void setStoreArea(String storeArea){
+        this.storeArea = storeArea;
+    }
+    
+    public String getStoreArea(){
+        return this.storeArea;
+    }
     
     public String getStoreName(){ 
         return this.storeName;
@@ -135,7 +147,6 @@ public class Store {
         this.storePhone = storePhone;
     } 
 
-    
     public void setStoreName(String storeName){ 
         this.storeName = storeName;
     } 
@@ -158,7 +169,6 @@ public class Store {
             System.out.println(e.toString());
         }
     }
-    
     
 }
 
