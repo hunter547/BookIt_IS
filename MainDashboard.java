@@ -1,29 +1,63 @@
 package BookIt_IS;
 
+import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.*;
-import static javafx.geometry.Pos.*;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import javafx.scene.text.*;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
+
 
 public class MainDashboard
 {
-    //Creating Panes
+    //Creating ArrayLists
+    ArrayList <Book> bookArray= Book.getBookArray();
+    ArrayList <Consumable> consumableArray = Consumable.getConsumableArray();
+    ArrayList <Customer> customerArray = Customer.getCustArray();
+    //ArrayList <Employee> employeeArray = Employee.getEmpArray();
+    ArrayList <Store> storeArray = Store.getStoreArray();
+    ArrayList <Supplier> supplierArray = Supplier.getSupplierArray();
+    
+//Creating Panes
     GridPane overallPane = new GridPane();
     
     GridPane salesPane = new GridPane();
+    
     GridPane customerPane = new GridPane(); 
+    GridPane modCustomerPane = new GridPane();
+    
     GridPane employeePane = new GridPane(); 
+    
     GridPane bookPane = new GridPane(); 
+    GridPane modBookPane = new GridPane();
+    
     GridPane profitPane = new GridPane();
+    
     GridPane invPane = new GridPane(); 
     GridPane invHeaderPane = new GridPane();
+    
     GridPane createPane = new GridPane(); 
+    
+    GridPane storePane = new GridPane();
+    GridPane modStorePane = new GridPane();
+    
+    //Creating Tabs
+    TabPane tbPane = new TabPane();
+    Tab salesTab = new Tab("Sales");
+    Tab customerTab = new Tab("Customers");
+    Tab employeeTab = new Tab("Employees");
+    Tab bookTab = new Tab("Books");
+    Tab profitTab = new Tab("Profits");
+    Tab invTab = new Tab("Inventory");
+    Tab createTab = new Tab("Create New");
+    Tab storeTab = new Tab("Store");
     
     //These panes are used in the Add Entity page. They make up the second 
     //half of the page, and are where a user can enter information for the new 
@@ -35,58 +69,86 @@ public class MainDashboard
     GridPane addBookPane = new GridPane();
     GridPane addConsumablePane = new GridPane();
     
-    //Creating Tabs
-    TabPane tbPane = new TabPane();
-    Tab salesTab = new Tab("Sales");
-    Tab customerTab = new Tab("Customers");
-    Tab employeeTab = new Tab("Employees");
-    Tab bookTab = new Tab("Books");
-    Tab profitTab = new Tab("Profits");
-    Tab invTab = new Tab("Inventory");
-    Tab createTab = new Tab("Create New");
+    //Global Declarations
+    ComboBox cmboInvChooseStore = new ComboBox();
+    ComboBox cmboAddSupplierRep = new ComboBox();
     
+    TextArea txtAreaCustDesc = new TextArea();
+  
+
     //Main Scene
     Scene primaryScene = new Scene(overallPane, 1200, 1000);
-    
     Stage primaryStage = new Stage();
     
-    //Adding tabs to tbPane, and tbPane primaryStage
+    // Setting up CustomerTableViews
+    TableView<Customer> custView = new TableView<>();
+    ObservableList<Customer> custTableData = 
+            FXCollections.observableArrayList(Customer.getCustArray());
+
+    TableView<Customer> custLoyaltyView = new TableView<>();
+    ObservableList<Customer> custLoyaltyTableData = 
+            FXCollections.observableArrayList(Customer.getCustArray());
+
+    TableView<Customer> custTransView = new TableView<>();
+    ObservableList<Customer> custTransTableData = 
+            FXCollections.observableArrayList(Customer.getCustArray());
+
+    //Setting Up StoreTableViews
+    TableView<Store> storeView = new TableView<>();
+    ObservableList<Store> storeTableData = 
+            FXCollections.observableArrayList(Store.getStoreArray());
+
+    TableView<Store> storeEmployeeView = new TableView<>();
+    ObservableList<Store> storeEmployeeTableData = 
+            FXCollections.observableArrayList(Store.getStoreArray());
     
     public MainDashboard() 
     {
         //Formatting Panes
-        overallPane.setAlignment(Pos.CENTER);
+        overallPane.setAlignment(Pos.TOP_CENTER);
         overallPane.setHgap(20);
+        overallPane.setVgap(5);
         overallPane.setMinSize(primaryScene.getWidth(), primaryScene.getHeight());
         
-        salesPane.setAlignment(Pos.CENTER);
+        salesPane.setAlignment(Pos.TOP_CENTER);
         salesPane.setHgap(20);
+        salesPane.setVgap(5);
         salesPane.setMinSize(primaryScene.getWidth(), primaryScene.getHeight());
         
-        customerPane.setAlignment(Pos.CENTER);
+        customerPane.setAlignment(Pos.TOP_CENTER);
         customerPane.setHgap(20);
+        customerPane.setVgap(5);
         customerPane.setMinSize(primaryScene.getWidth(), primaryScene.getHeight());
         
-        employeePane.setAlignment(Pos.CENTER);
+        employeePane.setAlignment(Pos.TOP_CENTER);
         employeePane.setHgap(20);
+        employeePane.setHgap(5);
         employeePane.setMinSize(primaryScene.getWidth(), primaryScene.getHeight());
         
-        bookPane.setAlignment(Pos.CENTER);
+        bookPane.setAlignment(Pos.TOP_CENTER);
         bookPane.setHgap(20);
+        bookPane.setVgap(5);
         bookPane.setMinSize(primaryScene.getWidth(), primaryScene.getHeight());
         
-        profitPane.setAlignment(Pos.CENTER);
+        profitPane.setAlignment(Pos.TOP_CENTER);
         profitPane.setHgap(20);
+        profitPane.setVgap(5);
         profitPane.setMinSize(primaryScene.getWidth(), primaryScene.getHeight());
         
         invPane.setAlignment(Pos.TOP_CENTER);
         invPane.setHgap(20);
-        invPane.setVgap(5);
+        invPane.setVgap(10);
         invPane.setMinSize(primaryScene.getWidth(), primaryScene.getHeight());
         
         createPane.setAlignment(Pos.TOP_CENTER);
         createPane.setHgap(20);
+        createPane.setVgap(5);
         createPane.setMinSize(primaryScene.getWidth(), primaryScene.getHeight());
+        
+        storePane.setAlignment(Pos.TOP_CENTER);
+        storePane.setHgap(20);
+        storePane.setHgap(5);
+        storePane.setMinSize(primaryScene.getWidth(), primaryScene.getHeight());
         
         //Setting up primaryStage
         primaryStage.setScene(primaryScene);
@@ -96,7 +158,7 @@ public class MainDashboard
         //Formatting tbPane
         tbPane.setMinSize(primaryScene.getWidth(), primaryScene.getHeight());
         
-        //Assign tabs to panes in main 
+        //Assign tabs to panes in MainDashboard 
         salesTab.setContent(salesPane);
         customerTab.setContent(customerPane);
         employeeTab.setContent(employeePane);
@@ -104,49 +166,311 @@ public class MainDashboard
         profitTab.setContent(profitPane);
         invTab.setContent(invPane);
         createTab.setContent(createPane);
-
+        storeTab.setContent(storePane);
+        
         //Add tabs to tab pane in main window
-        tbPane.getTabs().addAll(salesTab, customerTab, employeeTab, bookTab,
-                                profitTab, invTab, createTab);
-
-        salesTab.setClosable(false);
-        customerTab.setClosable(false);
-        employeeTab.setClosable(false);
-        bookTab.setClosable(false);
-        profitTab.setClosable(false);
-        invTab.setClosable(false);
-        createTab.setClosable(false);
-
+        tbPane.getTabs().addAll(customerTab, employeeTab, storeTab, bookTab,
+                                 invTab, salesTab, profitTab, createTab);
+        
         overallPane.add(tbPane, 0, 0);
         
-        //BOOK TAB INFORMATION
+        //Making tabs un-closable
+        customerTab.setClosable(false);
+        employeeTab.setClosable(false);
+        storeTab.setClosable(false);
+        bookTab.setClosable(false);
+        invTab.setClosable(false);
+        salesTab.setClosable(false);
+        profitTab.setClosable(false);
+        createTab.setClosable(false);
         
-        // Book Header
-        Label lblBookHeader = new Label ("Book Report:");
+        //******CUSTOMER TAB INFORMATION*************
+        
+        //Formatting Stuff
+        customerPane.setHgap(20);
+        customerPane.setVgap(5);
+        modCustomerPane.setHgap(20);
+        modCustomerPane.setVgap(5);
+        
+        // set modCustomerPane invisible
+        modCustomerPane.setVisible(false);
+        
+        // Customer Tab Header
+        Label lblCustHeader = new Label ("Customer Report:");
+        lblCustHeader.setFont(Font.font("Times New Roman", FontWeight.BOLD, 50));
+        GridPane.setHalignment(lblCustHeader, HPos.CENTER);
+        
+        // Customer Tab Labels
+        Label lblCustDesc = new Label("Customer Description: ");
+        GridPane.setHalignment(lblCustDesc, HPos.CENTER);
+        Label lblCustHist = new Label("Transaction History: ");
+        GridPane.setHalignment(lblCustHist, HPos.CENTER); 
+        Label lblCustEnroll = new Label("Enrolled in Loyalty Program: ");
+        GridPane.setHalignment(lblCustEnroll, HPos.CENTER);
+        
+        // Text Area output for customer description
+        txtAreaCustDesc.setMaxSize(300, 400);
+
+        // Customer Buttons
+        Button btnRemoveCust = new Button("Remove Customer ->");
+        Button btnEnrollCust = new Button("Enroll Customer ->");
+
+        btnRemoveCust.setMaxWidth(165);
+        btnEnrollCust.setMaxWidth(165);
+
+        VBox vbCustButtons = new VBox();
+        vbCustButtons.setSpacing(10);
+        vbCustButtons.setPadding(new Insets(0, 10, 10, 0));
+        vbCustButtons.getChildren().addAll(btnRemoveCust, btnEnrollCust);
+        
+        //modCustPane Controls
+        Label lblModCustomerHeader = new Label("Modify Customer:");
+        lblModCustomerHeader.setFont(Font.font("Times New Roman", FontWeight.BOLD, 18));
+        GridPane.setHalignment(lblModCustomerHeader, HPos.CENTER);
+        
+        Label lblModCustFname = new Label("First Name: ");
+        Label lblModCustLname = new Label("Last Name: ");
+        Label lblModCustPhone = new Label("Phone Number: ");
+        Label lblModCustAddress = new Label("Adress: ");
+        
+        TextField txtModCustFname = new TextField();
+        TextField txtModCustLname = new TextField();
+        TextField txtModCustPhone = new TextField();
+        TextField txtModCustAddress = new TextField();
+        
+        Button btnModCustSubmit = new Button("Submit");
+        Button btnModCustClear = new Button("Clear");
+        btnModCustSubmit.setMaxWidth(150);
+        btnModCustClear.setMaxWidth(150);
+
+        VBox vbModCustButtons = new VBox();
+        vbModCustButtons.setSpacing(10);
+        vbModCustButtons.setPadding(new Insets(0, 10, 10, 0));
+        vbModCustButtons.getChildren().addAll(btnModCustSubmit, btnModCustClear);
+        
+        //Add Controls to modCustPane
+        modCustomerPane.add(lblModCustomerHeader,0,0);
+        modCustomerPane.add(lblModCustFname, 0, 1);
+        modCustomerPane.add(lblModCustLname,0,2);
+        modCustomerPane.add(lblModCustPhone,0,3);
+        modCustomerPane.add(lblModCustAddress,0,4);
+        modCustomerPane.add(txtModCustFname, 1, 1);
+        modCustomerPane.add(txtModCustLname,1,2);
+        modCustomerPane.add(txtModCustPhone,1,3);
+        modCustomerPane.add(txtModCustAddress,1,4);
+        modCustomerPane.add(vbModCustButtons,0,5);
+        
+        // initialize tableviews
+        custView.setItems(custTableData);
+        custLoyaltyView.setItems(custLoyaltyTableData);
+        custTransView.setItems(custTransTableData);
+        
+        //Create Table Columns For TableViews   
+        TableColumn tblcCustID = new TableColumn("Customer ID");
+        TableColumn tblcCustFirstName = new TableColumn("First");
+        TableColumn tblcCustLastName = new TableColumn("Last");
+        
+        // Create Table Columns for enroll Customer
+        TableColumn tblcEnrollCustID = new TableColumn("Customer ID");
+        TableColumn tblcEnrollCustFirstName = new TableColumn("First");
+        TableColumn tblcEnrollCustLastName = new TableColumn("Last");
+        
+        // Table Columns for report
+        TableColumn tblcTransCustID = new TableColumn("Customer ID");
+        TableColumn tblcCustOrderID = new TableColumn("Order ID");
+        TableColumn tblcCustOrderQty = new TableColumn("Order Qty");
+        TableColumn tblcCustStore = new TableColumn("Store ID");
+        TableColumn tblcCustOrderDate = new TableColumn("Order Date");
+        
+        // custview table items
+        tblcCustID.setCellValueFactory(new PropertyValueFactory<Customer, Integer>("custID"));
+        tblcCustFirstName.setCellValueFactory(new PropertyValueFactory<Customer, String>("custFirstName"));
+        tblcCustLastName.setCellValueFactory(new PropertyValueFactory<Customer, String>("custLastName"));
+        
+        //enroll view table items
+        tblcEnrollCustID.setCellValueFactory(new PropertyValueFactory<Customer, Integer>("custID"));
+        tblcEnrollCustFirstName.setCellValueFactory(new PropertyValueFactory<Customer, String>("custFirstName"));
+        tblcEnrollCustLastName.setCellValueFactory(new PropertyValueFactory<Customer, String>("custLastName"));
+         
+        //Formatting and Adding Columns to TableViews
+        custView.setMinWidth(300);
+        custView.setMaxHeight(400);
+        custView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        custView.getColumns().addAll(tblcCustID, tblcCustFirstName, tblcCustLastName);
+
+        custLoyaltyView.setMinWidth(300);
+        custLoyaltyView.setMaxHeight(400);
+        custLoyaltyView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        custLoyaltyView.getColumns().addAll(tblcEnrollCustID, tblcEnrollCustFirstName, tblcEnrollCustLastName);
+
+        custTransView.setMinWidth(500);
+        custTransView.setMaxHeight(400);
+        custTransView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        custTransView.getColumns().addAll(tblcTransCustID, tblcCustOrderID, tblcCustOrderQty, tblcCustStore, tblcCustOrderDate);
+ 
+        //Adding Controls to custPane
+        customerPane.add(lblCustHeader,0,0,3,1);
+        customerPane.add(lblCustEnroll,1,1);
+        customerPane.add(lblCustHist,2,1);
+        customerPane.add(custView,0,2);
+        customerPane.add(custLoyaltyView,1,2);
+        customerPane.add(modCustomerPane,1,6);
+        customerPane.add(custTransView,2,2);
+        customerPane.add(lblCustDesc,0,5);
+        customerPane.add(txtAreaCustDesc,0,6);
+        customerPane.add(vbCustButtons,0,7);
+        
+        //Submit Customer Modification Functions
+        btnModCustSubmit.setOnAction(e ->
+        {
+            modCustomerPane.setVisible(false);
+            
+        });
+        
+        //Clear Customer Modification Functions
+        btnModCustClear.setOnAction(e ->
+        {
+            txtModCustFname.clear();
+            txtModCustLname.clear();
+            txtModCustPhone.clear();
+            txtModCustAddress.clear();  
+        });
+        
+        //Button to Enroll Customer
+        btnEnrollCust.setOnAction(e ->
+        {
+            ArrayList<Customer> holdEnrollCustArray = enrollCustomer();
+
+                for (Customer c: holdEnrollCustArray)
+                {
+                    custLoyaltyTableData.add(c); 
+                    custLoyaltyView.setItems(custLoyaltyTableData);
+                } 
+        });
+         
+         btnRemoveCust.setOnAction(e ->
+        {
+            removeCustomer();
+        });
+         
+        //populate text area upon customer selection from tableview
+        custView.setOnMouseClicked((MouseEvent event) -> {
+        if(event.getButton().equals(MouseButton.PRIMARY))
+        {                      
+            txtModCustFname.clear();
+            txtModCustLname.clear();
+            txtModCustPhone.clear();
+            txtModCustAddress.clear();
+            
+            txtAreaCustDesc.clear();
+            Customer cust = custView.getSelectionModel().getSelectedItem();
+            txtAreaCustDesc.appendText("Customer ID: ".toUpperCase() + cust.getCustID() + "\n"
+                                       + "First Name: ".toUpperCase() + cust.getCustFirstName() + "\n"
+                                       + "Last Name: ".toUpperCase() + cust.getCustLastName() + "\n"
+                                       + "Phone: ".toUpperCase() + cust.getCustPhone() + "\n"
+                                       + "Address: ".toUpperCase() + cust.getCustAddress());
+            
+            modCustomerPane.setVisible(true);
+            Customer modCustomer = custView.getSelectionModel().getSelectedItem();
+            txtModCustFname.appendText(modCustomer.getCustFirstName());
+            txtModCustLname.appendText(modCustomer.getCustLastName());
+            txtModCustPhone.appendText(modCustomer.getCustPhone());
+            txtModCustAddress.appendText(modCustomer.getCustAddress());
+        }
+
+        });
+        // populate text area upon customer loyalty selection from tableview
+         custLoyaltyView.setOnMouseClicked((MouseEvent event) -> {
+        if(event.getButton().equals(MouseButton.PRIMARY)){
+            txtAreaCustDesc.clear();
+            Customer cust = custLoyaltyView.getSelectionModel().getSelectedItem();
+            txtAreaCustDesc.appendText("Customer ID: ".toUpperCase() + cust.getCustID() + "\n"
+                                       + "First Name: ".toUpperCase() + cust.getCustFirstName() + "\n"
+                                       + "Last Name: ".toUpperCase() + cust.getCustLastName() + "\n"
+                                       + "Phone: ".toUpperCase() + cust.getCustPhone() + "\n"
+                                       + "Address: ".toUpperCase() + cust.getCustAddress());
+        }
+        });
+
+        //******BOOK TAB INFORMATION*********************************************
+        
+        //Formatting Stuff
+        bookPane.setHgap(20);
+        bookPane.setVgap(5);
+        modBookPane.setHgap(20);
+        modBookPane.setVgap(5);
+        modBookPane.setVisible(false);
+        
+        // Book Tab Header
+        Label lblBookHeader = new Label ("Book Report");
         lblBookHeader.setFont(Font.font("Times New Roman", FontWeight.BOLD, 50));
         GridPane.setHalignment(lblBookHeader, HPos.CENTER);
         
-        // book tab labels
+        //Book Tab Labels
         Label lblTopFive = new Label("Top 5 Sellers: ");
         GridPane.setHalignment(lblTopFive, HPos.CENTER);
-        
         Label lblBookDesc = new Label("Product Description: ");
-        GridPane.setHalignment(lblBookDesc, HPos.CENTER);
-        
+        GridPane.setHalignment(lblBookDesc, HPos.CENTER);   
         Label lblBookHist = new Label("Transaction History ");
         GridPane.setHalignment(lblBookHist, HPos.CENTER);
         
-        // Text Area outout for product description
+        //Text Area outout for product description
         TextArea txtAreaDesc = new TextArea();
         txtAreaDesc.setMaxSize(300, 400);
 
-        
-        // Book Buttons
+        //Book Tab Buttons      
         Button btnModBook = new Button("Modify Book ->");
-        btnModBook.setScaleX(1);
         Button btnRemoveBook = new Button("Remove Book ->");
-        btnRemoveBook.setScaleX(1);
+        btnModBook.setMaxWidth(150);
+        btnRemoveBook.setMaxWidth(150);
+
+        VBox vbBookButtons = new VBox();
+        vbBookButtons.setSpacing(10);
+        vbBookButtons.setPadding(new Insets(0, 10, 10, 0));
+        vbBookButtons.getChildren().addAll(btnModBook, btnRemoveBook);
         
+        //modBookPane Controls
+        Label lblModBookHeader = new Label("Modify Book:");
+        lblModBookHeader.setFont(Font.font("Times New Roman", FontWeight.BOLD, 20));
+        GridPane.setHalignment(lblModBookHeader, HPos.CENTER);
+        
+        Label lblModBookTitle = new Label("Title: ");
+        Label lblModBookAuthor = new Label("Author: ");
+        Label lblModBookDesc = new Label("Description: ");
+        Label lblModAcCost = new Label("Acquistion Cost: ");
+        Label lblModSalePrice = new Label("Retail Price: ");
+        
+        TextField txtModBookTitle = new TextField();
+        TextField txtModBookAuthor = new TextField();
+        TextField txtModBookDesc = new TextField();
+        TextField txtModAcCost = new TextField();
+        TextField txtModSalePrice = new TextField();
+        
+        Button btnModBookSubmit = new Button("Submit");
+        Button btnModBookClear = new Button("Clear");
+        btnModBookSubmit.setMaxWidth(150);
+        btnModBookClear.setMaxWidth(150);
+
+        VBox vbModBookButtons = new VBox();
+        vbModBookButtons.setSpacing(10);
+        vbModBookButtons.setPadding(new Insets(0, 10, 10, 0));
+        vbModBookButtons.getChildren().addAll(btnModBookSubmit, btnModBookClear);
+        
+        //adding controls to modBookPane
+        modBookPane.add(lblModBookHeader,0,0);
+        modBookPane.add(lblModBookTitle, 0, 1);
+        modBookPane.add(lblModBookAuthor,0,2);
+        modBookPane.add(lblModBookDesc,0,3);
+        modBookPane.add(lblModAcCost,0,4);
+        modBookPane.add(lblModSalePrice, 0, 5);
+        
+        modBookPane.add(txtModBookTitle, 1, 1);
+        modBookPane.add(txtModBookAuthor,1,2);
+        modBookPane.add(txtModBookDesc,1,3);
+        modBookPane.add(txtModAcCost,1,4);
+        modBookPane.add(txtModSalePrice, 1, 5);
+        modBookPane.add(vbModBookButtons,0, 6);
+         
         // create and add to book tableview for initial
         TableView<Book> bookView = new TableView<>();
         ObservableList<Book> bookTableData = 
@@ -164,8 +488,7 @@ public class MainDashboard
         ObservableList<Book> bookTransTableData = 
                 FXCollections.observableArrayList(Book.getBookArray());
         bookView.setItems(bookTransTableData);
-        
-        
+
         //Create Table Columns For tableView(s)    
         TableColumn tblcBookID = new TableColumn("Book ID");
         TableColumn tblcBookTitle = new TableColumn("Title");
@@ -178,8 +501,7 @@ public class MainDashboard
         TableColumn tblcBookStore = new TableColumn("Store ID");
         TableColumn tblcBookInStock = new TableColumn("Store Inventory");
         
-        
-        // format and add columns to bookView
+        //Format and add columns to bookView
         bookView.setMinWidth(200);
         bookView.setMaxHeight(400);
         bookView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
@@ -204,105 +526,31 @@ public class MainDashboard
         bookPane.add(topSellerView,1,3);
         bookPane.add(lblBookHist,2,2);
         bookPane.add(bookTransView,2,3);
+        bookPane.add(modBookPane,1,6);
         bookPane.add(lblBookDesc,0,5);
         bookPane.add(txtAreaDesc,0,6);
-        bookPane.add(btnModBook,0,7);         
-        bookPane.add(btnRemoveBook,0,9);
+        bookPane.add(vbBookButtons,0,7);       
         
-        //CUSTOMER TAB INFORMATION
+        //Modify Book Button Functions
+        btnModBook.setOnAction(e ->
+        {
+            modBookPane.setVisible(true); 
+        });
         
-        // Cust Header
-        Label lblCustHeader = new Label ("Customer Report:");
-        lblCustHeader.setFont(Font.font("Times New Roman", FontWeight.BOLD, 50));
-        GridPane.setHalignment(lblCustHeader, HPos.CENTER);
+        //Modify Book Submit Button Functions
+        btnModBookSubmit.setOnAction(e ->
+        {
+            modBookPane.setVisible(false);      
+        });
         
-        // cust tab labels
-        Label lblCustDesc = new Label("Customer Description: ");
-        GridPane.setHalignment(lblCustDesc, HPos.CENTER);
-        
-        Label lblCustHist = new Label("Transaction History: ");
-        GridPane.setHalignment(lblCustHist, HPos.CENTER);
-        
-        Label lblCustEnroll = new Label("Enrolled in Loyalty Program: ");
-        GridPane.setHalignment(lblCustEnroll, HPos.CENTER);
-        
-        // Text Area outout for product description
-        TextArea txtAreaCustDesc = new TextArea();
-        txtAreaCustDesc.setMaxSize(300, 400);
-        
-        // Label Blank
-
-        
-        // Cust Buttons
-        Button btnModCust = new Button("Modify Customer ->");
-        btnModCust.setScaleX(1);
-        Button btnRemoveCust = new Button("Remove Customer ->");
-        btnRemoveCust.setScaleX(1);
-        Button btnEnrollCust = new Button("Enroll Customer ->");
-        btnEnrollCust.setScaleX(1);
-        
-        // create and add to cust tableview for initial
-        TableView<Customer> custView = new TableView<>();
-        ObservableList<Customer> custTableData = 
-                FXCollections.observableArrayList(Customer.getCustArray());
-        custView.setItems(custTableData);
-        
-        // create and add to cust loyalaty
-        TableView<Customer> custLoyaltyView = new TableView<>();
-        ObservableList<Customer> custLoyaltyTableData = 
-                FXCollections.observableArrayList(Customer.getCustArray());
-        custView.setItems(custLoyaltyTableData);
-        
-        
-        // create and add to cust trans history
-        TableView<Customer> custTransView = new TableView<>();
-        ObservableList<Customer> custTransTableData = 
-                FXCollections.observableArrayList(Customer.getCustArray());
-        custTransView.setItems(custTransTableData);
-        
-        
-        //Create Table Columns For tableView(s)    
-        TableColumn tblcCustID = new TableColumn("Customer ID");
-        TableColumn tblcCustFirstName = new TableColumn("First");
-        TableColumn tblcCustLastName = new TableColumn("Last");
-        
-        // Table Columns for report
-        TableColumn tblcCustOrderID = new TableColumn("Order ID");
-        TableColumn tblcCustOrderQty = new TableColumn("Order Qty");
-        TableColumn tblcCustStore = new TableColumn("Store ID");
-        TableColumn tblcCustOrderDate = new TableColumn("Order Date");
-        
-        
-        // format and add columns to custView
-        custView.setMinWidth(300);
-        custView.setMaxHeight(400);
-        custView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        custView.getColumns().addAll(tblcCustID, tblcCustFirstName, tblcCustLastName);
-        
-        // Format and add columns to custloyaltyView
-        custLoyaltyView.setMinWidth(300);
-        custLoyaltyView.setMaxHeight(400);
-        custLoyaltyView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        custLoyaltyView.getColumns().addAll(tblcCustID, tblcCustFirstName, tblcCustLastName);
-        
-        // Format and add columns to custTransView
-        custTransView.setMinWidth(500);
-        custTransView.setMaxHeight(400);
-        custTransView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        custTransView.getColumns().addAll(tblcCustID, tblcCustOrderID, tblcCustOrderQty, tblcCustStore, tblcCustOrderDate);
- 
-        // add labels to custPane
-        customerPane.add(lblCustHeader,0,0,3,1);
-        customerPane.add(lblCustEnroll,1,1);
-        customerPane.add(lblCustHist,2,1);
-        customerPane.add(custView,0,2);
-        customerPane.add(custLoyaltyView,1,2);
-        customerPane.add(custTransView,2,2);
-        customerPane.add(lblCustDesc,0,5);
-        customerPane.add(txtAreaCustDesc,0,6);
-        customerPane.add(btnModCust,0,7);
-        customerPane.add(btnRemoveCust,0,8);
-        customerPane.add(btnEnrollCust,0,9);
+        btnModBookClear.setOnAction(e ->
+        {
+            txtModBookTitle.clear();
+            txtModBookAuthor.clear();
+            txtModBookDesc.clear();
+            txtModAcCost.clear();
+            txtModSalePrice.clear();   
+        });
         
         //INVENTORY TAB INFORMATION
         
@@ -321,8 +569,8 @@ public class MainDashboard
         Label lblInvChooseStore = new Label ("Choose a Store: ");
         GridPane.setHalignment(lblInvChooseStore, HPos.CENTER);
         
-        ComboBox cmboInvChooseStore = new ComboBox();
         GridPane.setHalignment(cmboInvChooseStore, HPos.CENTER);
+               
         
         //Filler Panes
         Pane blankSpace1 = new Pane();
@@ -335,7 +583,7 @@ public class MainDashboard
         //TableView Setups
         TableView<Book> bookInventoryView = new TableView<>();
         ObservableList<Book> bookInventoryTableData = 
-                FXCollections.observableArrayList(Book.getBookArray());
+                FXCollections.observableArrayList(bookArray);
         bookInventoryView.setItems(bookInventoryTableData);
         
         TableView<Consumable> consumableInventoryView = new TableView<>();
@@ -346,18 +594,17 @@ public class MainDashboard
         //Create Table Columns For bookInventoryView    
         TableColumn tblcBookInvID = new TableColumn("Book ID");
         TableColumn tblcBookInvTitle = new TableColumn("Title");
+        TableColumn tblcBookInvAuthor = new TableColumn("Author");
         TableColumn tblcBookQuantity = new TableColumn("Quantity");
-        TableColumn tblcBookPrice = new TableColumn("Sale Price");
+        TableColumn tblcBookPrice = new TableColumn("Retail Price");
         TableColumn tblcBookCost = new TableColumn("Aquisition Cost");
-        TableColumn tblcBookTotalCost = new TableColumn("Total Inventory Value");
         
         //Create Table Columns for consumableInventoryView
         TableColumn tblcConsInvID = new TableColumn("Consumable ID");
         TableColumn tblcConsInvName = new TableColumn("Name");
         TableColumn tblcConsQuantity = new TableColumn("Quantity");
-        TableColumn tblcConsPrice = new TableColumn("Sale Price");
+        TableColumn tblcConsPrice = new TableColumn("Retail Price");
         TableColumn tblcConsCost = new TableColumn("Aquisition Cost");
-        TableColumn tblcConsTotalCost = new TableColumn("Total Inventory Value");
 
         //Formatting TableViews
         bookInventoryView.setMinWidth(1000);
@@ -368,26 +615,25 @@ public class MainDashboard
         consumableInventoryView.setMaxHeight(320);
         consumableInventoryView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
                
-//        tblcBookInvID.setCellValueFactory(new PropertyValueFactory<Customer, String>("custIDString"));
-//        tblcBookInvTitle.setCellValueFactory(new PropertyValueFactory<Customer, String>("custName"));
-//        tblcBookQuantity.setCellValueFactory(new PropertyValueFactory<Customer, String>("custPhone"));
-//        tblcBookPrice.setCellValueFactory(new PropertyValueFactory<Customer, String>("custAddress"));
-//        tblcBookCost.setCellValueFactory(new PropertyValueFactory<Customer, String>("custPhone"));
-//        tblcBookTotalCost.setCellValueFactory(new PropertyValueFactory<Customer, String>("custAddress"));
-
-//        tblcConsInvID.setCellValueFactory(new PropertyValueFactory<Customer, String>("custIDString"));
-//        tblcConsInvTitle.setCellValueFactory(new PropertyValueFactory<Customer, String>("custName"));
-//        tblcConsQuantity.setCellValueFactory(new PropertyValueFactory<Customer, String>("custPhone"));
-//        tblcConsPrice.setCellValueFactory(new PropertyValueFactory<Customer, String>("custAddress"));
-//        tblcConsCost.setCellValueFactory(new PropertyValueFactory<Customer, String>("custPhone"));
-//        tblcConsTotalCost.setCellValueFactory(new PropertyValueFactory<Customer, String>("custAddress"));
+        tblcBookInvID.setCellValueFactory(new PropertyValueFactory<Book, Integer>("bookID"));
+        tblcBookInvTitle.setCellValueFactory(new PropertyValueFactory<Book, String>("bookTitle"));
+        tblcBookAuthor.setCellValueFactory(new PropertyValueFactory<Book, String>("bookAuthor"));
+        tblcBookCost.setCellValueFactory(new PropertyValueFactory<Book, String>("bookCost"));
+        tblcBookPrice.setCellValueFactory(new PropertyValueFactory<Book, Double>("bookSalePrice"));
+        tblcBookQuantity.setCellValueFactory(new PropertyValueFactory<Book, Integer>("bookQuantity"));
+       
+        tblcConsInvID.setCellValueFactory(new PropertyValueFactory<Consumable, Integer>("conID"));
+        tblcConsInvName.setCellValueFactory(new PropertyValueFactory<Consumable, String>("conName"));
+        tblcConsQuantity.setCellValueFactory(new PropertyValueFactory<Consumable, Integer>("conQuantity"));
+        tblcConsPrice.setCellValueFactory(new PropertyValueFactory<Consumable, Double>("conSalePrice"));
+        tblcConsCost.setCellValueFactory(new PropertyValueFactory<Consumable, Double>("conCost"));
         
         //Adding Columns to TableViews
-        bookInventoryView.getColumns().addAll(tblcBookInvID, tblcBookInvTitle, tblcBookQuantity, 
-                tblcBookPrice, tblcBookCost, tblcBookTotalCost);
+        bookInventoryView.getColumns().addAll(tblcBookInvID, tblcBookInvTitle, tblcBookAuthor,
+                tblcBookQuantity, tblcBookCost, tblcBookPrice);
         
         consumableInventoryView.getColumns().addAll(tblcConsInvID, tblcConsInvName, tblcConsQuantity, 
-                tblcConsPrice, tblcConsCost, tblcConsTotalCost);
+                tblcConsCost, tblcConsPrice);
         
         //Adding Items to invPane
         invPane.add(lblInventoryHeader, 1, 0);
@@ -400,6 +646,178 @@ public class MainDashboard
         invPane.add(lblConsInvHeader, 1, 7);
         invPane.add(consumableInventoryView, 1,8);
         
+        //******STORE TAB INFORMATION*******************************************************************************************
+        
+        // Store Tab Header
+        Label lblStoreHeader = new Label ("Store Report");
+        lblStoreHeader.setFont(Font.font("Times New Roman", FontWeight.BOLD, 50));
+        GridPane.setHalignment(lblStoreHeader, HPos.CENTER);
+        
+        //Formatting
+        storePane.setHgap(20);
+        storePane.setVgap(5);
+        modStorePane.setHgap(20);
+        modStorePane.setVgap(5);
+        modStorePane.setVisible(false);
+
+        //Store Tab Labels
+        Label lblEmployeeStore = new Label("Current Employees of Specified Store: ");
+        GridPane.setHalignment(lblEmployeeStore, HPos.CENTER);
+        Label lblStoreDesc = new Label("Store Description: ");
+        GridPane.setHalignment(lblStoreDesc, HPos.CENTER);
+        
+        //Store Tab Controls
+        TextArea txtAreaStoreDesc = new TextArea();
+        txtAreaStoreDesc.setMaxSize(300, 400);
+        
+        Button btnRemoveStore = new Button("Remove Store ->");
+        btnRemoveStore.setMaxWidth(150);
+
+        VBox vbStoreButtons = new VBox();
+        vbStoreButtons.setSpacing(10);
+        vbStoreButtons.setPadding(new Insets(0, 10, 10, 0));
+        vbStoreButtons.getChildren().addAll(btnRemoveStore);
+        
+        //Initialize TableViews
+        storeView.setItems(storeTableData);
+        storeEmployeeView.setItems(storeEmployeeTableData);
+        
+        //modStorePane Controls
+        Label lblModStoreHeader = new Label("Modify Store");
+        lblModStoreHeader.setFont(Font.font("Times New Roman", FontWeight.BOLD, 20));
+        GridPane.setHalignment(lblModStoreHeader, HPos.CENTER);
+        
+        Label lblModStoreName = new Label("Store Name: ");
+        Label lblModStoreAddress = new Label("Store Address: ");
+        Label lblModStorePhone = new Label("Store phone: ");
+        Label lblModStoreAreaID = new Label("Store Area ID: ");
+        
+        TextField txtModStoreName = new TextField();
+        TextField txtModStoreAddress = new TextField();
+        TextField txtModStorePhone = new TextField();
+        TextField txtModStoreAreaID = new TextField();
+
+        Button btnModStoreSubmit = new Button("Submit");
+        Button btnModStoreClear = new Button("Clear");
+        btnModStoreSubmit.setMaxWidth(150);
+        btnModStoreClear.setMaxWidth(150);
+
+        VBox vbModStoreButtons = new VBox();
+        vbModStoreButtons.setSpacing(10);
+        vbModStoreButtons.setPadding(new Insets(0, 10, 10, 0));
+        vbModStoreButtons.getChildren().addAll(btnModStoreSubmit, btnModStoreClear);
+       
+        //Add Controls to modCustPane
+        modStorePane.add(lblModStoreHeader,0,0);
+        modStorePane.add(lblModStoreName, 0, 1);
+        modStorePane.add(lblModStoreAddress,0,2);
+        modStorePane.add(lblModStorePhone,0,3);
+        modStorePane.add(lblModStoreAreaID,0,4);
+        
+        modStorePane.add(txtModStoreName, 1, 1);
+        modStorePane.add(txtModStoreAddress,1,2);
+        modStorePane.add(txtModStorePhone,1,3);
+        modStorePane.add(txtModStoreAreaID,1,4);
+        
+        modStorePane.add(vbModStoreButtons,0,5);
+
+        //Create Table Columns For initial tableView 
+        TableColumn tblcStoreID = new TableColumn("Store ID");
+        TableColumn tblcStoreName = new TableColumn("Store Name");
+        TableColumn tblcStoreLocation = new TableColumn("Location");
+        
+        // Table Columns for employees at store tableview
+        TableColumn tblcStoreID2 = new TableColumn ("Store ID");
+        TableColumn tblcStoreEmployID = new TableColumn("EmployeeID");
+        TableColumn tblcStoreEmployFname = new TableColumn("First Name");
+        TableColumn tblcStoreEmployLname = new TableColumn("Last Name");
+        TableColumn tblcStoreEmployEmail = new TableColumn("Emp Email");
+        TableColumn tblcStoreEmployPhone = new TableColumn("Emp Phone");
+        
+        // storeView table items
+        tblcStoreID.setCellValueFactory(new PropertyValueFactory<Store, Integer>("storeID"));
+        tblcStoreName.setCellValueFactory(new PropertyValueFactory<Store, String>("storeName"));
+        tblcStoreLocation.setCellValueFactory(new PropertyValueFactory<Store, String>("storeArea"));
+
+        //Format and add Columns to StoreView
+        storeView.setMinWidth(200);
+        storeView.setMaxHeight(400);
+        storeView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        storeView.getColumns().addAll(tblcStoreID, tblcStoreName, tblcStoreLocation);
+        
+        // Format and add columns to storeEmployeeView
+        storeEmployeeView.setMinWidth(700);
+        storeEmployeeView.setMaxHeight(400);
+        storeEmployeeView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        storeEmployeeView.getColumns().addAll(tblcStoreID2, tblcStoreEmployID, 
+                                              tblcStoreEmployFname,tblcStoreEmployLname, 
+                                              tblcStoreEmployEmail, tblcStoreEmployPhone);
+ 
+        // add labels and tableviews to storePane
+        storePane.add(lblStoreHeader,0,0,3,1);
+        storePane.add(lblEmployeeStore,1,2);
+        storePane.add(storeView,0,3);
+        storePane.add(storeEmployeeView,1,3);
+        storePane.add(modStorePane,1,6);
+        storePane.add(lblStoreDesc,0,5);
+        storePane.add(txtAreaStoreDesc,0,6);
+        storePane.add(vbStoreButtons,0,7);
+        
+        //Select Store from storeView
+        
+        storeView.setOnMouseClicked(e -> { 
+            
+                txtAreaStoreDesc.clear();
+                
+                //Filling the store description box
+                txtAreaStoreDesc.appendText(
+                        "STORE ID: " + storeArray.get(storeView.getSelectionModel()
+                                .getSelectedIndex()).getStoreID() +
+                        "\nSTORE NAME: " + storeArray.get(storeView.getSelectionModel()
+                                .getSelectedIndex()).getStoreName() +
+                        "\nSTORE ADDRESS: " + storeArray.get(storeView.getSelectionModel()
+                                .getSelectedIndex()).getStoreAddress() +
+                        "\nSTORE PHONE NUMBER: " + storeArray.get(storeView.getSelectionModel()
+                                .getSelectedIndex()).getStorePhone() +
+                        "\nSTORE AREA: " + storeArray.get(storeView.getSelectionModel()
+                                .getSelectedIndex()).getStoreArea());   
+                
+                //Filling modify store fields
+                txtModStoreName.setText(storeArray.get(storeView.getSelectionModel()
+                                .getSelectedIndex()).getStoreName());
+                txtModStoreAddress.setText(storeArray.get(storeView.getSelectionModel()
+                                .getSelectedIndex()).getStoreName());
+                txtModStorePhone.setText(storeArray.get(storeView.getSelectionModel()
+                                .getSelectedIndex()).getStoreName());
+                txtModStoreAreaID.setText(storeArray.get(storeView.getSelectionModel()
+                                .getSelectedIndex()).getStoreName());
+                
+                modStorePane.setVisible(true); 
+        });
+        
+        //Modify Store Submit Button Functions
+        btnModStoreSubmit.setOnAction(e ->
+        {
+            modStorePane.setVisible(false);
+        });
+        
+        btnModStoreClear.setOnAction(e ->
+        {
+            txtModStoreName.clear();
+            txtModStoreAddress.clear();
+            txtModStorePhone.clear();
+            txtModStoreAreaID.clear();   
+        });
+        
+        //Remove Store Button Functions
+        btnRemoveStore.setOnAction(e ->
+        {
+            Store selectedStore = storeView.getSelectionModel().getSelectedItem();
+            storeView.getItems().remove(selectedStore);
+            storeArray.remove(selectedStore);
+        });
+
+
         
         //Profit Vs Expense Header
 
@@ -509,6 +927,7 @@ profitPane.add(txtIncome, 0 ,14);
 
 
         
+
         //CREATE TAB INFORMATION
 
         Label lblCreateHeader = new Label ("Create New Object");
@@ -543,7 +962,6 @@ profitPane.add(txtIncome, 0 ,14);
         rdoCreateSupplier.setToggleGroup(createGroup);
         rdoCreateBook.setToggleGroup(createGroup);
         rdoCreateConsumable.setToggleGroup(createGroup);
-        
         
         Label lblCreateCustomer = new Label ("Customer");
         Label lblCreateEmployee = new Label ("Employee");
@@ -631,7 +1049,6 @@ profitPane.add(txtIncome, 0 ,14);
         addBookPane.setVisible(false);
         addConsumablePane.setVisible(false);
         
-          
         //Never-ending formatting
         addCustPane.setAlignment(Pos.TOP_CENTER);
         addCustPane.setHgap(20);
@@ -654,6 +1071,13 @@ profitPane.add(txtIncome, 0 ,14);
         
         createPane.add(blankSpace3, 0, 1);
         
+        //TextArea Field for error notification       
+        TextArea addOutput = new TextArea();
+        addOutput.setMaxSize(500, 50);
+        GridPane.setHalignment(addOutput, HPos.CENTER);
+        addOutput.setVisible(false);
+        addOutput.setEditable(false);
+             
         //Adding the lower panes to the main createPane
         createPane.add(addCustPane, 0, 2);
         createPane.add(addEmployeePane, 0, 2);
@@ -661,6 +1085,9 @@ profitPane.add(txtIncome, 0 ,14);
         createPane.add(addSupplierPane, 0, 2);
         createPane.add(addBookPane, 0, 2);
         createPane.add(addConsumablePane, 0, 2);
+        
+        createPane.add(blankSpace1, 0, 3);
+        createPane.add(addOutput, 0, 4);
         
         //Setting up add customer pane for second half of page
         Label lblAddCust = new Label ("Add New Customer");
@@ -691,6 +1118,26 @@ profitPane.add(txtIncome, 0 ,14);
         addCustPane.add(txtAddCustAddress, 1, 4);
         
         addCustPane.add(btnAddCust, 1, 5);
+
+        btnAddCust.setOnAction (e -> {
+            
+            addOutput.setVisible(true);
+            Customer.newCustomer(txtAddCustFN.getText(), txtAddCustLN.getText(),
+                txtAddCustPhone.getText(), txtAddCustAddress.getText());
+
+            txtAddCustFN.clear();
+            txtAddCustLN.clear();
+            txtAddCustPhone.clear();
+            txtAddCustAddress.clear();
+
+            custTableData.clear();
+            for (Customer c: customerArray)
+            {
+                custTableData.add(c); 
+            }
+            
+            addOutput.setText("Customer Added!");
+        });
         
         //Setting up add employee pane for second half of page
         Label lblAddEmployee = new Label ("Add New Employee");
@@ -753,6 +1200,45 @@ profitPane.add(txtIncome, 0 ,14);
         
         addStorePane.add(btnAddStore, 1, 5);
         
+        btnAddStore.setOnAction (e -> {
+            
+                boolean toAddFlag = true;
+                addOutput.setVisible(true);
+
+                for (Store s: storeArray)
+                {
+                    if (txtAddStoreName.getText().matches(s.getStoreName()) 
+                            && txtAddStoreAddress.getText().matches(s.getStoreAddress())
+                            && txtAddStoreAreaID.getText().matches(s.getStoreArea()))
+                    {
+                        addOutput.setText("Store already exists!");
+                        toAddFlag = false;
+                    }
+                }
+                    
+                if (toAddFlag == true)
+                {
+                    Store.newStore(txtAddStoreName.getText(), txtAddStoreAddress.getText(),
+                    txtAddStorePhone.getText(), txtAddStoreAreaID.getText());
+                   
+                    addOutput.setText("Store successfully added."); 
+                }
+
+                txtAddStoreName.clear();
+                txtAddStoreAddress.clear();
+                txtAddStorePhone.clear();
+                txtAddStoreAreaID.clear();
+                
+                bookInventoryTableData.clear();
+                
+                storeTableData.clear();
+                
+                for (Store s: storeArray)
+                {
+                    storeTableData.add(s); 
+                }
+            });
+        
         //Setting up add Supplier pane for second half of page
         Label lblAddSupplier = new Label ("Add New Supplier");
         lblAddSupplier.setFont(Font.font("Times New Roman", FontWeight.BOLD, 30));
@@ -764,8 +1250,6 @@ profitPane.add(txtIncome, 0 ,14);
         
         TextField txtAddSupplierName = new TextField ();
         TextField txtAddSupplierAddress = new TextField ();
-        
-        ComboBox cmboAddSupplierRep = new ComboBox();
         
         Button btnAddSupplier = new Button ("Add Supplier");
         
@@ -790,13 +1274,15 @@ profitPane.add(txtIncome, 0 ,14);
         Label lblAddBookAuthor = new Label ("Author: ");
         Label lblAddBookDesc = new Label ("Description ");
         Label lblAddBookCost = new Label ("Aquisition Cost: ");
-        Label lblAddBookSalePrice = new Label ("Sale Price: ");
+        Label lblAddBookSalePrice = new Label ("Retail Price: ");
+        Label lblAddBookQuantity = new Label ("Quantity to add: ");
         
         TextField txtAddBookTitle = new TextField();
         TextField txtAddBookAuthor = new TextField();
         TextField txtAddBookDesc = new TextField();
         TextField txtAddBookCost = new TextField();
         TextField txtAddBookSalePrice = new TextField();
+        TextField txtAddBookQuantity = new TextField();
         
         Button btnAddBook = new Button ("Add Book");
         
@@ -807,14 +1293,70 @@ profitPane.add(txtIncome, 0 ,14);
         addBookPane.add(lblAddBookDesc, 0, 3);
         addBookPane.add(lblAddBookCost, 0, 4);
         addBookPane.add(lblAddBookSalePrice, 0, 5);
+        addBookPane.add(lblAddBookQuantity, 0, 6);
         
         addBookPane.add(txtAddBookTitle, 1, 1);
         addBookPane.add(txtAddBookAuthor, 1, 2);
         addBookPane.add(txtAddBookDesc, 1, 3);
         addBookPane.add(txtAddBookCost, 1, 4);
         addBookPane.add(txtAddBookSalePrice, 1, 5);
+        addBookPane.add(txtAddBookQuantity, 1, 6);
         
-        addBookPane.add(btnAddBook, 1, 6);
+        addBookPane.add(btnAddBook, 1, 7);
+        
+        btnAddBook.setOnAction (e -> {
+            try
+            { 
+                boolean toAddFlag = true;
+                addOutput.setVisible(true);
+
+                for (Book b: bookArray)
+                {
+                    if (txtAddBookTitle.getText().matches(b.getBookTitle()) 
+                            && txtAddBookAuthor.getText().matches(b.getBookAuthor()))
+                    {
+                        addOutput.setText("Book is already in inventory. Updating quantity.");
+                        int newQuantity = b.getBookQuantity();
+                        newQuantity = newQuantity + Integer.parseInt(txtAddBookQuantity.getText());
+                        b.setBookQuantity(newQuantity);
+                        
+                        toAddFlag = false;
+                    }
+                }
+                    
+                if (toAddFlag == true)
+                {
+                    Book.newBook(txtAddBookTitle.getText(), txtAddBookAuthor.getText(),
+                    Double.parseDouble(txtAddBookCost.getText()),
+                    Double.parseDouble(txtAddBookSalePrice.getText()), 
+                    txtAddBookDesc.getText(), Integer.parseInt(txtAddBookQuantity.getText()));
+                   
+                    addOutput.setText("Book successfully added.");
+                    
+                }
+
+                txtAddBookTitle.clear();
+                txtAddBookAuthor.clear();
+                txtAddBookCost.clear();
+                txtAddBookSalePrice.clear();
+                txtAddBookDesc.clear();
+                txtAddBookQuantity.clear();
+                
+                bookInventoryTableData.clear();
+                
+                for (Book b: bookArray)
+                    bookInventoryTableData.add(b);
+                
+                bookInventoryView.setItems(bookInventoryTableData);
+            }
+            
+            catch(NumberFormatException n)
+            {
+                addOutput.setVisible(true);
+                addOutput.setText("Please ensure that Aquisition Cost, Retail Price"
+                        + ", and quantity are numbers.");
+            }
+        });
         
         //Setting up add Consumable pane for second half of page
         Label lblAddConsumable = new Label ("Add New Consumable");
@@ -824,12 +1366,14 @@ profitPane.add(txtIncome, 0 ,14);
         Label lblAddConsName = new Label ("Name: ");
         Label lblAddConsDesc = new Label ("Description: ");
         Label lblAddConsCost = new Label ("Aquisition Cost: ");
-        Label lblAddConsSalePrice= new Label ("Sale Price: ");
+        Label lblAddConsSalePrice= new Label ("Retail Price: ");
+        Label lblAddConsQuantity = new Label ("Quantity to add: ");
         
         TextField txtAddConsName = new TextField ();
         TextField txtAddConsDesc = new TextField ();
         TextField txtAddConsCost = new TextField ();
         TextField txtAddConsSalePrice = new TextField ();
+        TextField txtAddConsQuantity = new TextField ();
         
         Button btnAddConsumable = new Button("Add Consumable");
         
@@ -839,21 +1383,77 @@ profitPane.add(txtIncome, 0 ,14);
         addConsumablePane.add(lblAddConsDesc, 0, 2);
         addConsumablePane.add(lblAddConsCost, 0, 3);
         addConsumablePane.add(lblAddConsSalePrice, 0, 4);
+        addConsumablePane.add(lblAddConsQuantity, 0, 5);
         
         addConsumablePane.add(txtAddConsName, 1, 1);
         addConsumablePane.add(txtAddConsDesc, 1, 2);
         addConsumablePane.add(txtAddConsCost, 1, 3);
         addConsumablePane.add(txtAddConsSalePrice, 1, 4);
+        addConsumablePane.add(txtAddConsQuantity, 1, 5);
         
-        addConsumablePane.add(btnAddConsumable, 1, 5);
-       
+        addConsumablePane.add(btnAddConsumable, 1, 6);
+        
+        btnAddConsumable.setOnAction (e -> {
+            try
+            { 
+                addOutput.setVisible(true);
+                boolean toAddFlag = true;
+
+                for (Consumable c: consumableArray)
+                {
+                    if (txtAddConsName.getText().matches(c.getConName()) 
+                            && txtAddConsDesc.getText().matches(c.getConDesc()))
+                    {
+                        addOutput.setText("Consumable is already in inventory. Updating quantity.");
+                        int newQuantity = c.getConQuantity();
+                        newQuantity = newQuantity + Integer.parseInt(txtAddConsQuantity.getText());
+                        c.setConQuantity(newQuantity);
+                        
+                        toAddFlag = false;
+                    }
+                }
+                    
+                if (toAddFlag == true)
+                {
+                    Consumable.newCon(txtAddConsName.getText(), Double.parseDouble(txtAddConsCost.getText()),
+                    Double.parseDouble(txtAddConsSalePrice.getText()), 
+                    txtAddConsDesc.getText(), Integer.parseInt(txtAddConsQuantity.getText()));
+                    
+                    addOutput.setText("Consumable successfully added.");
+                }
+
+                txtAddConsName.clear();
+                txtAddConsCost.clear();
+                txtAddConsSalePrice.clear();
+                txtAddConsDesc.clear();
+                txtAddConsQuantity.clear();
+                
+                consumableInventoryTableData.clear();
+                
+                for (Consumable c: consumableArray)
+                {
+                    consumableInventoryTableData.add(c);
+                    System.out.println(consumableInventoryTableData);
+                }
+                
+                consumableInventoryView.setItems(consumableInventoryTableData);
+            }
+            
+            catch(NumberFormatException n)
+            {
+                addOutput.setText("Please ensure that Aquisition Cost, Retail Price"
+                        + ", and quantity are numbers.");
+            }
+        
+        });
+              
         //Radio Button Handlers to hide or display the desired pane to add objects
-        
         rdoCreateCustomer.setOnAction (e -> {
             if (rdoCreateCustomer.isSelected())
             {   
                 hideAddPanes();
                 addCustPane.setVisible(true);
+                addOutput.setVisible(false);
             }
         });
         
@@ -862,6 +1462,7 @@ profitPane.add(txtIncome, 0 ,14);
             {       
                 hideAddPanes();
                 addEmployeePane.setVisible(true);
+                addOutput.setVisible(false);
             }
         }); 
         
@@ -870,6 +1471,7 @@ profitPane.add(txtIncome, 0 ,14);
             {       
                 hideAddPanes();
                 addStorePane.setVisible(true);
+                addOutput.setVisible(false);
             }
         });   
         
@@ -878,6 +1480,7 @@ profitPane.add(txtIncome, 0 ,14);
             {       
                 hideAddPanes();
                 addSupplierPane.setVisible(true);
+                addOutput.setVisible(false);
             }
         });  
         
@@ -886,6 +1489,7 @@ profitPane.add(txtIncome, 0 ,14);
             {       
                 hideAddPanes();
                 addBookPane.setVisible(true);
+                addOutput.setVisible(false);
             }
         });
         
@@ -894,6 +1498,7 @@ profitPane.add(txtIncome, 0 ,14);
             {       
                 hideAddPanes();
                 addConsumablePane.setVisible(true);
+                addOutput.setVisible(false);
             }
         });  
     } 
@@ -907,5 +1512,46 @@ profitPane.add(txtIncome, 0 ,14);
         addBookPane.setVisible(false);
         addConsumablePane.setVisible(false);
     }
+    
+    public ArrayList enrollCustomer()
+    {
+        ArrayList<Customer> enrollCustArray = new ArrayList<>();
+        Customer selectedCust = custView.getSelectionModel().getSelectedItem();
+        
+        enrollCustArray.add(selectedCust);
+        return enrollCustArray;
+    }
+    
+    public void removeCustomer()
+    {
+        int custID = 0;
+        int custLoyaltyID = 0;
+        
+        Customer selectedCust = custView.getSelectionModel().getSelectedItem();
+        custView.getItems().remove(selectedCust);
+        customerArray.remove(selectedCust);
+        
+        try
+        {    
+            for(Customer c: customerArray)
+            {
+                custID = c.getCustID();
+            
+                for(Customer eC: custLoyaltyTableData)
+                {
+                    custLoyaltyID = eC.getCustID();
+            
+                    if(custID == custLoyaltyID)
+                    {
+                        custLoyaltyView.getSelectionModel().select(selectedCust);
+                        custLoyaltyView.getItems().remove(selectedCust);
+                    }   
+                }
+            }
+       }
+        catch(ConcurrentModificationException e)
+        {
+           System.out.println("");
+        }    
+    }
 }
-
