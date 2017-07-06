@@ -85,7 +85,7 @@ public class Store {
        for(Store s: storeArray)
        {  
         String sqlQuery = "";
-        sqlQuery += "INSERT INTO JAVAUSER.STORE (STOREID, STORENAME, STOREADDRESS, STOREPHONE, AREAID) VALUES (";
+        sqlQuery += "INSERT INTO JAVAUSER.STORE (STOREID, STORENAME, STOREADDRESS, STOREPHONE) VALUES (";
         sqlQuery += s.getStoreID() + " , '";
         sqlQuery += s.getStoreName() + "', '";
         sqlQuery += s.getStoreAddress() + "', '"; 
