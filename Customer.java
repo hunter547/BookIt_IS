@@ -97,7 +97,9 @@ public class Customer {
        for(Customer c: custArray)
        {  
         String sqlQuery = "";
-        sqlQuery += "INSERT INTO JAVAUSER.CUSTOMER (CUSTID, CUSTFIRSTNAME, CUSTLASTNAME, CUSTPHONE, CUSTADDRESS) VALUES (";
+        sqlQuery += "INSERT INTO JAVAUSER.CUSTOMER (CUSTID, CUSTFIRSTNAME, "
+                + "CUSTLASTNAME, CUSTPHONE, CUSTADDRESS, CUSTEMAIL) VALUES (";
+
         sqlQuery += c.getCustID() + " , '";
         sqlQuery += c.getCustFirstName() + "', '";
         sqlQuery += c.getCustLastName() + "', '"; 
