@@ -16,7 +16,6 @@ public class Customer {
     private String custLastName; 
     private String custPhone; 
     private String custAddress; 
-    private String custEmail;
     private static Connection dbConn;
     private static Statement commStmt;
     private static ResultSet dbResults;
@@ -28,46 +27,43 @@ public class Customer {
         custLastName = ""; 
         custPhone = ""; 
         custAddress = "";  
-        custEmail = "";
     } 
     
     public Customer(String custFirstName, String custLastName, 
-                    String custPhone, String custAddress, String custEmail) 
+                    String custPhone, String custAddress) 
     {  
         this.custID = ++nextID; 
         this.custFirstName = custFirstName; 
         this.custLastName = custLastName; 
         this.custPhone = custPhone; 
-        this.custAddress = custAddress; 
-        this.custEmail = custEmail;
+        this.custAddress = custAddress;        
     } 
     
     public Customer(int custID,String custFirstName, String custLastName, 
-                    String custPhone, String custAddress, String custEmail) 
+                    String custPhone, String custAddress) 
     {  
         this.custID = custID; 
         this.custFirstName = custFirstName; 
         this.custLastName = custLastName; 
         this.custPhone = custPhone; 
         this.custAddress = custAddress; 
-        this.custEmail = custEmail;
         if(custID>nextID){ 
             nextID = custID;
         }
     }  
     
     public static void newCustomer(String custFirstName, String custLastName, 
-                    String custPhone, String custAddress, String custEmail) 
+                    String custPhone, String custAddress) 
     {  
         custArray.add
-        (new Customer(custFirstName,custLastName,custPhone,custAddress,custEmail));
+        (new Customer(custFirstName,custLastName,custPhone,custAddress));
     } 
     
     public static void newCustomerFromDatabase(int custID, String custFirstName, String custLastName, 
-                    String custPhone, String custAddress, String custEmail) 
+                    String custPhone, String custAddress) 
     {  
         custArray.add
-        (new Customer(custID,custFirstName,custLastName,custPhone,custAddress,custEmail));
+        (new Customer(custID,custFirstName,custLastName,custPhone,custAddress));
     }
 
     public static void fillCustomerArray() { 
@@ -83,8 +79,7 @@ public class Customer {
                                     dbResults.getString(2), 
                                     dbResults.getString(3), 
                                     dbResults.getString(4), 
-                                    dbResults.getString(5),
-                                    dbResults.getString(6));
+                                    dbResults.getString(5));
 
             }
         } catch (SQLException e) {
@@ -104,12 +99,12 @@ public class Customer {
         String sqlQuery = "";
         sqlQuery += "INSERT INTO JAVAUSER.CUSTOMER (CUSTID, CUSTFIRSTNAME, "
                 + "CUSTLASTNAME, CUSTPHONE, CUSTADDRESS, CUSTEMAIL) VALUES (";
+
         sqlQuery += c.getCustID() + " , '";
         sqlQuery += c.getCustFirstName() + "', '";
         sqlQuery += c.getCustLastName() + "', '"; 
         sqlQuery += c.getCustPhone() + "', '";
-        sqlQuery += c.getCustAddress() + "', '";
-        sqlQuery += c.getCustEmail() + "')";
+        sqlQuery += c.getCustAddress() + "')";
 
         sendDBCommand(sqlQuery);        
       } 
@@ -210,15 +205,6 @@ public class Customer {
     public void setCustAddress(String custAddress){ 
         this.custAddress = custAddress;
     } 
-
-    public String getCustEmail() {
-        return custEmail;
-    }
-
-    public void setCustEmail(String custEmail) {
-        this.custEmail = custEmail;
-    }
-    
     
     private static void sendDBCommand(String sqlQuery) {
         String URL = "jdbc:oracle:thin:@localhost:1521:XE";
