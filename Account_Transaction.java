@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import oracle.jdbc.pool.OracleDataSource;
 
-//Test Commit
 public class Account_Transaction {
     private static ArrayList<Account_Transaction> acctTranArray = new ArrayList<>(); 
     private int tranID;  
@@ -146,7 +145,4 @@ public class Account_Transaction {
             System.out.println(e.toString());
         }
     }
-    
-    
-    
 }
