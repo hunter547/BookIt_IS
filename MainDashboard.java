@@ -400,6 +400,115 @@ public class MainDashboard
         invPane.add(lblConsInvHeader, 1, 7);
         invPane.add(consumableInventoryView, 1,8);
         
+        
+        //Profit Vs Expense Header
+
+//Title header
+Label lblPVE = new Label ("Profit/Expense Report");
+lblPVE.setFont(Font.font("Times New Roman", FontWeight.BOLD,50));
+GridPane.setHalignment(lblPVE, HPos.CENTER);
+
+//Time period header
+Label lblTime = new Label ("Choose Time Period:");
+lblTime.setFont(Font.font("Times New Roman", FontWeight.BOLD,25));
+GridPane.setHalignment(lblTime, HPos.CENTER);
+
+//Radio Buttons 
+RadioButton rdoDay = new RadioButton();
+RadioButton rdoMonth = new RadioButton();
+RadioButton rdoYear = new RadioButton();
+
+Label lblDay = new Label ("Day");
+Label lblMonth = new Label ("Month");
+Label lblYear = new Label ("Year");
+
+Label lblRev = new Label ("Revenues:");
+Label lblExp = new Label ("Expenses:");
+
+Label lblTotal = new Label ("Total Profit: ");
+Label lblIncome = new Label ("Income Before Taxes: ");
+
+TextField txtProfit = new TextField();
+TextField txtIncome = new TextField();
+
+
+
+
+
+
+//Location of labels and buttons
+
+
+
+        
+profitPane.add(lblPVE, 2, 0, 3, 1);
+
+profitPane.setHalignment(lblTime, HPos.CENTER);       
+profitPane.add(lblTime, 0,1);
+
+              
+//Revenues and expenses
+
+
+
+TableView<Book> profitView = new TableView<>();
+
+
+//create table columns 
+TableColumn tblcRevenueID = new TableColumn("ID");
+TableColumn tblcAmount = new TableColumn("Amount");
+TableColumn tblcDate = new TableColumn("Date");
+
+profitView.setMinWidth(300);
+        profitView.setMaxHeight(400);
+        profitView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        profitView.getColumns().addAll(tblcRevenueID, tblcAmount, tblcDate);
+
+
+
+TableView<Book> expenseView = new TableView<>();
+
+
+
+//create table columns 
+TableColumn tblcExpenseID = new TableColumn("ID");
+TableColumn tblcAmountExp = new TableColumn("Amount");
+TableColumn tblcDateExp = new TableColumn("Date");
+
+expenseView.setMinWidth(300);
+        expenseView.setMaxHeight(400);
+        expenseView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        expenseView.getColumns().addAll(tblcExpenseID, tblcAmountExp, tblcDateExp);
+        
+   GridPane.setHalignment(lblDay, HPos.LEFT);
+   GridPane.setHalignment(rdoDay, HPos.RIGHT);
+   GridPane.setHalignment(lblMonth, HPos.LEFT);
+   GridPane.setHalignment(rdoMonth, HPos.RIGHT);
+   GridPane.setHalignment(lblYear, HPos.LEFT);
+   GridPane.setHalignment(rdoYear, HPos.RIGHT);
+        
+        
+        
+profitPane.add(lblDay,3,1);
+profitPane.add(rdoDay, 4, 1);
+profitPane.add(lblMonth, 6, 1);
+profitPane.add(rdoMonth,  7,1);
+profitPane.add(lblYear, 8, 1);
+profitPane.add(rdoYear,  9, 1);
+profitPane.add(lblRev, 0, 5);
+profitPane.add(lblExp, 4,5);
+profitPane.add(profitView, 0, 7);
+profitPane.add(expenseView, 4, 7);
+profitPane.add(lblTotal, 0,11);
+profitPane.add(lblIncome, 0, 13 );
+profitPane.add(txtProfit, 0 , 12 );
+profitPane.add(txtIncome, 0 ,14);
+
+
+    
+
+
+        
         //CREATE TAB INFORMATION
 
         Label lblCreateHeader = new Label ("Create New Object");
