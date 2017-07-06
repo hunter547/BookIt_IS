@@ -16,7 +16,8 @@ public class Time_Management {
     private int storeID; 
     private int employID; 
     private Date timeIn; 
-    private Date timeOut;  
+    private Date timeOut; 
+    private double sumToDate;
     private static Connection dbConn;
     private static Statement commStmt;
     private static ResultSet dbResults;
@@ -26,38 +27,45 @@ public class Time_Management {
         this.storeID = 0;
         this.employID = 0;
         this.timeIn = new Date();
-        this.timeOut = new Date();
+        this.timeOut = new Date(); 
+        this.sumToDate = 0.0;
     } 
 
-    public Time_Management(int storeID, int employID, Date timeIn, Date timeOut) {
+
+    public Time_Management(int storeID, int employID, Date timeIn, Date timeOut, double sumToDate) {
         this.timeID = ++nextID;
         this.storeID = storeID;
         this.employID = employID;
         this.timeIn = timeIn;
         this.timeOut = timeOut;
+        this.sumToDate = sumToDate;
     }
+    
 
-    public Time_Management(int timeID, int storeID, int employID, Date timeIn, Date timeOut) {
+    public Time_Management(int timeID, int storeID, int employID, Date timeIn, Date timeOut, double sumToDate) {
         this.timeID = timeID;
         this.storeID = storeID;
         this.employID = employID;
         this.timeIn = timeIn;
-        this.timeOut = timeOut; 
+        this.timeOut = timeOut;
+        this.sumToDate = sumToDate; 
         if(timeID>nextID){ 
             nextID = timeID;
         }
-    } 
+    }
+    
+    
     
     public static void newTimeManagementFromDatabase(int timeID, int storeID, 
-            int employID, Date timeIn, Date timeOut){ 
+            int employID, Date timeIn, Date timeOut,double sumToDate){ 
         
-        timeArray.add(new Time_Management(timeID,storeID,employID,timeIn,timeOut));
+        timeArray.add(new Time_Management(timeID,storeID,employID,timeIn,timeOut,sumToDate));
     } 
     
     public static void newTimeManagement(int storeID, int employID, Date timeIn, 
-            Date timeOut){ 
+            Date timeOut, double sumToDate){ 
         
-        timeArray.add(new Time_Management(storeID,employID,timeIn,timeOut));
+        timeArray.add(new Time_Management(storeID,employID,timeIn,timeOut,sumToDate));
     } 
     
     public static void fillTimeManagementArray() { 
@@ -73,7 +81,8 @@ public class Time_Management {
                                     dbResults.getInt(2), 
                                     dbResults.getInt(3), 
                                     dbResults.getDate(4),
-                                    dbResults.getDate(5));
+                                    dbResults.getDate(5),
+                                    dbResults.getDouble(6));
 
             }
         } catch (SQLException e) {
@@ -91,12 +100,13 @@ public class Time_Management {
        {  
         String sqlQuery = "";
         sqlQuery += "INSERT INTO JAVAUSER.TIME_MANAGEMENT (TIMEID, STOREID, "
-                 +  "EMPLOYID, TIMEIN, TIMEOUT) VALUES (";
+                 +  "EMPLOYID, TIMEIN, TIMEOUT, SUMTODATE) VALUES (";
         sqlQuery += tm.getTimeID()+ ", ";
         sqlQuery += tm.getStoreID()+ ", ";
         sqlQuery += tm.getEmployID()+ ", '"; 
         sqlQuery += tm.getTimeIn()+ "', '"; 
-        sqlQuery += tm.getTimeOut()+ "')";
+        sqlQuery += tm.getTimeOut()+ "', "; 
+        sqlQuery += tm.getSumToDate()+ ")";
 
         sendDBCommand(sqlQuery);        
       } 
@@ -144,7 +154,16 @@ public class Time_Management {
 
     public static ArrayList<Time_Management> getTimeArray() {
         return timeArray;
+    } 
+
+    public double getSumToDate() {
+        return sumToDate;
     }
+
+    public void setSumToDate(double sumToDate) {
+        this.sumToDate = sumToDate;
+    }
+    
     
     
     private static void sendDBCommand(String sqlQuery) {

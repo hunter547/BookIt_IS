@@ -189,8 +189,11 @@ public class Employee {
 
     public void setEmployStatus(int employStatus) {
         this.employStatus = employStatus;
+    } 
+
+    public static ArrayList<Employee> getEmployArray() {
+        return employArray;
     }
-    
     
     
     private static void sendDBCommand(String sqlQuery) {

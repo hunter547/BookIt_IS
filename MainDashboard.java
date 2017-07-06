@@ -16,8 +16,6 @@ import javafx.scene.input.MouseEvent;
 
 public class MainDashboard {
 
-
-{
     //Creating ArrayLists
     ArrayList<Book> bookArray = Book.getBookArray();
     ArrayList<Consumable> consumableArray = Consumable.getConsumableArray();
@@ -76,7 +74,6 @@ public class MainDashboard {
     ComboBox cmboAddSupplierRep = new ComboBox();
 
     TextArea txtAreaCustDesc = new TextArea();
-
 
     //Main Scene
     Scene primaryScene = new Scene(overallPane, 1200, 1000);
@@ -190,7 +187,6 @@ public class MainDashboard {
         createTab.setClosable(false);
 
         //******CUSTOMER TAB INFORMATION*************
- 
         //Formatting Stuff
         customerPane.setHgap(20);
         customerPane.setVgap(5);
@@ -398,7 +394,6 @@ public class MainDashboard {
         });
 
         //******BOOK TAB INFORMATION*********************************************
-        
         //Formatting Stuff
         bookPane.setHgap(20);
         bookPane.setVgap(5);
@@ -818,7 +813,6 @@ public class MainDashboard {
         storePane.add(vbStoreButtons, 0, 7);
 
         //Select Store from storeView
-        
         storeView.setOnMouseClicked(e -> {
 
             txtAreaStoreDesc.clear();
@@ -871,10 +865,11 @@ public class MainDashboard {
             storeArray.remove(selectedStore);
         }); 
         
+         
+        
         
 
         //Profit Vs Expense Header
-
         //Title header
         Label lblPVE = new Label("Profit/Expense Report");
         lblPVE.setFont(Font.font("Times New Roman", FontWeight.BOLD, 50));
@@ -922,11 +917,7 @@ public class MainDashboard {
         profitView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         profitView.getColumns().addAll(tblcRevenueID, tblcAmount, tblcDate);
 
-
-
         TableView<Book> expenseView = new TableView<>();
-
-
 
         //create table columns 
         TableColumn tblcExpenseID = new TableColumn("ID");
@@ -1072,7 +1063,6 @@ public class MainDashboard {
 
         //These GridPanes will make up the second half of the page, where
         //the user will be able to add an entity
-        
         addCustPane.setVisible(false);
         addEmployeePane.setVisible(false);
         addStorePane.setVisible(false);
