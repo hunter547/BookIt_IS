@@ -28,8 +28,8 @@ public class launchWindow extends Application {
     private TextField tfPassword = new TextField();
     private Button btLogin = new Button("Login");
     private Button btClear = new Button("Clear"); 
-    private Button btnCheckIn = new Button("Check-In"); 
-    private Button btnCheckOut = new Button("Check-Out");
+    private Button btnCheckIn = new Button("Clock-In"); 
+    private Button btnCheckOut = new Button("Clock-Out");
     private Label lblError = new Label("Incorrect Login");
    
     

@@ -28,10 +28,13 @@ public class MainDashboard {
     private static ArrayList<Supplier> supplierArray = Supplier.getSupplierArray(); 
     private static ArrayList<Time_Management> timeArray = Time_Management.getTimeArray();
     private static ArrayList<Book> bookInvArray = new ArrayList<>();
-    private static ArrayList<Consumable> consInvArray = new ArrayList<>();
-
+    private static ArrayList<Consumable> consInvArray = new ArrayList<>(); 
+    private static ArrayList<Customer> custLoyaltyArray = new ArrayList<>();
     ObservableList<String> invTabStoreCombo = FXCollections.observableArrayList();
-
+    
+    
+    
+    
     //Creating Panes
     GridPane overallPane = new GridPane();
 
@@ -41,10 +44,12 @@ public class MainDashboard {
     GridPane modCustomerPane = new GridPane();
 
     GridPane employeePane = new GridPane(); 
-    GridPane modBookPane = new GridPane();
+    GridPane modEmployeePane = new GridPane();
+    
 
     GridPane bookPane = new GridPane();
     GridPane modBookPane = new GridPane();
+    
 
     GridPane profitPane = new GridPane();
 
@@ -82,7 +87,8 @@ public class MainDashboard {
     ComboBox cmboAddChooseStore = new ComboBox();
     ComboBox cmboAddSupplierRep = new ComboBox();
 
-    ComboBox cmboAddChooseStore2 = new ComboBox();
+    ComboBox cmboAddChooseStore2 = new ComboBox(); 
+    ComboBox cmboChooseEmployeeStore = new ComboBox();
 
     TextArea txtAreaCustDesc = new TextArea();
 
@@ -777,12 +783,12 @@ public class MainDashboard {
         Label lblModStoreName = new Label("Store Name: ");
         Label lblModStoreAddress = new Label("Store Address: ");
         Label lblModStorePhone = new Label("Store phone: ");
-        Label lblModStoreAreaID = new Label("Store Area ID: ");
+
 
         TextField txtModStoreName = new TextField();
         TextField txtModStoreAddress = new TextField();
         TextField txtModStorePhone = new TextField();
-        TextField txtModStoreAreaID = new TextField();
+
 
         Button btnModStoreSubmit = new Button("Submit");
         Button btnModStoreClear = new Button("Clear");
@@ -799,19 +805,19 @@ public class MainDashboard {
         modStorePane.add(lblModStoreName, 0, 1);
         modStorePane.add(lblModStoreAddress, 0, 2);
         modStorePane.add(lblModStorePhone, 0, 3);
-        modStorePane.add(lblModStoreAreaID, 0, 4);
+
 
         modStorePane.add(txtModStoreName, 1, 1);
         modStorePane.add(txtModStoreAddress, 1, 2);
         modStorePane.add(txtModStorePhone, 1, 3);
-        modStorePane.add(txtModStoreAreaID, 1, 4);
+
 
         modStorePane.add(vbModStoreButtons, 0, 5);
 
         //Create Table Columns For initial tableView 
         TableColumn tblcStoreID = new TableColumn("Store ID");
         TableColumn tblcStoreName = new TableColumn("Store Name");
-        TableColumn tblcStoreLocation = new TableColumn("Location");
+
 
         // Table Columns for employees at store tableview
         TableColumn tblcStoreID2 = new TableColumn("Store ID");
@@ -824,13 +830,13 @@ public class MainDashboard {
         // storeView table items
         tblcStoreID.setCellValueFactory(new PropertyValueFactory<Store, Integer>("storeID"));
         tblcStoreName.setCellValueFactory(new PropertyValueFactory<Store, String>("storeName"));
-        tblcStoreLocation.setCellValueFactory(new PropertyValueFactory<Store, String>("storeArea"));
+
 
         //Format and add Columns to StoreView
         storeView.setMinWidth(200);
         storeView.setMaxHeight(400);
         storeView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        storeView.getColumns().addAll(tblcStoreID, tblcStoreName, tblcStoreLocation);
+        storeView.getColumns().addAll(tblcStoreID, tblcStoreName);
 
         // Format and add columns to storeEmployeeView
         storeEmployeeView.setMinWidth(700);
@@ -864,19 +870,16 @@ public class MainDashboard {
                     + "\nSTORE ADDRESS: " + storeArray.get(storeView.getSelectionModel()
                             .getSelectedIndex()).getStoreAddress()
                     + "\nSTORE PHONE NUMBER: " + storeArray.get(storeView.getSelectionModel()
-                            .getSelectedIndex()).getStorePhone()
-                    + "\nSTORE AREA: " + storeArray.get(storeView.getSelectionModel()
-                            .getSelectedIndex()).getStoreArea());
+                            .getSelectedIndex()).getStorePhone());
 
             //Filling modify store fields
             txtModStoreName.setText(storeArray.get(storeView.getSelectionModel()
                     .getSelectedIndex()).getStoreName());
             txtModStoreAddress.setText(storeArray.get(storeView.getSelectionModel()
-                    .getSelectedIndex()).getStoreName());
+                    .getSelectedIndex()).getStoreAddress());
             txtModStorePhone.setText(storeArray.get(storeView.getSelectionModel()
-                    .getSelectedIndex()).getStoreName());
-            txtModStoreAreaID.setText(storeArray.get(storeView.getSelectionModel()
-                    .getSelectedIndex()).getStoreName());
+                    .getSelectedIndex()).getStorePhone());
+            
 
             modStorePane.setVisible(true);
         });
@@ -892,7 +895,6 @@ public class MainDashboard {
             txtModStoreName.clear();
             txtModStoreAddress.clear();
             txtModStorePhone.clear();
-            txtModStoreAreaID.clear();
         });
 
         //Remove Store Button Functions
@@ -908,6 +910,8 @@ public class MainDashboard {
         lblEmployeeHeader.setFont(Font.font("Times New Roman", FontWeight.BOLD,50)); 
         Label lblTimeLog = new Label("Time Log"); 
         lblTimeLog.setFont(Font.font("Times New Roman",FontWeight.BOLD,15)); 
+        Label lblChooseEmployee = new Label("Choose an Employee"); 
+        lblChooseEmployee.setFont(Font.font("Times New Roman",FontWeight.BOLD,15)); 
         GridPane.setHalignment(lblEmployeeHeader, HPos.CENTER); 
         Pane blankSpace4 = new Pane();
         blankSpace4.setMinHeight(20);
@@ -930,6 +934,7 @@ public class MainDashboard {
         
         
         
+        
         timeView.setItems(timeTableData); 
         TableColumn tblcTimeID = new TableColumn("Time ID");
         TableColumn tblcTimeIn = new TableColumn("Time-In");
@@ -941,23 +946,59 @@ public class MainDashboard {
         tblcTimeOut.setCellValueFactory(new PropertyValueFactory<Time_Management, Date>("timeOutFormat")); 
         tblcTimeID.setSortType(TableColumn.SortType.ASCENDING);
         timeView.getColumns().addAll(tblcTimeID,tblcTimeIn,tblcTimeOut); 
-        timeView.getSortOrder().add(tblcTimeIn);
+        timeView.getSortOrder().add(tblcTimeID);
         timeView.setMinWidth(400);
         employView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         timeView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         employView.getColumns().addAll(tblcEmployID,tblcEmployFirstName,tblcEmployLastName); 
-        
+        timeTableData.clear();
         employeePane.add(lblEmployeeHeader, 0, 0); 
         employeePane.add(blankSpace4, 0, 1); 
-        employeePane.add(lblTimeLog, 1, 2);
+        employeePane.add(lblTimeLog, 1, 2); 
+        employeePane.add(lblChooseEmployee, 0, 2);
         employeePane.add(employView, 0, 3); 
         employeePane.add(timeView,1,3); 
-        
+        tblcEmployID.setSortType(TableColumn.SortType.ASCENDING); 
+        employView.getSortOrder().add(tblcEmployID);
         employTableData.clear(); 
         employeeArray = Employee.getEmployArray(); 
+        
+        tblcEmployFirstName.setSortable(false); 
+        tblcEmployLastName.setSortable(false);
+        
         for(Employee e: employeeArray){ 
             employTableData.add(e);
-        }
+        } 
+        employView.sort(); 
+        
+        employeeArray.clear(); 
+        for(Employee e: employTableData){ 
+            employeeArray.add(e);
+        } 
+        
+        Employee.setEmployArray(employeeArray);
+        tblcEmployID.setSortable(false);  
+        tblcTimeID.setSortable(false);
+        tblcTimeIn.setSortable(false); 
+        tblcTimeOut.setSortable(false);
+        
+        employView.setOnMouseClicked(e -> { 
+            int selection = employView.getSelectionModel().getSelectedIndex(); 
+            if(selection != -1){ 
+                int employID = employeeArray.get(selection).getEmployID(); 
+                timeArray = Time_Management.timeLogForEmployee(employID); 
+                timeTableData.clear(); 
+                if(timeArray.size()>0){
+                for(Time_Management tm: timeArray){ 
+                    timeTableData.add(tm);
+                }  
+                timeView.refresh(); 
+                tblcTimeID.setSortable(true);
+                timeView.sort(); 
+                tblcTimeID.setSortable(false);
+                }    
+            }
+        });
 
         //Profit Vs Expense Header
         //Title header
@@ -1286,6 +1327,10 @@ public class MainDashboard {
         Label lblAddEmployeeUsername = new Label("Username"); 
         Label lblAddEmployeePassword = new Label("Password"); 
         CheckBox cbxManagementStatus = new CheckBox("Assign management privileges?"); 
+        Label lblStore = new Label("Employee of Store: "); 
+        Label lblErrorUsername = new Label("Username already taken!"); 
+        lblErrorUsername.setTextFill(Color.RED); 
+        lblErrorUsername.setVisible(false);
         cbxManagementStatus.setTextFill(Color.RED);
 
         TextField txtAddEmployeeFN = new TextField();
@@ -1299,40 +1344,54 @@ public class MainDashboard {
         
 
         addEmployeePane.add(lblAddEmployee, 0, 0);
-        addEmployeePane.add(lblAddEmployeeFN, 0, 1);
-        addEmployeePane.add(lblAddEmployeeLN, 0, 2);
-        addEmployeePane.add(lblAddEmployeePhone, 0, 3);
-        addEmployeePane.add(lblAddEmployeePay, 0, 4); 
-        addEmployeePane.add(lblAddEmployeeUsername, 0, 5); 
-        addEmployeePane.add(lblAddEmployeePassword, 0, 6); 
-        addEmployeePane.add(cbxManagementStatus,0,7);
+        addEmployeePane.add(lblStore, 0, 1);
+        addEmployeePane.add(lblAddEmployeeFN, 0, 2);
+        addEmployeePane.add(lblAddEmployeeLN, 0, 3);
+        addEmployeePane.add(lblAddEmployeePhone, 0, 4);
+        addEmployeePane.add(lblAddEmployeePay, 0, 5); 
+        addEmployeePane.add(lblAddEmployeeUsername, 0, 6); 
+        addEmployeePane.add(lblAddEmployeePassword, 0, 7); 
+        addEmployeePane.add(cbxManagementStatus,0,8); 
+        populateChooseStoreCombos();
+        addEmployeePane.add(cmboChooseEmployeeStore, 1, 1);
+        addEmployeePane.add(txtAddEmployeeFN, 1, 2);
+        addEmployeePane.add(txtAddEmployeeLN, 1, 3);
+        addEmployeePane.add(txtAddEmployeePhone, 1, 4);
+        addEmployeePane.add(txtAddEmployeePay, 1, 5); 
+        addEmployeePane.add(txtAddEmployeeUsername, 1, 6); 
+        addEmployeePane.add(txtAddEmployeePassword, 1, 7);
 
-        addEmployeePane.add(txtAddEmployeeFN, 1, 1);
-        addEmployeePane.add(txtAddEmployeeLN, 1, 2);
-        addEmployeePane.add(txtAddEmployeePhone, 1, 3);
-        addEmployeePane.add(txtAddEmployeePay, 1, 4); 
-        addEmployeePane.add(txtAddEmployeeUsername, 1, 5); 
-        addEmployeePane.add(txtAddEmployeePassword, 1, 6);
-
-        addEmployeePane.add(btnAddEmployee, 1, 8); 
+        addEmployeePane.add(btnAddEmployee, 1, 9); 
+        addEmployeePane.add(lblErrorUsername, 0, 10);
         
         btnAddEmployee.setOnAction(e -> { 
+            boolean valid = true;
             int status = 0; 
-            double payRate = Double.valueOf(txtAddEmployeePay.getText());
+            double payRate = Double.valueOf(txtAddEmployeePay.getText()); 
+            String attemptedUsername = txtAddEmployeeUsername.getText(); 
+            valid = Employee.checkUsernameAvailability(attemptedUsername);
+            int storeID = storeArray.get(
+                    cmboChooseEmployeeStore.getSelectionModel().getSelectedIndex())
+                    .getStoreID();
             if(cbxManagementStatus.isSelected()){ 
                 status = 1;
             } 
             
-            Employee.newEmployee(txtAddEmployeeFN.getText(), 
+            if(valid){
+            lblErrorUsername.setVisible(false);
+                Employee.newEmployee(txtAddEmployeeFN.getText(), 
                     txtAddEmployeeLN.getText(), txtAddEmployeePhone.getText(), 
                     payRate,txtAddEmployeeUsername.getText(), 
-                    txtAddEmployeePassword.getText(), status, status); 
+                    txtAddEmployeePassword.getText(), status, storeID); 
             employTableData.clear(); 
             employeeArray = Employee.getEmployArray(); 
             for(Employee em: employeeArray){ 
                 employTableData.add(em);
             }
-            
+            } 
+            else { 
+                lblErrorUsername.setVisible(true);
+            }
         });
 
         //Setting up add Store pane for second half of page
@@ -1343,12 +1402,12 @@ public class MainDashboard {
         Label lblAddStoreName = new Label("Store Name: ");
         Label lblAddStoreAddress = new Label("Store Address: ");
         Label lblAddStorePhone = new Label("Store Phone Number: ");
-        Label lblAddStoreAreaID = new Label("Store Area ID: ");
+
 
         TextField txtAddStoreName = new TextField();
         TextField txtAddStoreAddress = new TextField();
         TextField txtAddStorePhone = new TextField();
-        TextField txtAddStoreAreaID = new TextField();
+
 
         Button btnAddStore = new Button("Add Store");
 
@@ -1357,12 +1416,12 @@ public class MainDashboard {
         addStorePane.add(lblAddStoreName, 0, 1);
         addStorePane.add(lblAddStoreAddress, 0, 2);
         addStorePane.add(lblAddStorePhone, 0, 3);
-        addStorePane.add(lblAddStoreAreaID, 0, 4);
+
 
         addStorePane.add(txtAddStoreName, 1, 1);
         addStorePane.add(txtAddStoreAddress, 1, 2);
         addStorePane.add(txtAddStorePhone, 1, 3);
-        addStorePane.add(txtAddStoreAreaID, 1, 4);
+
 
         addStorePane.add(btnAddStore, 1, 5);
 
@@ -1373,8 +1432,8 @@ public class MainDashboard {
 
             for (Store s : storeArray) {
                 if (txtAddStoreName.getText().matches(s.getStoreName())
-                        && txtAddStoreAddress.getText().matches(s.getStoreAddress())
-                        && txtAddStoreAreaID.getText().matches(s.getStoreArea())) {
+                        || txtAddStoreAddress.getText().matches(s.getStoreAddress())
+                        ) {
                     addOutput.setText("Store already exists!");
                     toAddFlag = false;
                 }
@@ -1382,7 +1441,7 @@ public class MainDashboard {
 
             if (toAddFlag == true) {
                 Store.newStore(txtAddStoreName.getText(), txtAddStoreAddress.getText(),
-                        txtAddStorePhone.getText(), txtAddStoreAreaID.getText());
+                        txtAddStorePhone.getText());
 
                 addOutput.setText("Store successfully added.");
             }
@@ -1390,7 +1449,7 @@ public class MainDashboard {
             txtAddStoreName.clear();
             txtAddStoreAddress.clear();
             txtAddStorePhone.clear();
-            txtAddStoreAreaID.clear();
+
 
             bookInventoryTableData.clear();
 
@@ -1436,7 +1495,7 @@ public class MainDashboard {
 
             for (Supplier s : supplierArray) {
                 if (txtAddSupplierName.getText().matches(s.getSuppName())
-                        && txtAddSupplierAddress.getText().matches(s.getSuppAddress())) 
+                        || txtAddSupplierAddress.getText().matches(s.getSuppAddress())) 
                 {
                     addOutput.setText("Supplier already exists!");
                     toAddFlag = false;
@@ -1754,20 +1813,16 @@ public class MainDashboard {
         cmboInvChooseStore.getItems().clear();
         cmboAddChooseStore.getItems().clear();
         cmboAddChooseStore2.getItems().clear();
+        cmboChooseEmployeeStore.getItems().clear();
         for (Store s : storeArray) {
             invTabStoreCombo.add(s.getStoreID() + " : " + s.getStoreName());
         }
         cmboInvChooseStore.setItems(invTabStoreCombo);
         cmboAddChooseStore.setItems(invTabStoreCombo);
-        cmboAddChooseStore2.setItems(invTabStoreCombo);
+        cmboAddChooseStore2.setItems(invTabStoreCombo); 
+        cmboChooseEmployeeStore.setItems(invTabStoreCombo);
     } 
     
-    public static void refreshTimeLog(){ 
-        timeTableData.clear(); 
-        timeArray = Time_Management.getTimeArray(); 
-        for(Time_Management tm: timeArray){ 
-            timeTableData.add(tm);
-        }
-    }
+
     
 }

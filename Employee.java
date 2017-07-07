@@ -201,6 +201,10 @@ public class Employee {
         return employArray;
     }  
 
+    public static void setEmployArray(ArrayList<Employee> employArray) {
+        Employee.employArray = employArray;
+    }
+
     public int getStoreID() {
         return storeID;
     }
@@ -227,6 +231,16 @@ public class Employee {
             }
         } 
         return storeID;
+    } 
+    
+    public static boolean checkUsernameAvailability(String username){ 
+        boolean valid = true; 
+        for(Employee e: employArray){ 
+            if(e.getEmployUsername().matches(username)){ 
+                valid = false;
+            }
+        } 
+        return valid;
     }
     
     
