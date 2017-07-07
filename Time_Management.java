@@ -92,7 +92,7 @@ public class Time_Management {
         } 
         if(didCheckOut){ 
             timeArray.add(new Time_Management(employID,storeID,timeIn)); 
-            MainDashboard.refreshTimeLog();
+
         } 
         return didCheckOut;
     } 
@@ -122,7 +122,7 @@ public class Time_Management {
             findCheckIn.setTimeOut(timeOut); 
             findCheckIn.setSumToDate(sumToDate); 
             findCheckIn.setTimeOutFormat(formatDate.format(new Date(timeOut))); 
-            MainDashboard.refreshTimeLog();
+
             
         } 
         return didCheckIn;
@@ -214,9 +214,6 @@ public class Time_Management {
         this.timeOut = timeOut;
     }
 
-    
-
-     
 
     public static ArrayList<Time_Management> getTimeArray() {
         return timeArray;
@@ -244,6 +241,16 @@ public class Time_Management {
 
     public void setTimeOutFormat(String timeOutFormat) {
         this.timeOutFormat = timeOutFormat;
+    } 
+    
+    public static ArrayList timeLogForEmployee(int employID){ 
+        ArrayList<Time_Management> timeList = new ArrayList<>(); 
+        for(Time_Management tm: timeArray){ 
+            if(tm.getEmployID() == employID){
+                timeList.add(tm);
+            }
+        } 
+        return timeList;
     }
     
     

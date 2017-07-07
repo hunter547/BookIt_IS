@@ -185,7 +185,7 @@ public class Book
         String sqlQuery = "";
         sqlQuery += "INSERT INTO JAVAUSER.BOOK (BOOKID, BOOKTITLE, "
                  +  "BOOKAUTHOR, BOOKCOST, BOOKSALEPRICE, BOOKDESCRIPTION, "
-                 +  "BOOKQUANTITY, BOOKSTORE) VALUES (";
+                 +  "BOOKQUANTITY, STOREID) VALUES (";
         sqlQuery += b.getBookID() + " , '";
         sqlQuery += b.getBookTitle() + "', '";
         sqlQuery += b.getBookAuthor() + "', '"; 
