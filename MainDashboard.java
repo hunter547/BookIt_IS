@@ -28,10 +28,13 @@ public class MainDashboard {
     private static ArrayList<Supplier> supplierArray = Supplier.getSupplierArray(); 
     private static ArrayList<Time_Management> timeArray = Time_Management.getTimeArray();
     private static ArrayList<Book> bookInvArray = new ArrayList<>();
-    private static ArrayList<Consumable> consInvArray = new ArrayList<>();
-
+    private static ArrayList<Consumable> consInvArray = new ArrayList<>(); 
+    private static ArrayList<Customer> custLoyaltyArray = new ArrayList<>();
     ObservableList<String> invTabStoreCombo = FXCollections.observableArrayList();
-
+    
+    
+    
+    
     //Creating Panes
     GridPane overallPane = new GridPane();
 
@@ -41,10 +44,12 @@ public class MainDashboard {
     GridPane modCustomerPane = new GridPane();
 
     GridPane employeePane = new GridPane(); 
-    GridPane modBookPane = new GridPane();
+    GridPane modEmployeePane = new GridPane();
+    
 
     GridPane bookPane = new GridPane();
     GridPane modBookPane = new GridPane();
+    
 
     GridPane profitPane = new GridPane();
 
