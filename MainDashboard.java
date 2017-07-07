@@ -1,7 +1,8 @@
 package BookIt_IS;
 
 import java.util.ArrayList;
-import java.util.ConcurrentModificationException;
+import java.util.ConcurrentModificationException; 
+import java.util.Date;
 import java.util.Iterator;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -13,7 +14,8 @@ import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import javafx.scene.text.*;
 import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.input.MouseEvent; 
+import javafx.scene.paint.Color;
 
 public class MainDashboard {
 
@@ -99,7 +101,15 @@ public class MainDashboard {
 
     TableView<Customer> custTransView = new TableView<>();
     ObservableList<Customer> custTransTableData
-            = FXCollections.observableArrayList(Customer.getCustArray());
+            = FXCollections.observableArrayList(Customer.getCustArray()); 
+    
+    // Setting up employee tables
+    TableView<Employee> employView = new TableView<>(); 
+     ObservableList<Employee> employTableData 
+             = FXCollections.observableArrayList(employeeArray); 
+    private static TableView<Time_Management> timeView = new TableView<>(); 
+        private static ObservableList<Time_Management> timeTableData 
+            = FXCollections.observableArrayList(Time_Management.getTimeArray()); 
 
     //Setting Up StoreTableViews
     TableView<Store> storeView = new TableView<>();
@@ -109,9 +119,7 @@ public class MainDashboard {
     TableView<Store> storeEmployeeView = new TableView<>();
     ObservableList<Store> storeEmployeeTableData
             = FXCollections.observableArrayList(Store.getStoreArray()); 
-    private static TableView<Time_Management> timeView = new TableView<>(); 
-        private static ObservableList<Time_Management> timeTableData 
-            = FXCollections.observableArrayList(Time_Management.getTimeArray()); 
+    
 
     public MainDashboard() {
         //Formatting Panes
