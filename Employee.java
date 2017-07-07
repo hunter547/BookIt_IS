@@ -18,7 +18,8 @@ public class Employee {
     private double employPayrate; 
     private String employUsername; 
     private String employPassword;
-    private int employStatus;   
+    private int employStatus;  
+    private int storeID;
     private static Connection dbConn;
     private static Statement commStmt;
     private static ResultSet dbResults;
@@ -31,12 +32,13 @@ public class Employee {
         this.employPayrate=0.0; 
         this.employUsername = ""; 
         this.employPassword = ""; 
-        this.employStatus=0;
+        this.employStatus=0; 
+        this.storeID = 0;
     } 
 
     public Employee(String employFirstName, String employLastName, 
             String employPhone, double employPayrate, String employUsername, 
-            String employPassword, int employStatus) {
+            String employPassword, int employStatus, int storeID) {
         this.employID = ++ nextID;
         this.employFirstName = employFirstName;
         this.employLastName = employLastName;
@@ -44,12 +46,13 @@ public class Employee {
         this.employPayrate = employPayrate; 
         this.employUsername = employUsername;
         this.employPassword = employPassword;
-        this.employStatus = employStatus;
+        this.employStatus = employStatus; 
+        this.storeID = storeID;
     } 
 
     public Employee(int employID, String employFirstName, String employLastName, 
             String employPhone, double employPayrate, String employUsername, 
-            String employPassword, int employStatus) {
+            String employPassword, int employStatus, int storeID) {
         this.employID = employID;
         this.employFirstName = employFirstName;
         this.employLastName = employLastName;
@@ -57,7 +60,8 @@ public class Employee {
         this.employPayrate = employPayrate;
         this.employUsername = employUsername;
         this.employPassword = employPassword;
-        this.employStatus = employStatus;
+        this.employStatus = employStatus; 
+        this.storeID = storeID;
         if(employID>nextID){ 
             nextID = employID;
         }
@@ -66,16 +70,16 @@ public class Employee {
          
     public static void newEmployeeFromDatabase(int employID, String employFirstName, 
             String employLastName, String employPhone, double employPayrate, 
-            String employUsername, String employPassword, int employStatus){ 
+            String employUsername, String employPassword, int employStatus,int storeID){ 
         employArray.add(new Employee(employID,employFirstName,employLastName,
-            employPhone,employPayrate,employUsername,employPassword,employStatus));
+            employPhone,employPayrate,employUsername,employPassword,employStatus,storeID));
     } 
     
     public static void newEmployee(String employFirstName, String employLastName, 
             String employPhone, double employPayrate, String employUsername, 
-            String employPassword, int employStatus){ 
+            String employPassword, int employStatus,int storeID){ 
         employArray.add(new Employee(employFirstName,employLastName,
-            employPhone,employPayrate,employUsername,employPassword,employStatus));    
+            employPhone,employPayrate,employUsername,employPassword,employStatus, storeID));    
     } 
     
     public static void fillEmployeeArray() { 
@@ -94,7 +98,8 @@ public class Employee {
                                     dbResults.getDouble(5),
                                     dbResults.getString(6),
                                     dbResults.getString(7),
-                                    dbResults.getInt(8));
+                                    dbResults.getInt(8),
+                                    dbResults.getInt(9));
             }
         } catch (SQLException e) {
             System.out.println(e.toString());
@@ -113,15 +118,16 @@ public class Employee {
         String sqlQuery = "";
         sqlQuery += "INSERT INTO JAVAUSER.EMPLOYEE (EMPLOYID, EMPLOYFIRSTNAME, "
                 + "EMPLOYLASTNAME, EMPLOYPHONE, EMPLOYPAYRATE, EMPLOYUSERNAME, "
-                + "EMPLOYPASSWORD, EMPLOYSTATUS) VALUES (";
+                + "EMPLOYPASSWORD, EMPLOYSTATUS, STOREID) VALUES (";
         sqlQuery += e.getEmployID()+ " , '";
         sqlQuery += e.getEmployFirstName()+ "', '";
         sqlQuery += e.getEmployLastName()+ "', '"; 
         sqlQuery += e.getEmployPhone()+ "', ";
         sqlQuery += e.getEmployPayrate()+ ", '"; 
         sqlQuery += e.getEmployUsername()+ "', '"; 
-        sqlQuery += e.getEmployPassword()+ "', ";         
-        sqlQuery += e.getEmployStatus()+ ")";
+        sqlQuery += e.getEmployPassword()+ "', ";   
+        sqlQuery += e.getEmployStatus()+ ", "; 
+        sqlQuery += e.getStoreID()+ ")";
 
         sendDBCommand(sqlQuery);        
       } 
@@ -193,6 +199,34 @@ public class Employee {
 
     public static ArrayList<Employee> getEmployArray() {
         return employArray;
+    }  
+
+    public int getStoreID() {
+        return storeID;
+    }
+
+    public void setStoreID(int storeID) {
+        this.storeID = storeID;
+    }
+    
+    public static int getEmployID(String username){ 
+        int employID = 0; 
+        for(Employee e: employArray){ 
+            if(e.getEmployUsername().matches(username)){ 
+                employID = e.getEmployID();
+            }
+        } 
+        return employID;
+    } 
+    
+    public static int getStoreID(String username){ 
+        int storeID = 0; 
+        for(Employee e: employArray){ 
+            if(e.getEmployUsername().matches(username)){ 
+                storeID = e.getStoreID();
+            }
+        } 
+        return storeID;
     }
     
     
@@ -213,5 +247,17 @@ public class Employee {
         } catch (SQLException e) {
             System.out.println(e.toString());
         }
+    } 
+    
+    public static boolean checkCredentials(String username, String password){ 
+        boolean valid = false; 
+        for(Employee e:employArray){ 
+            if(e.getEmployUsername().matches(username)){ 
+                if(e.getEmployPassword().matches(password)){ 
+                    valid = true;
+                }
+            }
+        } 
+        return valid;
     }
 }

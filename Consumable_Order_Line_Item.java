@@ -75,7 +75,7 @@ public class Consumable_Order_Line_Item {
         sendDBCommand(sqlQuery);
     }   
     
-    public static void insertAllBookOrderLineItems() { 
+    public static void insertAllConsumableOrderLineItems() { 
        for(Consumable_Order_Line_Item coli : coliArray)
        {  
         String sqlQuery = "";
