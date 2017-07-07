@@ -4,6 +4,10 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.time.Period;
 import java.util.ArrayList;
 import java.util.Date;
 import oracle.jdbc.pool.OracleDataSource;
@@ -15,8 +19,10 @@ public class Time_Management {
     private static int nextID = 0;
     private int storeID; 
     private int employID; 
-    private Date timeIn; 
-    private Date timeOut; 
+    private long timeIn; 
+    private long timeOut; 
+    private String timeInFormat; 
+    private String timeOutFormat;
     private double sumToDate;
     private static Connection dbConn;
     private static Statement commStmt;
@@ -26,29 +32,41 @@ public class Time_Management {
         this.timeID = 0;
         this.storeID = 0;
         this.employID = 0;
-        this.timeIn = new Date();
-        this.timeOut = new Date(); 
+        this.timeIn = 0;
+        this.timeOut = 0; 
+        this.timeInFormat = ""; 
+        this.timeOutFormat="";
         this.sumToDate = 0.0;
     } 
 
 
-    public Time_Management(int storeID, int employID, Date timeIn, Date timeOut, double sumToDate) {
+    public Time_Management(int employID, int storeID, long timeIn) {
+        SimpleDateFormat formatDate = new SimpleDateFormat("h:mm:ss a, M/d/YYYY");
         this.timeID = ++nextID;
         this.storeID = storeID;
         this.employID = employID;
-        this.timeIn = timeIn;
-        this.timeOut = timeOut;
-        this.sumToDate = sumToDate;
+        this.timeIn = timeIn; 
+        this.timeOut = 0;
+        this.timeInFormat = formatDate.format(timeIn); 
+        this.timeOutFormat = "On Shift";
     }
-    
 
-    public Time_Management(int timeID, int storeID, int employID, Date timeIn, Date timeOut, double sumToDate) {
+    public Time_Management(int timeID, int storeID, int employID, long timeIn, long timeOut, double sumToDate) {
+        SimpleDateFormat formatDate = new SimpleDateFormat("h:mm:ss a, M/d/YYYY");
         this.timeID = timeID;
         this.storeID = storeID;
         this.employID = employID;
         this.timeIn = timeIn;
         this.timeOut = timeOut;
         this.sumToDate = sumToDate; 
+        this.timeInFormat = formatDate.format(timeIn); 
+        if(timeOut==0){ 
+            timeOutFormat = "On Shift";
+        } 
+        else
+        { 
+        this.timeOutFormat = formatDate.format(timeOut); 
+        }
         if(timeID>nextID){ 
             nextID = timeID;
         }
@@ -57,16 +75,58 @@ public class Time_Management {
     
     
     public static void newTimeManagementFromDatabase(int timeID, int storeID, 
-            int employID, Date timeIn, Date timeOut,double sumToDate){ 
+            int employID, long timeIn, long timeOut, double sumToDate){ 
         
         timeArray.add(new Time_Management(timeID,storeID,employID,timeIn,timeOut,sumToDate));
     } 
     
-    public static void newTimeManagement(int storeID, int employID, Date timeIn, 
-            Date timeOut, double sumToDate){ 
-        
-        timeArray.add(new Time_Management(storeID,employID,timeIn,timeOut,sumToDate));
+    
+    public static boolean timeIn(int employID,int storeID, long timeIn){ 
+        boolean didCheckOut = true; 
+        for(Time_Management tm: timeArray){ 
+            if(tm.getEmployID() == employID){ 
+                if(tm.getTimeOut() == 0.0){ 
+                    didCheckOut =false;
+                }
+            }
+        } 
+        if(didCheckOut){ 
+            timeArray.add(new Time_Management(employID,storeID,timeIn)); 
+            MainDashboard.refreshTimeLog();
+        } 
+        return didCheckOut;
     } 
+    
+    public static boolean timeOut(int employID, int storeID, long timeOut){ 
+        boolean didCheckIn = true; 
+        double sumToDate = 0.0;
+        SimpleDateFormat formatDate = new SimpleDateFormat("h:mm:ss a, M/d/YYYY");
+        Time_Management findCheckIn = new Time_Management();
+        for(Time_Management tm: timeArray){ 
+            if(tm.getEmployID() == employID){ 
+                if(tm.getStoreID()==storeID){
+                    if(tm.getTimeOut() != 0.0){ 
+                        didCheckIn =false; 
+                        sumToDate = tm.getSumToDate();
+                    } 
+                    else{ 
+                        didCheckIn = true;
+                        findCheckIn = tm;
+                    } 
+                    }
+            }
+        } 
+        
+        if(didCheckIn){ 
+            sumToDate = sumToDate + (timeOut - findCheckIn.getTimeIn());
+            findCheckIn.setTimeOut(timeOut); 
+            findCheckIn.setSumToDate(sumToDate); 
+            findCheckIn.setTimeOutFormat(formatDate.format(new Date(timeOut))); 
+            MainDashboard.refreshTimeLog();
+            
+        } 
+        return didCheckIn;
+    }
     
     public static void fillTimeManagementArray() { 
        String sqlQuery = "";
@@ -75,14 +135,16 @@ public class Time_Management {
 
         try {
             while (dbResults.next()) {
-
+                long timeIn = Long.valueOf(dbResults.getString(4)); 
+                long timeOut = Long.valueOf(dbResults.getString(5));
+                double millisecondSum = Double.valueOf(dbResults.getString(6));
                 Time_Management.newTimeManagementFromDatabase(
                                     dbResults.getInt(1),
                                     dbResults.getInt(2), 
                                     dbResults.getInt(3), 
-                                    dbResults.getDate(4),
-                                    dbResults.getDate(5),
-                                    dbResults.getDouble(6));
+                                    timeIn,
+                                    timeOut,
+                                    millisecondSum);
 
             }
         } catch (SQLException e) {
@@ -105,8 +167,8 @@ public class Time_Management {
         sqlQuery += tm.getStoreID()+ ", ";
         sqlQuery += tm.getEmployID()+ ", '"; 
         sqlQuery += tm.getTimeIn()+ "', '"; 
-        sqlQuery += tm.getTimeOut()+ "', "; 
-        sqlQuery += tm.getSumToDate()+ ")";
+        sqlQuery += tm.getTimeOut()+ "', '"; 
+        sqlQuery += tm.getSumToDate()+ "')";
 
         sendDBCommand(sqlQuery);        
       } 
@@ -136,21 +198,25 @@ public class Time_Management {
         this.employID = employID;
     }
 
-    public Date getTimeIn() {
+    public long getTimeIn() {
         return timeIn;
     }
 
-    public void setTimeIn(Date timeIn) {
+    public void setTimeIn(long timeIn) {
         this.timeIn = timeIn;
     }
 
-    public Date getTimeOut() {
+    public long getTimeOut() {
         return timeOut;
     }
 
-    public void setTimeOut(Date timeOut) {
+    public void setTimeOut(long timeOut) {
         this.timeOut = timeOut;
-    } 
+    }
+
+    
+
+     
 
     public static ArrayList<Time_Management> getTimeArray() {
         return timeArray;
@@ -163,7 +229,22 @@ public class Time_Management {
     public void setSumToDate(double sumToDate) {
         this.sumToDate = sumToDate;
     }
-    
+
+    public String getTimeInFormat() {
+        return timeInFormat;
+    }
+
+    public void setTimeInFormat(String timeInFormat) {
+        this.timeInFormat = timeInFormat;
+    }
+
+    public String getTimeOutFormat() {
+        return timeOutFormat;
+    }
+
+    public void setTimeOutFormat(String timeOutFormat) {
+        this.timeOutFormat = timeOutFormat;
+    }
     
     
     private static void sendDBCommand(String sqlQuery) {

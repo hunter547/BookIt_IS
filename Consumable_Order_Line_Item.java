@@ -75,11 +75,12 @@ public class Consumable_Order_Line_Item {
         sendDBCommand(sqlQuery);
     }   
     
-    public static void insertAllBookOrderLineItems() { 
+    public static void insertAllConsumableOrderLineItems() { 
        for(Consumable_Order_Line_Item coli : coliArray)
        {  
         String sqlQuery = "";
-        sqlQuery += "INSERT INTO JAVAUSER.CONSUMABLE_ORDER_LINE_ITEM (COLIID, POID, CONID, QUANTITY) VALUES (";
+        sqlQuery += "INSERT INTO JAVAUSER.CONSUMABLE_ORDER_LINE_ITEM (COLIID, "
+                + "POID, CONID, QUANTITY) VALUES (";
         sqlQuery += coli.getColiID()+ " , ";
         sqlQuery += coli.getPoID()+ ", ";
         sqlQuery += coli.getConID()+ ", "; 
