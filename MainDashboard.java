@@ -1,11 +1,20 @@
 package BookIt_IS;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.ConcurrentModificationException; 
 import java.util.Date;
 import java.util.Iterator;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.embed.swing.SwingNode;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.*;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -15,7 +24,9 @@ import javafx.stage.Stage;
 import javafx.scene.text.*;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent; 
-import javafx.scene.paint.Color;
+import javafx.scene.paint.Color; 
+import javax.swing.JSpinner;
+import javax.swing.SpinnerDateModel;
 
 public class MainDashboard {
 
@@ -29,7 +40,9 @@ public class MainDashboard {
     private static ArrayList<Time_Management> timeArray = Time_Management.getTimeArray();
     private static ArrayList<Book> bookInvArray = new ArrayList<>();
     private static ArrayList<Consumable> consInvArray = new ArrayList<>(); 
-    private static ArrayList<Customer> custLoyaltyArray = new ArrayList<>();
+    private static ArrayList<Customer> custLoyaltyArray = new ArrayList<>(); 
+    private static ArrayList<Spinner> bookSpinArray = new ArrayList<>(); 
+    private static ArrayList<Spinner> conSpinArray = new ArrayList<>();
     ObservableList<String> invTabStoreCombo = FXCollections.observableArrayList();
     
     
@@ -59,7 +72,8 @@ public class MainDashboard {
     GridPane createPane = new GridPane();
 
     GridPane storePane = new GridPane();
-    GridPane modStorePane = new GridPane();
+    GridPane modStorePane = new GridPane(); 
+    
 
     //Creating Tabs
     TabPane tbPane = new TabPane();
@@ -81,7 +95,8 @@ public class MainDashboard {
     GridPane addSupplierPane = new GridPane();
     GridPane addBookPane = new GridPane();
     GridPane addConsumablePane = new GridPane();
-
+    GridPane addPOSPane = new GridPane(); 
+    GridPane addProductOrderPane = new GridPane();
     //Global controls for ease of updates
     ComboBox cmboInvChooseStore = new ComboBox();
     ComboBox cmboAddChooseStore = new ComboBox();
@@ -89,8 +104,25 @@ public class MainDashboard {
 
     ComboBox cmboAddChooseStore2 = new ComboBox(); 
     ComboBox cmboChooseEmployeeStore = new ComboBox();
-
-    TextArea txtAreaCustDesc = new TextArea();
+    ComboBox cmboAddPOSCustomer = new ComboBox(); 
+    ComboBox cmboAddPOSStore = new ComboBox(); 
+    ComboBox cmboAddProductOrderStore = new ComboBox(); 
+    ComboBox cmboAddProductOrderSupplier = new ComboBox();  
+    TextArea txtAreaCustDesc = new TextArea(); 
+    Menu mnuCategories = new Menu("Product Type...."); 
+    MenuBar mnuBar = new MenuBar();  
+    Menu mnuBook = new Menu("Book..."); 
+    Menu mnuConsumable = new Menu("Consumable..."); 
+    Label lblAddPOSTax = new Label("Tax (5.30%):"); 
+    Label lblAddPOSTotal = new Label("Total:"); 
+    Label lblAddPOSTaxAmount = new Label(); 
+    Label lblAddPOSTotalAmount = new Label(); 
+    Label lblAddPOSSub = new Label("Sub Total:"); 
+    Label lblAddPOSSubAmount = new Label();
+    int posPaneControl = 4;  
+    int productOrderPaneControl = 4;
+    Button btnAddPOS = new Button("Add POS"); 
+    Button btnAddProductOrder = new Button("Add Product Order");
 
     //Main Scene
     Scene primaryScene = new Scene(overallPane, 1200, 1000);
@@ -1224,7 +1256,9 @@ public class MainDashboard {
         addStorePane.setVisible(false);
         addSupplierPane.setVisible(false);
         addBookPane.setVisible(false);
-        addConsumablePane.setVisible(false);
+        addConsumablePane.setVisible(false); 
+        addPOSPane.setVisible(false); 
+        addProductOrderPane.setVisible(false);
 
         //Never-ending formatting
         addCustPane.setAlignment(Pos.TOP_CENTER);
@@ -1244,7 +1278,13 @@ public class MainDashboard {
         addBookPane.setVgap(5);
         addConsumablePane.setAlignment(Pos.TOP_CENTER);
         addConsumablePane.setHgap(20);
-        addConsumablePane.setVgap(5);
+        addConsumablePane.setVgap(5); 
+        addPOSPane.setAlignment(Pos.TOP_CENTER); 
+        addPOSPane.setHgap(20);
+        addPOSPane.setVgap(5); 
+        addProductOrderPane.setAlignment(Pos.TOP_CENTER);
+        addProductOrderPane.setHgap(20);
+        addProductOrderPane.setVgap(5);        
 
         createPane.add(blankSpace3, 0, 1);
 
@@ -1261,7 +1301,9 @@ public class MainDashboard {
         createPane.add(addStorePane, 0, 2);
         createPane.add(addSupplierPane, 0, 2);
         createPane.add(addBookPane, 0, 2);
-        createPane.add(addConsumablePane, 0, 2);
+        createPane.add(addConsumablePane, 0, 2); 
+        createPane.add(addPOSPane, 0, 2); 
+        createPane.add(addProductOrderPane, 0, 2);        
 
         createPane.add(blankSpace1, 0, 3);
         createPane.add(addOutput, 0, 4);
@@ -1469,7 +1511,7 @@ public class MainDashboard {
 
         Label lblAddSupplierName = new Label("Supplier Name: ");
         Label lblAddSupplierAddress = new Label("Supplier Address: ");
-        Label lblAddSupplierRep = new Label("Supplier Contact: ");
+        //Label lblAddSupplierRep = new Label("Supplier Contact: ");
 
         TextField txtAddSupplierName = new TextField();
         TextField txtAddSupplierAddress = new TextField();
@@ -1480,7 +1522,7 @@ public class MainDashboard {
 
         addSupplierPane.add(lblAddSupplierName, 0, 1);
         addSupplierPane.add(lblAddSupplierAddress, 0, 2);
-        addSupplierPane.add(lblAddSupplierRep, 0, 3);
+        //addSupplierPane.add(lblAddSupplierRep, 0, 3);
 
         addSupplierPane.add(txtAddSupplierName, 1, 1);
         addSupplierPane.add(txtAddSupplierAddress, 1, 2);
@@ -1613,7 +1655,274 @@ public class MainDashboard {
                 addOutput.setText("Please ensure that Aquisition Cost, Retail Price"
                         + ", and quantity are numbers and that you have selected a store.");
             }
+        }); 
+        
+         //Setting up POS pane for second half of page 
+        Label lblAddPOS = new Label("Add New POS");
+        lblAddPOS.setFont(Font.font("Times New Roman", FontWeight.BOLD, 30));
+        GridPane.setHalignment(lblAddPOS, HPos.RIGHT); 
+        
+        Label lblAddPOSCustomer = new Label ("Select a Customer:"); 
+        Label lblAddPOSDate = new Label ("Select a Date:"); 
+        Label lblAddPOSStore = new Label ("Select a Store:"); 
+        Label lblAddPOSProducts = new Label("Items Bought:");  
+
+        mnuBar.getMenus().add(mnuCategories); 
+        mnuCategories.getItems().addAll(mnuBook,mnuConsumable);
+        
+        
+        DatePicker datePick = new DatePicker(); 
+        datePick.setEditable(false);
+        // Technique retrieved from 
+        // https://stackoverflow.com/a/665463
+        JSpinner spinTimePick = new JSpinner( new SpinnerDateModel() ); 
+        JSpinner.DateEditor timeEditor = new JSpinner.DateEditor(spinTimePick, "hh:mm:ss a");
+        spinTimePick.setEditor(timeEditor);
+        spinTimePick.setValue(new Date());  
+        
+        SwingNode timePick = new SwingNode(); 
+        timePick.setContent(spinTimePick); 
+        
+        
+        addPOSPane.add(lblAddPOS, 0, 0); 
+        addPOSPane.add(lblAddPOSCustomer, 0, 1); 
+        addPOSPane.add(lblAddPOSStore, 0, 2); 
+        addPOSPane.add(lblAddPOSDate, 0, 3); 
+        addPOSPane.add(lblAddPOSProducts, 0, 4); 
+
+
+        addPOSPane.add(cmboAddPOSCustomer,1,1); 
+        addPOSPane.add(cmboAddPOSStore, 1, 2); 
+        addPOSPane.add(datePick, 1, 3); 
+        addPOSPane.add(timePick, 2, 3); 
+        addPOSPane.add(mnuBar, 1, 4);  
+        
+
+        
+        
+        
+        cmboAddPOSStore.setOnAction(e -> { 
+            int storeSelection = cmboAddPOSStore.getSelectionModel().getSelectedIndex();
+            if(storeSelection>-1){ 
+                mnuBook.getItems().clear(); 
+                mnuConsumable.getItems().clear();
+                int storeID = storeArray.get(storeSelection).getStoreID(); 
+                EventHandler<ActionEvent> action = changeCustPOSPlacement(storeID);
+                bookArray = Book.getBookStoreInventory(storeID);
+                consumableArray = Consumable.getConsumableStoreInventory(storeID); 
+                if(!bookArray.isEmpty()){ 
+                    for(Book b: bookArray){ 
+                        MenuItem mnuItem = new MenuItem(b.getBookTitle()); 
+                        mnuBook.getItems().add(mnuItem); 
+                        mnuItem.setUserData("b"+b.getBookID()); 
+                        mnuItem.setOnAction(action);
+                    }
+                } 
+                if(!consumableArray.isEmpty()){ 
+                    for(Consumable c: consumableArray){ 
+                        MenuItem mnuItem = new MenuItem(c.getConName()); 
+                        mnuConsumable.getItems().add(mnuItem); 
+                        mnuItem.setUserData("c"+c.getConID()); 
+                        mnuItem.setOnAction(action);
+                    }
+                }
+            }
         });
+        
+        
+        btnAddPOS.setOnAction(e -> { 
+            Date timePickDate = (Date) spinTimePick.getValue(); 
+            SimpleDateFormat formatDate = new SimpleDateFormat("h:mm:ss a"); 
+            String sPosDate = ""; 
+            sPosDate = datePick.getValue().format(DateTimeFormatter.ofPattern("MMMM dd, yyyy")); 
+            sPosDate = sPosDate + " " + formatDate.format(timePickDate); 
+            try {
+                Date posDate = new SimpleDateFormat("MMMM dd, yyyy hh:mm:ss a").parse(sPosDate); 
+                double total = 0;
+                if(!bookSpinArray.isEmpty()){ 
+                    for(Spinner s : bookSpinArray){ 
+                        total += (Book.getSalePrice((Integer) s.getUserData())) 
+                                * ((Integer) s.getValue());
+                    }
+                } 
+                if(!conSpinArray.isEmpty()){ 
+                    for(Spinner s : conSpinArray){ 
+                        total += (Consumable.getSalePrice((Integer) s.getUserData())) 
+                                * ((Integer) s.getValue());
+                    }
+                }
+                int custID = customerArray.get(
+                        cmboAddPOSCustomer.getSelectionModel().getSelectedIndex())
+                        .getCustID(); 
+                int storeID = storeArray.get(
+                        cmboAddPOSStore.getSelectionModel().getSelectedIndex())
+                        .getStoreID(); 
+                POS.newPos(storeID, custID, posDate.getTime(),total); 
+                addOutput.setVisible(true);
+                addOutput.setText("POS added!");
+                Account_Transaction.newAcctTransation(posDate.getTime(), total, 0);
+                posPaneControl = 4;
+                if(!bookSpinArray.isEmpty()){ 
+                    for(Spinner s : bookSpinArray){ 
+                        POS_Line_Item.newPosLineItem(POS.getNextID(), 
+                                (Integer) s.getUserData(), 1, 
+                                (Integer) s.getValue()); 
+                        Book.setQuantity(storeID, (Integer) s.getUserData(), 
+                                ((Integer) s.getValue())*-1);
+                    } 
+                    
+                } 
+                
+                if(!conSpinArray.isEmpty()){ 
+                    for(Spinner s: conSpinArray){ 
+                        POS_Line_Item.newPosLineItem(POS.getNextID(), 
+                                (Integer) s.getUserData(), 0, 
+                                (Integer) s.getValue()); 
+                        Consumable.setQuantity(storeID, (Integer) s.getUserData(), 
+                                ((Integer) s.getValue())*-1);
+                    } 
+                    
+                }
+                bookSpinArray.clear(); 
+                mnuBook.getItems().clear();
+                conSpinArray.clear(); 
+                mnuConsumable.getItems().clear(); 
+                
+            } catch (ParseException ex) {
+                addOutput.setVisible(true);
+                addOutput.setText("Please enter a valid date");
+            }
+        }); 
+        
+        //Setting up add Product Order for second half of page 
+        Label lblAddProductOrder = new Label("Add New Product Order");
+        lblAddProductOrder.setFont(Font.font("Times New Roman", FontWeight.BOLD, 30));
+        GridPane.setHalignment(lblAddProductOrder, HPos.RIGHT); 
+
+        Label lblAddProductOrderDate = new Label ("Select a Date:"); 
+        Label lblAddProductOrderStore = new Label ("Select a Store:"); 
+        Label lblAddProductOrderProducts = new Label("Items Ordered:");
+        Label lblAddProductOrderSupplier = new Label ("Select a Supplier:");  
+        
+        DatePicker datePick2 = new DatePicker(); 
+        datePick2.setEditable(false);
+        // Technique retrieved from 
+        // https://stackoverflow.com/a/665463
+        JSpinner spinTimePick2 = new JSpinner( new SpinnerDateModel() ); 
+        JSpinner.DateEditor timeEditor2 = new JSpinner.DateEditor(spinTimePick, "hh:mm:ss a");
+        spinTimePick2.setEditor(timeEditor2);
+        spinTimePick2.setValue(new Date());  
+        
+        SwingNode timePick2 = new SwingNode(); 
+        timePick2.setContent(spinTimePick2); 
+        
+        addProductOrderPane.add(lblAddProductOrder, 0, 0); 
+        addProductOrderPane.add(lblAddProductOrderStore, 0, 1); 
+        addProductOrderPane.add(lblAddProductOrderSupplier, 0, 2); 
+        addProductOrderPane.add(lblAddProductOrderDate, 0, 3); 
+        addProductOrderPane.add(lblAddProductOrderProducts, 0, 4); 
+
+
+        addProductOrderPane.add(cmboAddProductOrderStore,1,1); 
+        addProductOrderPane.add(cmboAddProductOrderSupplier, 1, 2); 
+        addProductOrderPane.add(datePick2, 1, 3); 
+        addProductOrderPane.add(timePick2, 2, 3); 
+        addProductOrderPane.add(mnuBar, 1, 4);  
+        
+        cmboAddProductOrderStore.setOnAction(e -> { 
+            int storeSelection = cmboAddProductOrderStore.getSelectionModel().getSelectedIndex();
+            if(storeSelection>-1){ 
+                mnuBook.getItems().clear(); 
+                mnuConsumable.getItems().clear();
+                int storeID = storeArray.get(storeSelection).getStoreID(); 
+                EventHandler<ActionEvent> action = changeProductOrderPlacement();
+                bookArray = Book.getBookStoreInventory(storeID);
+                consumableArray = Consumable.getConsumableStoreInventory(storeID); 
+                if(!bookArray.isEmpty()){ 
+                    for(Book b: bookArray){ 
+                        MenuItem mnuItem = new MenuItem(b.getBookTitle()); 
+                        mnuBook.getItems().add(mnuItem); 
+                        mnuItem.setUserData("b"+b.getBookID()); 
+                        mnuItem.setOnAction(action);
+                    }
+                } 
+                if(!consumableArray.isEmpty()){ 
+                    for(Consumable c: consumableArray){ 
+                        MenuItem mnuItem = new MenuItem(c.getConName()); 
+                        mnuConsumable.getItems().add(mnuItem); 
+                        mnuItem.setUserData("c"+c.getConID()); 
+                        mnuItem.setOnAction(action);
+                    }
+                }
+            }
+        }); 
+        
+        
+        btnAddProductOrder.setOnAction(e -> {
+            Date timePickDate = (Date) spinTimePick2.getValue(); 
+            SimpleDateFormat formatDate = new SimpleDateFormat("h:mm:ss a"); 
+            String sPosDate = ""; 
+            sPosDate = datePick2.getValue().format(DateTimeFormatter.ofPattern("MMMM dd, yyyy")); 
+            sPosDate = sPosDate + " " + formatDate.format(timePickDate); 
+            try {
+                Date posDate = new SimpleDateFormat("MMMM dd, yyyy hh:mm:ss a").parse(sPosDate); 
+                double total = 0;
+                if(!bookSpinArray.isEmpty()){ 
+                    for(Spinner s : bookSpinArray){ 
+                        total += (Book.getSalePrice((Integer) s.getUserData())) 
+                                * ((Integer) s.getValue());
+                    }
+                } 
+                if(!conSpinArray.isEmpty()){ 
+                    for(Spinner s : conSpinArray){ 
+                        total += (Consumable.getSalePrice((Integer) s.getUserData())) 
+                                * ((Integer) s.getValue());
+                    }
+                }
+                int suppID = supplierArray.get(
+                        cmboAddProductOrderSupplier.getSelectionModel().getSelectedIndex())
+                        .getSuppID(); 
+                int storeID = storeArray.get(
+                        cmboAddProductOrderStore.getSelectionModel().getSelectedIndex())
+                        .getStoreID(); 
+                Product_Order.newProductOrder(posDate.getTime(), suppID, storeID, total); 
+                addOutput.setVisible(true);
+                addOutput.setText("Product Order added!");
+                Account_Transaction.newAcctTransation(posDate.getTime(), total, 1);
+
+                if(!bookSpinArray.isEmpty()){ 
+                    for(Spinner s : bookSpinArray){ 
+                        Book_Order_Line_Item.newBoli(Product_Order.getNextID(), 
+                                (Integer) s.getUserData(), 
+                                (Integer) s.getValue()); 
+                        Book.setQuantity(storeID, (Integer) s.getUserData(), 
+                                (Integer) s.getValue());
+                    } 
+                    
+                } 
+                
+                if(!conSpinArray.isEmpty()){ 
+                    for(Spinner s: conSpinArray){ 
+                        Consumable_Order_Line_Item.newColi(POS.getNextID(), 
+                                (Integer) s.getUserData(), 
+                                (Integer) s.getValue()); 
+                        Consumable.setQuantity(storeID, (Integer) s.getUserData(),
+                                (Integer) s.getValue());
+                    } 
+                    
+                }
+                bookSpinArray.clear(); 
+                mnuBook.getItems().clear();
+                conSpinArray.clear(); 
+                mnuConsumable.getItems().clear(); 
+                productOrderPaneControl = 4;
+                
+            } catch (ParseException ex) {
+                addOutput.setVisible(true);
+                addOutput.setText("Please enter a valid date");
+            }
+        });
+        
 
         //Setting up add Consumable pane for second half of page
         Label lblAddConsumable = new Label("Add New Consumable");
@@ -1759,6 +2068,26 @@ public class MainDashboard {
                 addConsumablePane.setVisible(true);
                 addOutput.setVisible(false);
             }
+        }); 
+        
+        rdoCreatePOS.setOnAction(e -> { 
+            if (rdoCreatePOS.isSelected()) {
+                hideAddPanes(); 
+                populateChooseStoreCombos(); 
+                populateChooseCustomerCombos();
+                addPOSPane.setVisible(true);
+                addOutput.setVisible(false);
+            }
+        }); 
+        
+        rdoCreateProductOrder.setOnAction(e -> { 
+            if (rdoCreateProductOrder.isSelected()) {
+                hideAddPanes(); 
+                populateChooseStoreCombos(); 
+                populateChooseSupplierCombos();
+                addProductOrderPane.setVisible(true);
+                addOutput.setVisible(false);
+            }
         });
     }
 
@@ -1768,7 +2097,9 @@ public class MainDashboard {
         addStorePane.setVisible(false);
         addSupplierPane.setVisible(false);
         addBookPane.setVisible(false);
-        addConsumablePane.setVisible(false);
+        addConsumablePane.setVisible(false); 
+        addPOSPane.setVisible(false); 
+        addProductOrderPane.setVisible(false);
     }
 
     public ArrayList enrollCustomer() {
@@ -1813,15 +2144,139 @@ public class MainDashboard {
         cmboInvChooseStore.getItems().clear();
         cmboAddChooseStore.getItems().clear();
         cmboAddChooseStore2.getItems().clear();
-        cmboChooseEmployeeStore.getItems().clear();
+        cmboChooseEmployeeStore.getItems().clear(); 
+        cmboAddPOSStore.getItems().clear(); 
+        cmboAddProductOrderStore.getItems().clear();
         for (Store s : storeArray) {
             invTabStoreCombo.add(s.getStoreID() + " : " + s.getStoreName());
         }
         cmboInvChooseStore.setItems(invTabStoreCombo);
         cmboAddChooseStore.setItems(invTabStoreCombo);
         cmboAddChooseStore2.setItems(invTabStoreCombo); 
-        cmboChooseEmployeeStore.setItems(invTabStoreCombo);
+        cmboChooseEmployeeStore.setItems(invTabStoreCombo); 
+        cmboAddPOSStore.setItems(invTabStoreCombo); 
+        cmboAddProductOrderStore.setItems(invTabStoreCombo);        
+    }  
+    
+    public void populateChooseCustomerCombos(){ 
+        cmboAddPOSCustomer.getItems().clear(); 
+        customerArray = Customer.getCustArray();
+        for (Customer c: customerArray){ 
+            cmboAddPOSCustomer.getItems().add(c.getCustFirstName()+" "+c.getCustLastName());
+        }
     } 
+    
+    public void populateChooseSupplierCombos(){ 
+        cmboAddProductOrderSupplier.getItems().clear(); 
+        supplierArray = Supplier.getSupplierArray(); 
+        for(Supplier s: supplierArray){ 
+            cmboAddProductOrderSupplier.getItems().add(s.getSuppName());
+        }
+    }
+    
+        
+    
+    private EventHandler<ActionEvent> changeCustPOSPlacement(int storeID) {
+        return new EventHandler<ActionEvent>() {
+            
+            public void handle(ActionEvent event) {
+                
+                addPOSPane.getChildren().removeAll(lblAddPOSTax,lblAddPOSTotal,
+                        lblAddPOSTaxAmount, lblAddPOSTotalAmount, lblAddPOSSub,
+                        lblAddPOSSubAmount,btnAddPOS);
+                MenuItem mnuItem = (MenuItem) event.getSource();
+                Label lblProductName = new Label(mnuItem.getText()); 
+                addPOSPane.add(lblProductName, 0, ++posPaneControl);
+                if(mnuItem.getUserData().toString().substring(0, 1).matches("b"))
+                { 
+                    int bookID = Integer.valueOf(mnuItem.getUserData().toString().substring(1)); 
+                    int limit = Book.getQuantity(storeID, bookID); 
+                    // From SpinnerDemo: 
+                    // http://o7planning.org/en/11185/javafx-spinner-tutorial 
+                    Spinner<Integer> spinQuantity = new Spinner<>();
+                    SpinnerValueFactory<Integer> valueFactory = 
+                    new SpinnerValueFactory.IntegerSpinnerValueFactory(1, limit, 0);
+                    spinQuantity.setValueFactory(valueFactory); 
+                    spinQuantity.setUserData(bookID); 
+                    bookSpinArray.add(spinQuantity); 
+                    addPOSPane.add(spinQuantity, 1, posPaneControl);
+                }  
+                else
+                { 
+                    int conID = Integer.valueOf(mnuItem.getUserData().toString().substring(1));
+                    int limit = Consumable.getQuantity(storeID,conID); 
+                    Spinner<Integer> spinQuantity = new Spinner<>();
+                    SpinnerValueFactory<Integer> valueFactory = 
+                    new SpinnerValueFactory.IntegerSpinnerValueFactory(1, limit, 0);
+                    spinQuantity.setValueFactory(valueFactory);  
+                    spinQuantity.setUserData(conID); 
+                    conSpinArray.add(spinQuantity); 
+                    addPOSPane.add(spinQuantity, 1, posPaneControl);
+                }
+                
+                addPOSPane.add(btnAddPOS, 0, posPaneControl+1);
+                                
+                Menu parentMenu = mnuItem.getParentMenu();
+                mnuItem.getParentMenu().getItems().remove(mnuItem); 
+                if(parentMenu.getItems().isEmpty()){ 
+                    parentMenu.getParentMenu().getItems().remove(parentMenu);
+                }
+                
+                
+                
+            }
+        };
+
+    } 
+    
+    private EventHandler<ActionEvent> changeProductOrderPlacement() {
+        return new EventHandler<ActionEvent>() {
+            
+            public void handle(ActionEvent event) {
+                
+                addProductOrderPane.getChildren().removeAll(btnAddProductOrder);
+                MenuItem mnuItem = (MenuItem) event.getSource();
+                Label lblProductName = new Label(mnuItem.getText()); 
+                addProductOrderPane.add(lblProductName, 0, ++productOrderPaneControl);
+                if(mnuItem.getUserData().toString().substring(0, 1).matches("b"))
+                { 
+                    int bookID = Integer.valueOf(mnuItem.getUserData().toString().substring(1)); 
+                    // From SpinnerDemo: 
+                    // http://o7planning.org/en/11185/javafx-spinner-tutorial 
+                    Spinner<Integer> spinQuantity = new Spinner<>();
+                    SpinnerValueFactory<Integer> valueFactory = 
+                    new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 500, 0);
+                    spinQuantity.setValueFactory(valueFactory); 
+                    spinQuantity.setUserData(bookID); 
+                    bookSpinArray.add(spinQuantity); 
+                    addProductOrderPane.add(spinQuantity, 1, productOrderPaneControl);
+                }  
+                else
+                { 
+                    int conID = Integer.valueOf(mnuItem.getUserData().toString().substring(1));
+                    Spinner<Integer> spinQuantity = new Spinner<>();
+                    SpinnerValueFactory<Integer> valueFactory = 
+                    new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 500, 0);
+                    spinQuantity.setValueFactory(valueFactory);  
+                    spinQuantity.setUserData(conID); 
+                    conSpinArray.add(spinQuantity); 
+                    addProductOrderPane.add(spinQuantity, 1, productOrderPaneControl);
+                }
+                
+                addProductOrderPane.add(btnAddProductOrder, 0, productOrderPaneControl+1);
+                                
+                Menu parentMenu = mnuItem.getParentMenu();
+                mnuItem.getParentMenu().getItems().remove(mnuItem); 
+                if(parentMenu.getItems().isEmpty()){ 
+                    parentMenu.getParentMenu().getItems().remove(parentMenu);
+                }
+                
+                
+                
+            }
+        };
+
+    }
     
 
     
