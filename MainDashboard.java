@@ -1000,87 +1000,330 @@ public class MainDashboard {
             }
         });
 
-        //Profit Vs Expense Header
+       //Profit Vs Expense Header
         //Title header
         Label lblPVE = new Label("Profit/Expense Report");
         lblPVE.setFont(Font.font("Times New Roman", FontWeight.BOLD, 50));
         GridPane.setHalignment(lblPVE, HPos.CENTER);
 
         //Time period header
-        Label lblTime = new Label("Choose Time Period:");
-        lblTime.setFont(Font.font("Times New Roman", FontWeight.BOLD, 25));
-        GridPane.setHalignment(lblTime, HPos.CENTER);
+        Label lblChooseStore = new Label("Choose Store:");
+        lblChooseStore.setFont(Font.font("Times New Roman", FontWeight.BOLD, 25));
+        GridPane.setHalignment(lblChooseStore, HPos.CENTER);
 
         //Radio Buttons 
-        RadioButton rdoDay = new RadioButton();
-        RadioButton rdoMonth = new RadioButton();
-        RadioButton rdoYear = new RadioButton();
+        RadioButton rdoStore1 = new RadioButton("Store 1");
+        RadioButton rdoStore2 = new RadioButton("Store 2");
+        RadioButton rdoStore3 = new RadioButton("Store 3");
+        RadioButton rdoStore4 = new RadioButton("Store 4");
+        RadioButton rdoAllStores = new RadioButton("All Stores");
 
-        Label lblDay = new Label("Day");
-        Label lblMonth = new Label("Month");
-        Label lblYear = new Label("Year");
+        Label lblSales1 = new Label("Sales");
+        TextField txtSales1 = new TextField();
+        Label lblExpenses1 = new Label("Expenses");
+        TextField txtExpenses1 = new TextField();
+        Label lblNetProfit1 = new Label("Net Profit");
+        TextField txtNet1 = new TextField();
+        
+        Label lblSales2 = new Label("Sales");
+        TextField txtSales2 = new TextField();
+        Label lblExpenses2 = new Label("Expenses");
+        TextField txtExpenses2 = new TextField();
+        Label lblNetProfit2 = new Label("Net Profit");
+        TextField txtNet2 = new TextField();
+        
+        Label lblSales3 = new Label("Sales");
+        TextField txtSales3 = new TextField();
+        Label lblExpenses3 = new Label("Expenses");
+        TextField txtExpenses3 = new TextField();
+        Label lblNetProfit3 = new Label("Net Profit");
+        TextField txtNet3 = new TextField();
+        
+        Label lblSales4 = new Label("Sales");
+        TextField txtSales4 = new TextField();
+        Label lblExpenses4 = new Label("Expenses");
+        TextField txtExpenses4 = new TextField();
+        Label lblNetProfit4 = new Label("Net Profit");
+        TextField txtNet4 = new TextField();
+        
+        Label lblSalesAll = new Label("Sales");
+        TextField txtSalesAll = new TextField();
+        Label lblExpensesAll = new Label("Expenses");
+        TextField txtExpensesAll = new TextField();
+        Label lblNetProfitAll = new Label("Net Profit");
+        TextField txtNetAll = new TextField();
+                
+                
+        
+        Label lblBegDate = new Label("Sales and Expenses From");
+        Label lblEndDate = new Label ("Sales and Expenses To");
+        
+        DatePicker dpBegDate = new DatePicker();
+        DatePicker dpEndDate = new DatePicker();
+        dpEndDate.setValue(LocalDate.now());
+        dpBegDate.setValue(LocalDate.now());
+                
+       
+         int expStore1 = 56;
+         int salesStore1 = 112;
+         int expStore2 = 72;
+         int salesStore2 = 243;
+         int expStore3 = 85;
+         int salesStore3 = 99;
+         int expStore4 = 22;
+         int salesStore4 = 40;
+         int expStoreAll = expStore1 + expStore2 + expStore3 + expStore4;
+         int salesStoreAll = salesStore1 + salesStore2 + salesStore3 + salesStore4;
+         int netProfit1;
+         int netProfit2;
+         int netProfit3;
+         int netProfit4;
+         int netProfitAll;
+         
+        LocalDate begDate = dpBegDate.getValue();
+        LocalDate EndDate = dpEndDate.getValue();
+        
+       
+            
+        netProfit1 = salesStore1 - expStore1; 
+        netProfit2 = salesStore2 - expStore2; 
+        netProfit3 = salesStore3 - expStore3; 
+        netProfit4 = salesStore4 - expStore4; 
+        netProfitAll = salesStoreAll - expStoreAll; 
+        
+        txtSales1.setText("$" + Integer.toString(salesStore1));
+        txtExpenses1.setText("$" + Integer.toString(expStore1));
+        txtNet1.setText("$" + Integer.toString(netProfit1));
+        
+        txtSales2.setText("$" + Integer.toString(salesStore2));
+        txtExpenses2.setText("$" + Integer.toString(expStore2));
+        txtNet2.setText("$" + Integer.toString(netProfit2));
+        
+        txtSales3.setText("$" + Integer.toString(salesStore3));
+        txtExpenses3.setText("$" + Integer.toString(expStore3));
+        txtNet3.setText("$" + Integer.toString(netProfit3));
+        
+        txtSales4.setText("$" + Integer.toString(salesStore4));
+        txtExpenses4.setText("$" + Integer.toString(expStore4));
+        txtNet4.setText("$" + Integer.toString(netProfit4));
+        
+        txtSalesAll.setText("$" + Integer.toString(salesStoreAll));
+        txtExpensesAll.setText("$" + Integer.toString(expStoreAll));
+        txtNetAll.setText("$" + Integer.toString(netProfitAll));
+        
+        
+        rdoStore1.setOnAction(e -> {
+            if (rdoStore1.isSelected()) {
+                txtSales1.setVisible(true);
+                txtSales2.setVisible(false);
+                txtSales3.setVisible(false);
+                txtSales4.setVisible(false);
+                txtSalesAll.setVisible(false);
+                txtExpenses1.setVisible(true);
+                txtExpenses2.setVisible(false);
+                txtExpenses3.setVisible(false);
+                txtExpenses4.setVisible(false);
+                txtExpensesAll.setVisible(false);
+                txtNet1.setVisible(true);
+                txtNet2.setVisible(false);
+                txtNet3.setVisible(false);
+                txtNet4.setVisible(false);
+                txtNetAll.setVisible(false);
+                
+            }
+        });
+        
+        rdoStore2.setOnAction(e -> {
+            if (rdoStore2.isSelected()) {
+                txtSales1.setVisible(false);
+                txtSales2.setVisible(true);
+                txtSales3.setVisible(false);
+                txtSales4.setVisible(false);
+                txtSalesAll.setVisible(false);
+                txtExpenses1.setVisible(false);
+                txtExpenses2.setVisible(true);
+                txtExpenses3.setVisible(false);
+                txtExpenses4.setVisible(false);
+                txtExpensesAll.setVisible(false);
+                txtNet1.setVisible(false);
+                txtNet2.setVisible(true);
+                txtNet3.setVisible(false);
+                txtNet4.setVisible(false);
+                txtNetAll.setVisible(false);
+                
+            }
+        });
+        
+        rdoStore3.setOnAction(e -> {
+            if (rdoStore3.isSelected()) {
+                txtSales1.setVisible(false);
+                txtSales2.setVisible(false);
+                txtSales3.setVisible(true);
+                txtSales4.setVisible(false);
+                txtSalesAll.setVisible(false);
+                txtExpenses1.setVisible(false);
+                txtExpenses2.setVisible(false);
+                txtExpenses3.setVisible(true);
+                txtExpenses4.setVisible(false);
+                txtExpensesAll.setVisible(false);
+                txtNet1.setVisible(false);
+                txtNet2.setVisible(false);
+                txtNet3.setVisible(true);
+                txtNet4.setVisible(false);
+                txtNetAll.setVisible(false);
+                
+            }
+        });
+        
 
-        Label lblRev = new Label("Revenues:");
-        Label lblExp = new Label("Expenses:");
-
-        Label lblTotal = new Label("Total Profit: ");
-        Label lblIncome = new Label("Income Before Taxes: ");
-
-        TextField txtProfit = new TextField();
-        TextField txtIncome = new TextField();
+      rdoStore4.setOnAction(e -> {
+            if (rdoStore4.isSelected()) {
+                txtSales1.setVisible(false);
+                txtSales2.setVisible(false);
+                txtSales3.setVisible(false);
+                txtSales4.setVisible(true);
+                txtSalesAll.setVisible(false);
+                txtExpenses1.setVisible(false);
+                txtExpenses2.setVisible(false);
+                txtExpenses3.setVisible(false);
+                txtExpenses4.setVisible(true);
+                txtExpensesAll.setVisible(false);
+                txtNet1.setVisible(false);
+                txtNet2.setVisible(false);
+                txtNet3.setVisible(false);
+                txtNet4.setVisible(true);
+                txtNetAll.setVisible(false);
+                
+            }
+        });
+      
+      rdoAllStores.setOnAction(e -> {
+            if (rdoAllStores.isSelected()) {
+                txtSales1.setVisible(false);
+                txtSales2.setVisible(false);
+                txtSales3.setVisible(false);
+                txtSales4.setVisible(false);
+                txtSalesAll.setVisible(true);
+                txtExpenses1.setVisible(false);
+                txtExpenses2.setVisible(false);
+                txtExpenses3.setVisible(false);
+                txtExpenses4.setVisible(false);
+                txtExpensesAll.setVisible(true);
+                txtNet1.setVisible(false);
+                txtNet2.setVisible(false);
+                txtNet3.setVisible(false);
+                txtNet4.setVisible(false);
+                txtNetAll.setVisible(true);
+                
+            }
+        });
+      
 
         //Location of labels and buttons
-        profitPane.add(lblPVE, 2, 0, 3, 1);
+        GridPane pePane = new GridPane();
+        profitPane.add(pePane, 0, 0);
+//        pePane.setHgap(20);
 
-        profitPane.setHalignment(lblTime, HPos.CENTER);
-        profitPane.add(lblTime, 0, 1);
+        pePane.add(lblPVE, 0,0);
+        lblPVE.setAlignment(Pos.CENTER);
+      
 
-        //Revenues and expenses
-        TableView<Book> profitView = new TableView<>();
+        pePane.add(lblChooseStore, 0, 1);
+         
 
-        //create table columns 
-        TableColumn tblcRevenueID = new TableColumn("ID");
-        TableColumn tblcAmount = new TableColumn("Amount");
-        TableColumn tblcDate = new TableColumn("Date");
-
-        profitView.setMinWidth(300);
-        profitView.setMaxHeight(400);
-        profitView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        profitView.getColumns().addAll(tblcRevenueID, tblcAmount, tblcDate);
-
-        TableView<Book> expenseView = new TableView<>();
-
-        //create table columns 
-        TableColumn tblcExpenseID = new TableColumn("ID");
-        TableColumn tblcAmountExp = new TableColumn("Amount");
-        TableColumn tblcDateExp = new TableColumn("Date");
-
-        expenseView.setMinWidth(300);
-        expenseView.setMaxHeight(400);
-        expenseView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        expenseView.getColumns().addAll(tblcExpenseID, tblcAmountExp, tblcDateExp);
-
-        GridPane.setHalignment(lblDay, HPos.LEFT);
-        GridPane.setHalignment(rdoDay, HPos.RIGHT);
-        GridPane.setHalignment(lblMonth, HPos.LEFT);
-        GridPane.setHalignment(rdoMonth, HPos.RIGHT);
-        GridPane.setHalignment(lblYear, HPos.LEFT);
-        GridPane.setHalignment(rdoYear, HPos.RIGHT);
-
-        profitPane.add(lblDay, 3, 1);
-        profitPane.add(rdoDay, 4, 1);
-        profitPane.add(lblMonth, 6, 1);
-        profitPane.add(rdoMonth, 7, 1);
-        profitPane.add(lblYear, 8, 1);
-        profitPane.add(rdoYear, 9, 1);
-        profitPane.add(lblRev, 0, 5);
-        profitPane.add(lblExp, 4, 5);
-        profitPane.add(profitView, 0, 7);
-        profitPane.add(expenseView, 4, 7);
-        profitPane.add(lblTotal, 0, 11);
-        profitPane.add(lblIncome, 0, 13);
-        profitPane.add(txtProfit, 0, 12);
-        profitPane.add(txtIncome, 0, 14);
+        pePane.add(rdoStore1, 0, 5);
+        rdoStore1.setAlignment(Pos.CENTER);
+        pePane.add(rdoStore2, 1, 5);
+        pePane.add(rdoStore3, 0, 6);
+        pePane.add(rdoStore4, 1, 6);
+        pePane.add(rdoAllStores, 0, 7);
+        pePane.add(lblSales1, 0, 11);
+        lblSales1.setAlignment(Pos.CENTER);
+        pePane.add(txtSales1, 0, 12);
+         txtSales1.setAlignment(Pos.CENTER);
+        pePane.add(lblExpenses1, 0, 13);
+         lblExpenses1.setAlignment(Pos.CENTER);
+        pePane.add(txtExpenses1, 0, 14);
+         txtExpenses1.setAlignment(Pos.CENTER);
+        pePane.add(lblNetProfit1, 0, 15);
+         lblNetProfit1.setAlignment(Pos.CENTER);
+        pePane.add(txtNet1, 0, 16);
+         txtNet1.setAlignment(Pos.CENTER);
+         
+         pePane.add(lblSales2, 0, 11);
+        lblSales2.setAlignment(Pos.CENTER);
+        pePane.add(txtSales2, 0, 12);
+         txtSales2.setAlignment(Pos.CENTER);
+        pePane.add(lblExpenses2, 0, 13);
+         lblExpenses2.setAlignment(Pos.CENTER);
+        pePane.add(txtExpenses2, 0, 14);
+         txtExpenses2.setAlignment(Pos.CENTER);
+        pePane.add(lblNetProfit2, 0, 15);
+         lblNetProfit2.setAlignment(Pos.CENTER);
+        pePane.add(txtNet2, 0, 16);
+         txtNet2.setAlignment(Pos.CENTER);
+         
+         pePane.add(lblSales3, 0, 11);
+        lblSales3.setAlignment(Pos.CENTER);
+        pePane.add(txtSales3, 0, 12);
+         txtSales3.setAlignment(Pos.CENTER);
+        pePane.add(lblExpenses3, 0, 13);
+         lblExpenses3.setAlignment(Pos.CENTER);
+        pePane.add(txtExpenses3, 0, 14);
+         txtExpenses3.setAlignment(Pos.CENTER);
+        pePane.add(lblNetProfit3, 0, 15);
+         lblNetProfit3.setAlignment(Pos.CENTER);
+        pePane.add(txtNet3, 0, 16);
+         txtNet3.setAlignment(Pos.CENTER);
+         
+         pePane.add(lblSales4, 0, 11);
+        lblSales4.setAlignment(Pos.CENTER);
+        pePane.add(txtSales4, 0, 12);
+         txtSales4.setAlignment(Pos.CENTER);
+        pePane.add(lblExpenses4, 0, 13);
+         lblExpenses4.setAlignment(Pos.CENTER);
+        pePane.add(txtExpenses4, 0, 14);
+         txtExpenses4.setAlignment(Pos.CENTER);
+        pePane.add(lblNetProfit4, 0, 15);
+         lblNetProfit4.setAlignment(Pos.CENTER);
+        pePane.add(txtNet4, 0, 16);
+         txtNet4.setAlignment(Pos.CENTER);
+         
+         pePane.add(lblSalesAll, 0, 11);
+        lblSalesAll.setAlignment(Pos.CENTER);
+        pePane.add(txtSalesAll, 0, 12);
+         txtSalesAll.setAlignment(Pos.CENTER);
+        pePane.add(lblExpensesAll, 0, 13);
+         lblExpensesAll.setAlignment(Pos.CENTER);
+        pePane.add(txtExpensesAll, 0, 14);
+         txtExpensesAll.setAlignment(Pos.CENTER);
+        pePane.add(lblNetProfitAll, 0, 15);
+         lblNetProfitAll.setAlignment(Pos.CENTER);
+        pePane.add(txtNetAll, 0, 16);
+         txtNetAll.setAlignment(Pos.CENTER);
+         
+         
+         pePane.add(dpBegDate, 0, 8);
+         pePane.add(lblBegDate,0,9);
+         
+         pePane.add(dpEndDate, 1, 8);
+         pePane.add(lblEndDate, 1, 9);
+         
+         
+        
+        
+        //grouping radio buttons
+      
+           ToggleGroup rdoGroup = new ToggleGroup();
+           rdoStore1.setToggleGroup(rdoGroup);         
+           rdoStore2.setToggleGroup(rdoGroup);
+           rdoStore3.setToggleGroup(rdoGroup);
+           rdoStore4.setToggleGroup(rdoGroup);
+           rdoAllStores.setToggleGroup(rdoGroup);
+           rdoAllStores.setSelected(true);
+           
+           
+           
         //CREATE TAB INFORMATION
         Label lblCreateHeader = new Label("Create New Object");
         lblCreateHeader.setFont(Font.font("Times New Roman", FontWeight.BOLD, 50));
