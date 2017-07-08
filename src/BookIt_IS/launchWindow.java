@@ -101,7 +101,7 @@ public class launchWindow extends Application {
            lblError.setVisible(true);
            else 
             { 
-               MainDashboard mainDashboard = new MainDashboard();              
+               MainDashboard mainDashboard = new MainDashboard();
             }
         }); 
         

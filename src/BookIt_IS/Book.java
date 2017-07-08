@@ -134,7 +134,6 @@ public class Book
         this.bookStore = bookStore;
     }
     
-    
     public static void newBook (String bookTitle, String bookAuthor, 
             double bookCost, double bookSalePrice, String bookDescription, int bookQuantity, int bookStore)
     {
@@ -142,11 +141,11 @@ public class Book
         (new Book(bookTitle, bookAuthor, bookCost, bookSalePrice, bookDescription, bookQuantity, bookStore));
     }
     
-    public static void newBookFromDatabase (String bookTitle, String bookAuthor, 
+    public static void newBookFromDatabase (int bookID, String bookTitle, String bookAuthor, 
             double bookCost, double bookSalePrice, String bookDescription, int bookQuantity, int bookStore)
     {
         bookArray.add
-        (new Book(bookTitle, bookAuthor, bookCost, bookSalePrice, bookDescription, bookQuantity, bookStore));
+        (new Book(bookID, bookTitle, bookAuthor, bookCost, bookSalePrice, bookDescription, bookQuantity, bookStore));
     }
     
     public static void fillBookArray() { 
@@ -158,15 +157,14 @@ public class Book
             while (dbResults.next()) {
 
                 Book.newBookFromDatabase(
-                                    dbResults.getString(1),
-                                    dbResults.getString(2), 
-                                    dbResults.getDouble(3), 
+                                    dbResults.getInt(1),
+                                    dbResults.getString(2),
+                                    dbResults.getString(3), 
                                     dbResults.getDouble(4), 
-                                    dbResults.getString(5),
-                                    dbResults.getInt(6),
-                                    dbResults.getInt(7));
-                
-
+                                    dbResults.getDouble(5), 
+                                    dbResults.getString(6),
+                                    dbResults.getInt(7),
+                                    dbResults.getInt(8));
             }
         } catch (SQLException e) {
             System.out.println(e.toString());

@@ -29,7 +29,7 @@ public class MainDashboard {
     private static ArrayList<Time_Management> timeArray = Time_Management.getTimeArray();
     private static ArrayList<Book> bookInvArray = new ArrayList<>();
     private static ArrayList<Consumable> consInvArray = new ArrayList<>(); 
-    private static ArrayList<Customer> custLoyaltyArray = new ArrayList<>();
+    private static ArrayList<Customer> custLoyaltyArray = Customer.getLoyaltyArray();
     ObservableList<String> invTabStoreCombo = FXCollections.observableArrayList();
     
     //Creating Panes
@@ -47,6 +47,16 @@ public class MainDashboard {
     GridPane createPane = new GridPane();
     GridPane storePane = new GridPane();
     GridPane modStorePane = new GridPane();
+            
+    //These panes are used in the Add Entity page. They make up the second 
+    //half of the page, and are where a user can enter information for the new 
+    //entity.
+    GridPane addCustPane = new GridPane();
+    GridPane addEmployeePane = new GridPane();
+    GridPane addStorePane = new GridPane();
+    GridPane addSupplierPane = new GridPane();
+    GridPane addBookPane = new GridPane();
+    GridPane addConsumablePane = new GridPane();
 
     //Creating Tabs
     TabPane tbPane = new TabPane();
@@ -58,16 +68,6 @@ public class MainDashboard {
     Tab invTab = new Tab("Inventory");
     Tab createTab = new Tab("Create New");
     Tab storeTab = new Tab("Store");
-
-    //These panes are used in the Add Entity page. They make up the second 
-    //half of the page, and are where a user can enter information for the new 
-    //entity.
-    GridPane addCustPane = new GridPane();
-    GridPane addEmployeePane = new GridPane();
-    GridPane addStorePane = new GridPane();
-    GridPane addSupplierPane = new GridPane();
-    GridPane addBookPane = new GridPane();
-    GridPane addConsumablePane = new GridPane();
 
     //Global controls for ease of updates
     
@@ -94,7 +94,7 @@ public class MainDashboard {
 
     TableView<Customer> custLoyaltyView = new TableView<>();
     ObservableList<Customer> custLoyaltyTableData
-            = FXCollections.observableArrayList(Customer.getCustArray());
+            = FXCollections.observableArrayList(custLoyaltyArray);
 
     TableView<Customer> custTransView = new TableView<>();
     ObservableList<Customer> custTransTableData
@@ -128,9 +128,9 @@ public class MainDashboard {
     ObservableList<Store> storeTableData
             = FXCollections.observableArrayList(Store.getStoreArray());
 
-    TableView<Store> storeEmployeeView = new TableView<>();
-    ObservableList<Store> storeEmployeeTableData
-            = FXCollections.observableArrayList(Store.getStoreArray()); 
+    TableView<Employee> storeEmployeeView = new TableView<>();
+    ObservableList<Employee> storeEmployeeTableData
+            = FXCollections.observableArrayList(); 
     
     public MainDashboard() {
         //Formatting Panes
@@ -369,7 +369,8 @@ public class MainDashboard {
                     txtModCustFname.getText(),
                     txtModCustLname.getText(),
                     txtModCustPhone.getText(),
-                    txtModCustAddress.getText());
+                    txtModCustAddress.getText(),
+                    selectedCust.getFlag());
             // update customer array and listview
             customerArray.add(modCust);
             custTableData.add(modCust);
@@ -446,8 +447,8 @@ public class MainDashboard {
                         +"\n"
                         +"Please choose a new customer to continue!");
             
-            btnRemoveCust.setDisable(false);
-            btnEnrollCust.setDisable(false);
+            btnRemoveCust.setDisable(true);
+            btnEnrollCust.setDisable(true);
         });
 
         //populate text area upon customer selection from tableview
@@ -519,10 +520,13 @@ public class MainDashboard {
             Customer selectedCust = custLoyaltyView.getSelectionModel().getSelectedItem();
             
             custLoyaltyArray.remove(selectedCust);
+            selectedCust.setFlag(0);
             custLoyaltyTableData.remove(selectedCust);
             custLoyaltyView.setItems(custLoyaltyTableData);
             
             btnRemoveEnrolledCust.setDisable(true);
+            btnRemoveCust.setDisable(true);
+            btnEnrollCust.setDisable(true);
             txtAreaCustDesc.clear();
             
             txtAreaCustDesc.appendText("Enrolled customer is successfully deleted!"
@@ -962,13 +966,11 @@ public class MainDashboard {
         TableColumn tblcStoreID = new TableColumn("Store ID");
         TableColumn tblcStoreName = new TableColumn("Store Name");
 
-
         // Table Columns for employees at store tableview
         TableColumn tblcStoreID2 = new TableColumn("Store ID");
         TableColumn tblcStoreEmployID = new TableColumn("EmployeeID");
         TableColumn tblcStoreEmployFname = new TableColumn("First Name");
         TableColumn tblcStoreEmployLname = new TableColumn("Last Name");
-        TableColumn tblcStoreEmployEmail = new TableColumn("Emp Email");
         TableColumn tblcStoreEmployPhone = new TableColumn("Emp Phone");
 
         // storeView table items
@@ -987,8 +989,14 @@ public class MainDashboard {
         storeEmployeeView.setMaxHeight(400);
         storeEmployeeView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         storeEmployeeView.getColumns().addAll(tblcStoreID2, tblcStoreEmployID,
-                tblcStoreEmployFname, tblcStoreEmployLname,
-                tblcStoreEmployEmail, tblcStoreEmployPhone);
+                tblcStoreEmployFname, tblcStoreEmployLname, tblcStoreEmployPhone);
+        
+        // storeView table items
+        tblcStoreID2.setCellValueFactory(new PropertyValueFactory<Employee, Integer>("storeID"));
+        tblcStoreEmployID.setCellValueFactory(new PropertyValueFactory<Employee, String>("employID"));
+        tblcStoreEmployFname.setCellValueFactory(new PropertyValueFactory<Employee, Integer>("employFirstName"));
+        tblcStoreEmployLname.setCellValueFactory(new PropertyValueFactory<Employee, String>("employLastName"));
+        tblcStoreEmployPhone.setCellValueFactory(new PropertyValueFactory<Employee, Integer>("employPhone"));
 
         // add labels and tableviews to storePane
         storePane.add(lblStoreHeader, 0, 0, 3, 1);
@@ -1026,6 +1034,24 @@ public class MainDashboard {
                     .getSelectedIndex()).getStorePhone());
            
             modStorePane.setVisible(true);
+            
+            //Populate storeEmployeeView
+            Store newStore = storeView.getSelectionModel().getSelectedItem();
+            
+            ArrayList<Employee> holdEmployee = new ArrayList<>();
+            
+            storeEmployeeTableData.clear();
+            
+            for(Employee em: employeeArray)
+            {
+                if (newStore.getStoreID()==em.getStoreID())
+                {
+                    holdEmployee.add(em);
+                    storeEmployeeTableData.add(em);
+                }
+            }
+            
+            storeEmployeeView.setItems(storeEmployeeTableData);
         });
 
         //Modify Store Submit Button Functions
@@ -1463,7 +1489,7 @@ public class MainDashboard {
         {
             addOutput.setVisible(true);
             Customer.newCustomer(txtAddCustFN.getText(), txtAddCustLN.getText(),
-                    txtAddCustPhone.getText(), txtAddCustAddress.getText());
+                    txtAddCustPhone.getText(), txtAddCustAddress.getText(), 0);
 
             txtAddCustFN.clear();
             txtAddCustLN.clear();
@@ -1529,38 +1555,67 @@ public class MainDashboard {
         
         btnAddEmployee.setOnAction(e -> 
         { 
-            boolean valid = true;
-            int status = 0; 
-            double payRate = Double.valueOf(txtAddEmployeePay.getText()); 
-            String attemptedUsername = txtAddEmployeeUsername.getText(); 
-            valid = Employee.checkUsernameAvailability(attemptedUsername);
+            addOutput.setVisible(true);
             
-            int storeID = storeArray.get(
-                    cmboChooseEmployeeStore.getSelectionModel().getSelectedIndex())
-                    .getStoreID();
-            
-            if(cbxManagementStatus.isSelected())
-                status = 1;
-            
-            if(valid)
+            try
             {
-                lblErrorUsername.setVisible(false);
-                Employee.newEmployee(txtAddEmployeeFN.getText(), 
-                    txtAddEmployeeLN.getText(), txtAddEmployeePhone.getText(), 
-                    payRate,txtAddEmployeeUsername.getText(), 
-                    txtAddEmployeePassword.getText(), status, storeID)
-                        ; 
-                employTableData.clear(); 
-                employeeArray = Employee.getEmployArray(); 
-                for(Employee em: employeeArray)
+                boolean valid = true;
+                int status = 0; 
+                double payRate = Double.valueOf(txtAddEmployeePay.getText()); 
+                String attemptedUsername = txtAddEmployeeUsername.getText(); 
+                valid = Employee.checkUsernameAvailability(attemptedUsername);
+
+                int storeID = storeArray.get(
+                        cmboChooseEmployeeStore.getSelectionModel().getSelectedIndex())
+                        .getStoreID();
+
+                if(cbxManagementStatus.isSelected())
+                    status = 1;
+
+                if(valid)
+                {
+                    lblErrorUsername.setVisible(false);
+                    Employee.newEmployee(txtAddEmployeeFN.getText(), 
+                        txtAddEmployeeLN.getText(), txtAddEmployeePhone.getText(), 
+                        payRate,txtAddEmployeeUsername.getText(), 
+                        txtAddEmployeePassword.getText(), status, storeID)
+                            ; 
+                    employTableData.clear(); 
+                    employeeArray = Employee.getEmployArray(); 
+                    for(Employee em: employeeArray)
+                    { 
+                        employTableData.add(em);
+                    }
+
+                    cmboChooseEmployeeStore.getSelectionModel().clearSelection();
+                    txtAddEmployeeFN.clear();
+                    txtAddEmployeeLN.clear();
+                    txtAddEmployeePhone.clear();
+                    txtAddEmployeePay.clear();
+                    txtAddEmployeeUsername.clear();
+                    txtAddEmployeePassword.clear();
+
+                    addOutput.setText("Employee successfully added.");
+                } 
+            
+                else 
                 { 
-                    employTableData.add(em);
+                    lblErrorUsername.setVisible(true);
                 }
+            }
+                
+            catch (NumberFormatException n)
+            {
+                addOutput.setVisible(true);
+                addOutput.setText("Please ensure that pay rate is a number"
+                        + " and that you have selected a store.");
             } 
             
-            else 
-            { 
-                lblErrorUsername.setVisible(true);
+            catch (NullPointerException npe) 
+            {
+                addOutput.setVisible(true);
+                addOutput.setText("Please ensure that pay rate is a number"
+                        + " and that you have selected a store.");
             }
         });
 
@@ -1675,7 +1730,7 @@ public class MainDashboard {
             if (toAddFlag == true) 
             {
                 Supplier.newSupplier(txtAddSupplierName.getText(), txtAddSupplierAddress.getText());
-                addOutput.setText("Store successfully added.");
+                addOutput.setText("Supplier successfully added.");
             }
 
             txtAddSupplierName.clear();
@@ -1993,6 +2048,7 @@ public class MainDashboard {
         Customer selectedCust = custView.getSelectionModel().getSelectedItem();
 
         custLoyaltyArray.add(selectedCust);
+        selectedCust.setFlag(1);
         return custLoyaltyArray;
     }
 
@@ -2001,6 +2057,7 @@ public class MainDashboard {
         int custID = 0;
         int custLoyaltyID = 0;
         Customer selectedCust = custView.getSelectionModel().getSelectedItem();
+        selectedCust.setFlag(0);
 
         try 
         {
@@ -2067,5 +2124,5 @@ public class MainDashboard {
         storeView.getItems().remove(selectedStore);
         storeArray.remove(selectedStore);
         txtAreaStoreDesc.clear();
-    }
+    }  
 }
