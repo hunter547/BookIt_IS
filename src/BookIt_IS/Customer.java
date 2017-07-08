@@ -70,8 +70,7 @@ public class Customer {
                     String custPhone, String custAddress, int flag) 
     {  
         custArray.add
-        (new Customer(custID,custFirstName,custLastName,custPhone,custAddress,flag));
-        System.out.println("RUNNING METHOD NEWCUSTOMERFROMDATABASE: FLAG IS " + flag);   
+        (new Customer(custID,custFirstName,custLastName,custPhone,custAddress,flag)); 
     }
 
     public static void fillCustomerArray() { 
@@ -89,15 +88,6 @@ public class Customer {
                                     dbResults.getString(4),
                                     dbResults.getString(5),
                                     dbResults.getInt(6));
-                
-                System.out.println(
-                                    dbResults.getInt(1)+ 
-                                    dbResults.getString(2) + 
-                                    dbResults.getString(3) +  
-                                    dbResults.getString(4) +
-                                    dbResults.getString(5) +
-                                    dbResults.getInt(6));
-
             }
         } catch (SQLException e) {
             System.out.println(e.toString());
@@ -155,7 +145,6 @@ public class Customer {
     
     public int getFlag()
     {
-        System.out.println("Flag being fetched is: " + this.flag);
         return this.flag;
     }
     
@@ -234,7 +223,6 @@ public class Customer {
     public void setFlag(int flag)
     {
         this.flag = flag;
-        System.out.println("FLAG SET TO: " + flag);
     }
 
     public static ArrayList getLoyaltyArray()
@@ -245,10 +233,9 @@ public class Customer {
                 custLoyaltyArray.add(c);
         }
         
-        System.out.println("NUMBER OF ENROLLED CUSTOMERS: " + custLoyaltyArray.size());
-        
         return custLoyaltyArray;
     }
+    
     private static void sendDBCommand(String sqlQuery) {
         String URL = "jdbc:oracle:thin:@localhost:1521:XE";
         String userID = "javauser"; 

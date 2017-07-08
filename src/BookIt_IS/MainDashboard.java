@@ -82,9 +82,10 @@ public class MainDashboard {
     TextArea txtAreaCustDesc = new TextArea();
     TextArea txtAreaBookDesc = new TextArea();
     TextArea txtAreaStoreDesc = new TextArea();
+    TextArea txtAreaEmpDesc = new TextArea();
 
     //Main Scene
-    Scene primaryScene = new Scene(overallPane, 1200, 1000);
+    Scene primaryScene = new Scene(overallPane, 1250, 975);
     Stage primaryStage = new Stage();
 
     // Setting up CustomerTableViews
@@ -109,8 +110,7 @@ public class MainDashboard {
         private static ObservableList<Time_Management> timeTableData 
             = FXCollections.observableArrayList(Time_Management.getTimeArray()); 
         
-    //Setting up Book Tables
-        
+    //Setting up Book Tables  
         TableView<Book> bookView = new TableView<>();
         ObservableList<Book> bookTableData
             = FXCollections.observableArrayList(Book.getBookArray());
@@ -132,7 +132,8 @@ public class MainDashboard {
     ObservableList<Employee> storeEmployeeTableData
             = FXCollections.observableArrayList(); 
     
-    public MainDashboard() {
+    public MainDashboard() 
+    {
         //Formatting Panes
         overallPane.setAlignment(Pos.TOP_CENTER);
         overallPane.setHgap(20);
@@ -150,8 +151,8 @@ public class MainDashboard {
         customerPane.setMinSize(primaryScene.getWidth(), primaryScene.getHeight());
 
         employeePane.setAlignment(Pos.TOP_CENTER);
-        employeePane.setHgap(20);
-        employeePane.setHgap(5);
+        employeePane.setHgap(40);
+        employeePane.setVgap(5);
         employeePane.setMinSize(primaryScene.getWidth(), primaryScene.getHeight());
 
         bookPane.setAlignment(Pos.TOP_CENTER);
@@ -224,16 +225,25 @@ public class MainDashboard {
         modCustomerPane.setVisible(false);
 
         // Customer Tab Header
-        Label lblCustHeader = new Label("Customer Report:");
+        Label lblCustHeader = new Label("Customer Report");
         lblCustHeader.setFont(Font.font("Times New Roman", FontWeight.BOLD, 50));
         GridPane.setHalignment(lblCustHeader, HPos.CENTER);
 
         // Customer Tab Labels
-        Label lblCustDesc = new Label("Customer Description: ");
-        GridPane.setHalignment(lblCustDesc, HPos.CENTER);
-        Label lblCustHist = new Label("Transaction History: ");
+        Label lblChooseCust = new Label("Choose a Customer");
+        lblChooseCust.setFont(Font.font("Times New Roman",FontWeight.BOLD,15));
+        GridPane.setHalignment(lblChooseCust, HPos.LEFT);
+        
+        Label lblCustDesc = new Label("Customer Description ");
+        lblCustDesc.setFont(Font.font("Times New Roman",FontWeight.BOLD,15));
+        GridPane.setHalignment(lblCustDesc, HPos.LEFT);
+        
+        Label lblCustHist = new Label("Transaction History ");
+        lblCustHist.setFont(Font.font("Times New Roman",FontWeight.BOLD,15));
         GridPane.setHalignment(lblCustHist, HPos.CENTER);
-        Label lblCustEnroll = new Label("Enrolled in Loyalty Program: ");
+        
+        Label lblCustEnroll = new Label("Enrolled in Loyalty Program ");
+        lblCustEnroll.setFont(Font.font("Times New Roman",FontWeight.BOLD,15));
         GridPane.setHalignment(lblCustEnroll, HPos.CENTER);
 
         // Text Area output for customer description
@@ -245,19 +255,22 @@ public class MainDashboard {
         Button btnRemoveCust = new Button("Remove Customer ->");
         Button btnEnrollCust = new Button("Enroll Customer ->");
         Button btnRemoveEnrolledCust = new Button("Remove Enrolled Customer ->");
+        Button btnModCust = new Button("Modify Customer ->");
 
         // disable buttons initially
         btnRemoveCust.setDisable(true);
         btnEnrollCust.setDisable(true);
         btnRemoveEnrolledCust.setDisable(true);
+        btnModCust.setDisable(true);
 
         btnRemoveCust.setMaxWidth(165);
         btnEnrollCust.setMaxWidth(165);
+        btnModCust.setMaxWidth(165);
 
         VBox vbCustButtons = new VBox();
         vbCustButtons.setSpacing(10);
         vbCustButtons.setPadding(new Insets(0, 10, 10, 0));
-        vbCustButtons.getChildren().addAll(btnRemoveCust, btnEnrollCust, btnRemoveEnrolledCust);
+        vbCustButtons.getChildren().addAll(btnModCust, btnRemoveCust, btnEnrollCust, btnRemoveEnrolledCust);
 
         //modCustPane Controls
         Label lblModCustomerHeader = new Label("Modify Customer:");
@@ -346,6 +359,7 @@ public class MainDashboard {
 
         //Adding Controls to custPane
         customerPane.add(lblCustHeader, 0, 0, 3, 1);
+        customerPane.add(lblChooseCust, 0, 1);
         customerPane.add(lblCustEnroll, 1, 1);
         customerPane.add(lblCustHist, 2, 1);
         customerPane.add(custView, 0, 2);
@@ -358,8 +372,8 @@ public class MainDashboard {
 
         //Submit Customer Modification Functions
         //here
-        btnModCustSubmit.setOnAction(e
-                -> {
+        btnModCustSubmit.setOnAction(e -> 
+        {
             // store selected Customer Information
             Customer selectedCust = custView.getSelectionModel().getSelectedItem();
             // remove old customer information from array and listview
@@ -387,6 +401,7 @@ public class MainDashboard {
             removeCustomer();
             btnRemoveCust.setDisable(true);
             btnEnrollCust.setDisable(true);
+            btnModCust.setDisable(true);
             
             modCustomerPane.setVisible(false);
             txtAreaCustDesc.appendText("Customer successfully modified!"
@@ -457,6 +472,7 @@ public class MainDashboard {
             {
                 btnRemoveCust.setDisable(false);
                 btnEnrollCust.setDisable(false);
+                btnModCust.setDisable(false);
                 btnRemoveEnrolledCust.setDisable(true);
                 
                 txtModCustFname.clear();
@@ -471,15 +487,18 @@ public class MainDashboard {
                         + "Last Name: ".toUpperCase() + cust.getCustLastName() + "\n"
                         + "Phone: ".toUpperCase() + cust.getCustPhone() + "\n"
                         + "Address: ".toUpperCase() + cust.getCustAddress());
-
+            }
+        });
+        
+        btnModCust.setOnAction(e -> 
+            {
                 modCustomerPane.setVisible(true);
                 Customer modCustomer = custView.getSelectionModel().getSelectedItem();
                 txtModCustFname.appendText(modCustomer.getCustFirstName());
                 txtModCustLname.appendText(modCustomer.getCustLastName());
                 txtModCustPhone.appendText(modCustomer.getCustPhone());
                 txtModCustAddress.appendText(modCustomer.getCustAddress());
-            }
-        });
+            });
         
         // populate text area upon customer loyalty selection from tableview
         custLoyaltyView.setOnMouseClicked((MouseEvent event) -> 
@@ -548,13 +567,22 @@ public class MainDashboard {
         lblBookHeader.setFont(Font.font("Times New Roman", FontWeight.BOLD, 50));
         GridPane.setHalignment(lblBookHeader, HPos.CENTER);
 
-        //Book Tab Labels
-        Label lblTopFive = new Label("Top 5 Sellers: ");
-        GridPane.setHalignment(lblTopFive, HPos.CENTER);
-        Label lblBookDesc = new Label("Product Description: ");
-        GridPane.setHalignment(lblBookDesc, HPos.CENTER);
+        //Book Tab Labels  
+        Label lblChooseBook = new Label("Choose a Book");
+        lblChooseBook.setFont(Font.font("Times New Roman",FontWeight.BOLD,15));
+        GridPane.setHalignment(lblChooseBook, HPos.LEFT);
+        
+        Label lblTopFive = new Label("Top 5 Sellers ");
+        lblTopFive.setFont(Font.font("Times New Roman",FontWeight.BOLD,15));
+        GridPane.setHalignment(lblTopFive, HPos.LEFT);
+        
+        Label lblBookDesc = new Label("Product Description ");
+        GridPane.setHalignment(lblBookDesc, HPos.LEFT);
+        lblBookDesc.setFont(Font.font("Times New Roman",FontWeight.BOLD,15));
+        
         Label lblBookHist = new Label("Transaction History ");
-        GridPane.setHalignment(lblBookHist, HPos.CENTER);
+        lblBookHist.setFont(Font.font("Times New Roman",FontWeight.BOLD,15));
+        GridPane.setHalignment(lblBookHist, HPos.LEFT);
 
         //Text Area outout for product description
         txtAreaBookDesc.setMaxSize(300, 400);
@@ -562,14 +590,18 @@ public class MainDashboard {
         txtAreaBookDesc.appendText("Please begin by selecting a book.");
         
         //Book Tab Buttons      
-        Button btnRemoveBook = new Button("Remove Book ->");;
+        Button btnModBook = new Button ("Modify Book ->");
+        Button btnRemoveBook = new Button("Remove Book ->");
+        
+        btnModBook.setMaxWidth(150);
+        btnModBook.setDisable(true);
         btnRemoveBook.setMaxWidth(150);
         btnRemoveBook.setDisable(true);
 
         VBox vbBookButtons = new VBox();
         vbBookButtons.setSpacing(10);
         vbBookButtons.setPadding(new Insets(0, 10, 10, 0));
-        vbBookButtons.getChildren().addAll(btnRemoveBook);
+        vbBookButtons.getChildren().addAll(btnModBook, btnRemoveBook);
 
         //modBookPane Controls
         Label lblModBookHeader = new Label("Modify Book:");
@@ -663,6 +695,7 @@ public class MainDashboard {
 
         // add labels to bookPane
         bookPane.add(lblBookHeader, 0, 0, 3, 1);
+        bookPane.add(lblChooseBook, 0, 2);
         bookPane.add(lblTopFive, 1, 2);
         bookPane.add(bookView, 0, 3);
         bookPane.add(bookTopSellerView, 1, 3);
@@ -677,6 +710,7 @@ public class MainDashboard {
         {
             txtAreaBookDesc.clear();
             btnRemoveBook.setDisable(false);
+            btnModBook.setDisable(false);
             
             //Filling the store description box
             txtAreaBookDesc.appendText(
@@ -695,8 +729,10 @@ public class MainDashboard {
                     + "\nQUANTITY IN STOCK AT STORE # " + bookArray.get(bookView.getSelectionModel()
                             .getSelectedIndex()).getBookStore() + ": " 
                     + bookArray.get(bookView.getSelectionModel().getSelectedIndex()).getBookQuantity());
-                    
-
+        });
+        
+        btnModBook.setOnAction(e ->
+        {
             //Filling modify book fields
             txtModBookTitle.setText(bookArray.get(bookView.getSelectionModel()
                     .getSelectedIndex()).getBookTitle());
@@ -743,6 +779,7 @@ public class MainDashboard {
             
             modBookPane.setVisible(false);
             btnRemoveBook.setDisable(true);
+            btnModBook.setDisable(true);
         });
 
         btnModBookClear.setOnAction(e -> 
@@ -760,6 +797,9 @@ public class MainDashboard {
             
             txtAreaBookDesc.appendText("Book successfully deleted!" + "\n"
                     +"Choose a new book to continue.");
+            
+            btnModBook.setDisable(true);
+            btnRemoveBook.setDisable(true);
         });
 
         //INVENTORY TAB INFORMATION
@@ -771,7 +811,7 @@ public class MainDashboard {
         lblBookInvHeader.setFont(Font.font("Times New Roman", FontWeight.BOLD, 30));
         GridPane.setHalignment(lblBookInvHeader, HPos.CENTER);
 
-        Label lblConsInvHeader = new Label("Consumable Inventory");
+        Label lblConsInvHeader = new Label("Coffee Shop Inventory");
         lblConsInvHeader.setFont(Font.font("Times New Roman", FontWeight.BOLD, 30));
         GridPane.setHalignment(lblConsInvHeader, HPos.CENTER);
 
@@ -900,9 +940,16 @@ public class MainDashboard {
         modStorePane.setVisible(false);
 
         //Store Tab Labels
-        Label lblEmployeeStore = new Label("Current Employees of Specified Store: ");
+        Label lblChooseStore = new Label("Choose a Store");
+        lblChooseStore.setFont(Font.font("Times New Roman",FontWeight.BOLD,15));
+        GridPane.setHalignment(lblChooseStore, HPos.LEFT);
+        
+        Label lblEmployeeStore = new Label("Current Employees of Specified Store ");
+        lblEmployeeStore.setFont(Font.font("Times New Roman",FontWeight.BOLD,15));
         GridPane.setHalignment(lblEmployeeStore, HPos.CENTER);
+        
         Label lblStoreDesc = new Label("Store Description: ");
+        lblStoreDesc.setFont(Font.font("Times New Roman",FontWeight.BOLD,15));
         GridPane.setHalignment(lblStoreDesc, HPos.CENTER);
 
         //Store Tab Controls
@@ -911,13 +958,17 @@ public class MainDashboard {
         txtAreaStoreDesc.appendText("Begin by selecting a store from above.");
 
         Button btnRemoveStore = new Button("Remove Store ->");
+        Button btnModStore = new Button("Modify Store ->");
+        
         btnRemoveStore.setMaxWidth(150);
         btnRemoveStore.setDisable(true);
+        btnModStore.setMaxWidth(150);
+        btnModStore.setDisable(true);
 
         VBox vbStoreButtons = new VBox();
         vbStoreButtons.setSpacing(10);
         vbStoreButtons.setPadding(new Insets(0, 10, 10, 0));
-        vbStoreButtons.getChildren().addAll(btnRemoveStore);
+        vbStoreButtons.getChildren().addAll(btnModStore, btnRemoveStore);
 
         //Initialize TableViews
         storeView.setItems(storeTableData);
@@ -932,11 +983,9 @@ public class MainDashboard {
         Label lblModStoreAddress = new Label("Store Address: ");
         Label lblModStorePhone = new Label("Store phone: ");
 
-
         TextField txtModStoreName = new TextField();
         TextField txtModStoreAddress = new TextField();
         TextField txtModStorePhone = new TextField();
-
 
         Button btnModStoreSubmit = new Button("Submit");
         Button btnModStoreClear = new Button("Clear");
@@ -954,11 +1003,9 @@ public class MainDashboard {
         modStorePane.add(lblModStoreAddress, 0, 2);
         modStorePane.add(lblModStorePhone, 0, 3);
 
-
         modStorePane.add(txtModStoreName, 1, 1);
         modStorePane.add(txtModStoreAddress, 1, 2);
         modStorePane.add(txtModStorePhone, 1, 3);
-
 
         modStorePane.add(vbModStoreButtons, 0, 5);
 
@@ -976,7 +1023,6 @@ public class MainDashboard {
         // storeView table items
         tblcStoreID.setCellValueFactory(new PropertyValueFactory<Store, Integer>("storeID"));
         tblcStoreName.setCellValueFactory(new PropertyValueFactory<Store, String>("storeName"));
-
 
         //Format and add Columns to StoreView
         storeView.setMinWidth(200);
@@ -1000,6 +1046,7 @@ public class MainDashboard {
 
         // add labels and tableviews to storePane
         storePane.add(lblStoreHeader, 0, 0, 3, 1);
+        storePane.add(lblChooseStore, 0, 2);
         storePane.add(lblEmployeeStore, 1, 2);
         storePane.add(storeView, 0, 3);
         storePane.add(storeEmployeeView, 1, 3);
@@ -1012,6 +1059,8 @@ public class MainDashboard {
         storeView.setOnMouseClicked(e -> 
         {
             btnRemoveStore.setDisable(false);
+            btnModStore.setDisable(false);
+            
             txtAreaStoreDesc.clear();
 
             //Filling the store description box
@@ -1025,15 +1074,6 @@ public class MainDashboard {
                     + "\nSTORE PHONE NUMBER: " + storeArray.get(storeView.getSelectionModel()
                             .getSelectedIndex()).getStorePhone());
 
-            //Filling modify store fields
-            txtModStoreName.setText(storeArray.get(storeView.getSelectionModel()
-                    .getSelectedIndex()).getStoreName());
-            txtModStoreAddress.setText(storeArray.get(storeView.getSelectionModel()
-                    .getSelectedIndex()).getStoreAddress());
-            txtModStorePhone.setText(storeArray.get(storeView.getSelectionModel()
-                    .getSelectedIndex()).getStorePhone());
-           
-            modStorePane.setVisible(true);
             
             //Populate storeEmployeeView
             Store newStore = storeView.getSelectionModel().getSelectedItem();
@@ -1053,6 +1093,23 @@ public class MainDashboard {
             
             storeEmployeeView.setItems(storeEmployeeTableData);
         });
+        
+        btnModStore.setOnAction (e ->
+        {
+            //Filling modify store fields
+            txtModStoreName.setText(storeArray.get(storeView.getSelectionModel()
+                    .getSelectedIndex()).getStoreName());
+            txtModStoreAddress.setText(storeArray.get(storeView.getSelectionModel()
+                    .getSelectedIndex()).getStoreAddress());
+            txtModStorePhone.setText(storeArray.get(storeView.getSelectionModel()
+                    .getSelectedIndex()).getStorePhone());
+           
+            modStorePane.setVisible(true);
+            btnModStore.setDisable(true);
+            btnRemoveStore.setDisable(true);
+            
+            
+        });
 
         //Modify Store Submit Button Functions
         btnModStoreSubmit.setOnAction(e-> 
@@ -1067,9 +1124,13 @@ public class MainDashboard {
             storeTableData.add(modStore);
             storeView.setItems(storeTableData);
             
+            btnModStore.setDisable(false);
+            btnRemoveStore.setDisable(false);
+            
             removeStore();
             
             btnRemoveStore.setDisable(true);
+            btnModStore.setDisable(true);
             modStorePane.setVisible(false);
             
             txtAreaStoreDesc.appendText("Store is successfully modified!"
@@ -1095,6 +1156,7 @@ public class MainDashboard {
             
             modStorePane.setVisible(false);
             btnRemoveStore.setDisable(true);
+            btnModStore.setDisable(true);
         }); 
         
          //****EMPLOYEE TAB INFORMATION*********** 
@@ -1106,7 +1168,7 @@ public class MainDashboard {
         lblChooseEmployee.setFont(Font.font("Times New Roman",FontWeight.BOLD,15)); 
         GridPane.setHalignment(lblEmployeeHeader, HPos.CENTER); 
         Pane blankSpace4 = new Pane();
-        blankSpace4.setMinHeight(20);
+        blankSpace4.setMinHeight(20);  
         
         //Formatting 
         employeePane.setVgap(5); 
@@ -1114,6 +1176,11 @@ public class MainDashboard {
         modEmployeePane.setHgap(20); 
         modEmployeePane.setVgap(5); 
         
+        // Text Area output for employee description
+        txtAreaEmpDesc.setMaxSize(400, 400);
+        txtAreaEmpDesc.setEditable(false);
+        txtAreaEmpDesc.appendText("Begin by selecting an employee from above!");
+
         //Employee columns 
         employView.setItems(employTableData); 
         TableColumn tblcEmployID = new TableColumn("Employee ID");
@@ -1132,20 +1199,82 @@ public class MainDashboard {
         tblcTimeID.setCellValueFactory(new PropertyValueFactory<Time_Management, Integer>("timeID"));
         tblcTimeIn.setCellValueFactory(new PropertyValueFactory<Time_Management, Date>("timeInFormat"));
         tblcTimeOut.setCellValueFactory(new PropertyValueFactory<Time_Management, Date>("timeOutFormat")); 
+        
         tblcTimeID.setSortType(TableColumn.SortType.ASCENDING);
+        
         timeView.getColumns().addAll(tblcTimeID,tblcTimeIn,tblcTimeOut); 
         timeView.getSortOrder().add(tblcTimeID);
         timeView.setMinWidth(400);
+        
         employView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         timeView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        employView.getColumns().addAll(tblcEmployID,tblcEmployFirstName,tblcEmployLastName); 
+        employView.getColumns().addAll(tblcEmployID,tblcEmployFirstName,tblcEmployLastName);
+        
+        employView.setMinWidth(400);
+        
+        //Adding buttons for modifying / removing employees
+        Button btnModEmp = new Button ("Modify ->");
+        Button btnRemoveEmp = new Button ("Remove ->");
+        btnModEmp.setDisable(true);
+        btnRemoveEmp.setDisable(true);
+        
+        Button btnSubmitModEmp = new Button ("Submit");
+        Button btnClearModEmp = new Button ("Clear");
+        
+        VBox vbEmpButtons = new VBox();
+        vbEmpButtons.setSpacing (10);
+        vbEmpButtons.setPadding(new Insets (0, 10, 10, 0));
+        vbEmpButtons.getChildren().addAll(btnModEmp, btnRemoveEmp);
+        
+        VBox vbModEmpButtons = new VBox();
+        vbModEmpButtons.setSpacing (10);
+        vbModEmpButtons.setPadding(new Insets (0, 10, 10, 0));
+        vbModEmpButtons.getChildren().addAll(btnSubmitModEmp, btnClearModEmp);
+        
+        modEmployeePane.setHgap(20);
+        modEmployeePane.setVgap(10);
+        
         timeTableData.clear();
-        employeePane.add(lblEmployeeHeader, 0, 0); 
+        employeePane.add(lblEmployeeHeader, 0, 0, 2, 1); 
         employeePane.add(blankSpace4, 0, 1); 
         employeePane.add(lblTimeLog, 1, 2); 
         employeePane.add(lblChooseEmployee, 0, 2);
         employeePane.add(employView, 0, 3); 
         employeePane.add(timeView,1,3); 
+        employeePane.add(txtAreaEmpDesc, 0, 4);
+        employeePane.add(modEmployeePane, 1, 4);
+        employeePane.add(vbEmpButtons, 0, 5);
+        
+        Label lblModEmpFN = new Label ("First Name: ");
+        Label lblModEmpLN = new Label ("Last Name: ");
+        Label lblModEmpPhone = new Label ("Phone Number: ");
+        Label lblModEmpPayrate = new Label ("Pay Rate: ");
+        
+        TextField txtModEmpFN = new TextField ();
+        TextField txtModEmpLN = new TextField ();
+        TextField txtModEmpPhone = new TextField ();
+        TextField txtModEmpPayrate = new TextField ();
+        
+        Label lblModEmpHeader = new Label("Modify Employee");
+        lblModEmpHeader.setFont(Font.font("Times New Roman", FontWeight.BOLD, 20));
+        GridPane.setHalignment(lblModEmpHeader, HPos.CENTER);
+ 
+        modEmployeePane.add(lblModEmpHeader, 0, 0);
+        
+        modEmployeePane.add(lblModEmpFN, 0, 1);
+        modEmployeePane.add(lblModEmpLN, 0, 2);
+        modEmployeePane.add(lblModEmpPhone, 0, 3);
+        modEmployeePane.add(lblModEmpPayrate, 0, 4);
+        
+        modEmployeePane.add(txtModEmpFN, 1, 1);
+        modEmployeePane.add(txtModEmpLN, 1, 2);
+        modEmployeePane.add(txtModEmpPhone, 1, 3);
+        modEmployeePane.add(txtModEmpPayrate, 1, 4);
+        
+        modEmployeePane.add(vbModEmpButtons, 1, 5);
+        
+        modEmployeePane.setVisible(false);
+        
         tblcEmployID.setSortType(TableColumn.SortType.ASCENDING); 
         employView.getSortOrder().add(tblcEmployID);
         employTableData.clear(); 
@@ -1170,7 +1299,8 @@ public class MainDashboard {
         tblcTimeIn.setSortable(false); 
         tblcTimeOut.setSortable(false);
         
-        employView.setOnMouseClicked(e -> { 
+        employView.setOnMouseClicked(e -> 
+        { 
             int selection = employView.getSelectionModel().getSelectedIndex(); 
             if(selection != -1){ 
                 int employID = employeeArray.get(selection).getEmployID(); 
@@ -1186,6 +1316,83 @@ public class MainDashboard {
                 tblcTimeID.setSortable(false);
                 }    
             }
+            
+            // create employee description
+            txtAreaEmpDesc.clear();
+            Employee selectedEmployee = employView.getSelectionModel().getSelectedItem();
+   
+            txtAreaEmpDesc.appendText("EmployeeID: " + selectedEmployee.getEmployID() + "\n"
+                                       + "First Name: " + selectedEmployee.getEmployFirstName() + "\n"
+                                       + "Last Name: "  + selectedEmployee.getEmployLastName() + "\n"
+                                       + "Phone number: " + selectedEmployee.getEmployPhone() + "\n"
+                                       + "Pay Rate: "   + selectedEmployee.getEmployPayrate());
+            
+            btnModEmp.setDisable(false);
+            btnRemoveEmp.setDisable(false);
+        });
+        
+        btnRemoveEmp.setOnAction(e -> 
+        {
+            txtAreaEmpDesc.clear();
+            txtAreaEmpDesc.appendText("Employee was successfully deleted!"
+                        +"\n"
+                        +"Please choose a new employee to continue!");
+            removeEmployee();
+            
+            btnRemoveEmp.setDisable(true);
+            btnModEmp.setDisable(true);
+        });
+        
+        btnModEmp.setOnAction(e -> 
+        {
+            modEmployeePane.setVisible(true);
+            btnModEmp.setDisable(true);
+            btnRemoveEmp.setDisable(true);
+            
+            //Filling modify employee fields
+            txtModEmpFN.setText(employeeArray.get(employView.getSelectionModel()
+                    .getSelectedIndex()).getEmployFirstName());
+            txtModEmpLN.setText(employeeArray.get(employView.getSelectionModel()
+                    .getSelectedIndex()).getEmployLastName());
+            txtModEmpPhone.setText(employeeArray.get(employView.getSelectionModel()
+                    .getSelectedIndex()).getEmployPhone());
+            txtModEmpPayrate.setText(employeeArray.get(employView.getSelectionModel()
+                    .getSelectedIndex()).getEmployPayrate()+"");
+        });
+        
+        btnSubmitModEmp.setOnAction(e -> 
+        {
+            Employee selectedEmp = employView.getSelectionModel().getSelectedItem();
+            
+            Employee modEmp = new Employee (selectedEmp.getStoreID(),
+            txtModEmpFN.getText(), txtModEmpLN.getText(), txtModEmpPhone.getText(),
+            Double.parseDouble(txtModEmpPayrate.getText()), selectedEmp.getEmployUsername(), 
+                    selectedEmp.getEmployPassword(), selectedEmp.getEmployStatus(),
+                    selectedEmp.getStoreID());
+            
+            employeeArray.add(modEmp);
+            
+            employTableData.add(modEmp);
+            employView.setItems(employTableData);
+            
+            removeEmployee();
+            
+            btnRemoveEmp.setDisable(true);
+            btnModEmp.setDisable(true);
+            modEmployeePane.setVisible(false);
+            
+            txtAreaEmpDesc.clear();
+            txtAreaEmpDesc.appendText("Employee is successfully modified!"
+                        +"\n"
+                        +"Please choose a new employee to continue!");
+        });
+
+        btnClearModEmp.setOnAction(e -> 
+        {
+            txtModEmpFN.clear();
+            txtModEmpLN.clear();
+            txtModEmpPhone.clear();
+            txtModEmpPayrate.clear();
         });
 
         //Profit Vs Expense Header
@@ -1439,7 +1646,7 @@ public class MainDashboard {
 
         //TextArea Field for error notification       
         TextArea addOutput = new TextArea();
-        addOutput.setMaxSize(500, 50);
+        addOutput.setMaxSize(550, 60);
         GridPane.setHalignment(addOutput, HPos.CENTER);
         addOutput.setVisible(false);
         addOutput.setEditable(false);
@@ -1487,22 +1694,32 @@ public class MainDashboard {
 
         btnAddCust.setOnAction(e -> 
         {
-            addOutput.setVisible(true);
-            Customer.newCustomer(txtAddCustFN.getText(), txtAddCustLN.getText(),
-                    txtAddCustPhone.getText(), txtAddCustAddress.getText(), 0);
-
-            txtAddCustFN.clear();
-            txtAddCustLN.clear();
-            txtAddCustPhone.clear();
-            txtAddCustAddress.clear();
-
-            custTableData.clear();
-            for (Customer c : customerArray) 
+            if (txtAddCustFN.getText().isEmpty() || txtAddCustLN.getText().isEmpty()
+                    || txtAddCustPhone.getText().isEmpty() || txtAddCustAddress.getText().isEmpty())
             {
-                custTableData.add(c);
+                addOutput.setVisible(true);
+                addOutput.setText("Please ensure that all fields contain a valid value.");
             }
+            
+            else
+            {
+                addOutput.setVisible(true);
+                Customer.newCustomer(txtAddCustFN.getText(), txtAddCustLN.getText(),
+                        txtAddCustPhone.getText(), txtAddCustAddress.getText(), 0);
 
-            addOutput.setText("Customer Added!");
+                txtAddCustFN.clear();
+                txtAddCustLN.clear();
+                txtAddCustPhone.clear();
+                txtAddCustAddress.clear();
+
+                custTableData.clear();
+                for (Customer c : customerArray) 
+                {
+                    custTableData.add(c);
+                }
+
+                addOutput.setText("Customer Added!");
+            }
         });
 
         //Setting up add employee pane for second half of page
@@ -1541,7 +1758,6 @@ public class MainDashboard {
         addEmployeePane.add(lblAddEmployeeUsername, 0, 6); 
         addEmployeePane.add(lblAddEmployeePassword, 0, 7); 
         addEmployeePane.add(cbxManagementStatus,0,8); 
-        populateChooseStoreCombos();
         addEmployeePane.add(cmboChooseEmployeeStore, 1, 1);
         addEmployeePane.add(txtAddEmployeeFN, 1, 2);
         addEmployeePane.add(txtAddEmployeeLN, 1, 3);
@@ -1553,69 +1769,82 @@ public class MainDashboard {
         addEmployeePane.add(btnAddEmployee, 1, 9); 
         addEmployeePane.add(lblErrorUsername, 0, 10);
         
+        populateChooseStoreCombos();
+        
         btnAddEmployee.setOnAction(e -> 
         { 
-            addOutput.setVisible(true);
-            
-            try
+            if (txtAddEmployeeFN.getText().isEmpty() || txtAddEmployeeLN.getText().isEmpty()
+                    || txtAddEmployeePhone.getText().isEmpty() || txtAddEmployeePay.getText().isEmpty()
+                    || txtAddEmployeeUsername.getText().isEmpty() || txtAddEmployeePassword.getText().isEmpty())
             {
-                boolean valid = true;
-                int status = 0; 
-                double payRate = Double.valueOf(txtAddEmployeePay.getText()); 
-                String attemptedUsername = txtAddEmployeeUsername.getText(); 
-                valid = Employee.checkUsernameAvailability(attemptedUsername);
-
-                int storeID = storeArray.get(
-                        cmboChooseEmployeeStore.getSelectionModel().getSelectedIndex())
-                        .getStoreID();
-
-                if(cbxManagementStatus.isSelected())
-                    status = 1;
-
-                if(valid)
-                {
-                    lblErrorUsername.setVisible(false);
-                    Employee.newEmployee(txtAddEmployeeFN.getText(), 
-                        txtAddEmployeeLN.getText(), txtAddEmployeePhone.getText(), 
-                        payRate,txtAddEmployeeUsername.getText(), 
-                        txtAddEmployeePassword.getText(), status, storeID)
-                            ; 
-                    employTableData.clear(); 
-                    employeeArray = Employee.getEmployArray(); 
-                    for(Employee em: employeeArray)
-                    { 
-                        employTableData.add(em);
-                    }
-
-                    cmboChooseEmployeeStore.getSelectionModel().clearSelection();
-                    txtAddEmployeeFN.clear();
-                    txtAddEmployeeLN.clear();
-                    txtAddEmployeePhone.clear();
-                    txtAddEmployeePay.clear();
-                    txtAddEmployeeUsername.clear();
-                    txtAddEmployeePassword.clear();
-
-                    addOutput.setText("Employee successfully added.");
-                } 
-            
-                else 
-                { 
-                    lblErrorUsername.setVisible(true);
-                }
+                addOutput.setVisible(true);
+                addOutput.setText("Please ensure that all fields contain a valid value.");
             }
-                
-            catch (NumberFormatException n)
-            {
-                addOutput.setVisible(true);
-                addOutput.setText("Please ensure that pay rate is a number"
-                        + " and that you have selected a store.");
-            } 
             
-            catch (NullPointerException npe) 
+            else
             {
                 addOutput.setVisible(true);
-                addOutput.setText("Please ensure that pay rate is a number"
-                        + " and that you have selected a store.");
+
+                try
+                {
+                    boolean valid = true;
+                    int status = 0; 
+                    double payRate = Double.valueOf(txtAddEmployeePay.getText()); 
+                    String attemptedUsername = txtAddEmployeeUsername.getText(); 
+                    valid = Employee.checkUsernameAvailability(attemptedUsername);
+
+                    int storeID = storeArray.get(
+                            cmboChooseEmployeeStore.getSelectionModel().getSelectedIndex())
+                            .getStoreID();
+
+                    if(cbxManagementStatus.isSelected())
+                        status = 1;
+
+                    if(valid)
+                    {
+                        lblErrorUsername.setVisible(false);
+                        Employee.newEmployee(txtAddEmployeeFN.getText(), 
+                            txtAddEmployeeLN.getText(), txtAddEmployeePhone.getText(), 
+                            payRate,txtAddEmployeeUsername.getText(), 
+                            txtAddEmployeePassword.getText(), status, storeID)
+                                ; 
+                        employTableData.clear(); 
+                        employeeArray = Employee.getEmployArray(); 
+                        for(Employee em: employeeArray)
+                        { 
+                            employTableData.add(em);
+                        }
+
+                        cmboChooseEmployeeStore.getSelectionModel().clearSelection();
+                        txtAddEmployeeFN.clear();
+                        txtAddEmployeeLN.clear();
+                        txtAddEmployeePhone.clear();
+                        txtAddEmployeePay.clear();
+                        txtAddEmployeeUsername.clear();
+                        txtAddEmployeePassword.clear();
+
+                        addOutput.setText("Employee successfully added.");
+                    } 
+
+                    else 
+                    { 
+                        lblErrorUsername.setVisible(true);
+                    }
+                }
+
+                catch (NumberFormatException n)
+                {
+                    addOutput.setVisible(true);
+                    addOutput.setText("Please ensure that pay rate is a number"
+                            + " and that you have selected a store.");
+                } 
+
+                catch (NullPointerException npe) 
+                {
+                    addOutput.setVisible(true);
+                    addOutput.setText("Please ensure that pay rate is a number"
+                            + " and that you have selected a store.");
+                }
             }
         });
 
@@ -1648,42 +1877,52 @@ public class MainDashboard {
 
         btnAddStore.setOnAction(e -> 
         {
-            boolean toAddFlag = true;
-            addOutput.setVisible(true);
-
-            for (Store s : storeArray) 
+            if (txtAddStoreName.getText().isEmpty() || txtAddStoreAddress.getText().isEmpty()
+                    || txtAddStorePhone.getText().isEmpty())
             {
-                if (txtAddStoreName.getText().matches(s.getStoreName())
-                        || txtAddStoreAddress.getText().matches(s.getStoreAddress())) 
+                addOutput.setVisible(true);
+                addOutput.setText("Please ensure that all fields contain a valid value.");
+            }
+            
+            else
+            {
+                boolean toAddFlag = true;
+                addOutput.setVisible(true);
+
+                for (Store s : storeArray) 
                 {
-                    addOutput.setText("Store already exists!");
-                    toAddFlag = false;
+                    if (txtAddStoreName.getText().matches(s.getStoreName())
+                            || txtAddStoreAddress.getText().matches(s.getStoreAddress())) 
+                    {
+                        addOutput.setText("Store already exists!");
+                        toAddFlag = false;
+                    }
                 }
+
+                if (toAddFlag == true) 
+                {
+                    Store.newStore(txtAddStoreName.getText(), txtAddStoreAddress.getText(),
+                            txtAddStorePhone.getText());
+
+                    addOutput.setText("Store successfully added.");
+                }
+
+                txtAddStoreName.clear();
+                txtAddStoreAddress.clear();
+                txtAddStorePhone.clear();
+
+
+                bookInventoryTableData.clear();
+
+                storeTableData.clear();
+
+                for (Store s : storeArray) 
+                {
+                    storeTableData.add(s);
+                }
+
+                populateChooseStoreCombos();
             }
-
-            if (toAddFlag == true) 
-            {
-                Store.newStore(txtAddStoreName.getText(), txtAddStoreAddress.getText(),
-                        txtAddStorePhone.getText());
-
-                addOutput.setText("Store successfully added.");
-            }
-
-            txtAddStoreName.clear();
-            txtAddStoreAddress.clear();
-            txtAddStorePhone.clear();
-
-
-            bookInventoryTableData.clear();
-
-            storeTableData.clear();
-
-            for (Store s : storeArray) 
-            {
-                storeTableData.add(s);
-            }
-
-            populateChooseStoreCombos();
         });
 
         //Setting up add Supplier pane for second half of page
@@ -1693,7 +1932,6 @@ public class MainDashboard {
 
         Label lblAddSupplierName = new Label("Supplier Name: ");
         Label lblAddSupplierAddress = new Label("Supplier Address: ");
-        Label lblAddSupplierRep = new Label("Supplier Contact: ");
 
         TextField txtAddSupplierName = new TextField();
         TextField txtAddSupplierAddress = new TextField();
@@ -1704,37 +1942,44 @@ public class MainDashboard {
 
         addSupplierPane.add(lblAddSupplierName, 0, 1);
         addSupplierPane.add(lblAddSupplierAddress, 0, 2);
-        addSupplierPane.add(lblAddSupplierRep, 0, 3);
 
         addSupplierPane.add(txtAddSupplierName, 1, 1);
         addSupplierPane.add(txtAddSupplierAddress, 1, 2);
-        //addSupplierPane.add(cmboAddSupplierRep, 1, 3);
 
         addSupplierPane.add(btnAddSupplier, 1, 4);
         
         btnAddSupplier.setOnAction(e -> 
         {
-            boolean toAddFlag = true;
-            addOutput.setVisible(true);
-
-            for (Supplier s : supplierArray) 
+            if (txtAddSupplierName.getText().isEmpty() || txtAddSupplierAddress.getText().isEmpty())
             {
-                if (txtAddSupplierName.getText().matches(s.getSuppName())
-                        || txtAddSupplierAddress.getText().matches(s.getSuppAddress())) 
+                addOutput.setVisible(true);
+                addOutput.setText("Please ensure that all fields contain a valid value.");
+            }
+            
+            else
+            {
+                boolean toAddFlag = true;
+                addOutput.setVisible(true);
+
+                for (Supplier s : supplierArray) 
                 {
-                    addOutput.setText("Supplier already exists!");
-                    toAddFlag = false;
+                    if (txtAddSupplierName.getText().matches(s.getSuppName())
+                            || txtAddSupplierAddress.getText().matches(s.getSuppAddress())) 
+                    {
+                        addOutput.setText("Supplier already exists!");
+                        toAddFlag = false;
+                    }
                 }
-            }
 
-            if (toAddFlag == true) 
-            {
-                Supplier.newSupplier(txtAddSupplierName.getText(), txtAddSupplierAddress.getText());
-                addOutput.setText("Supplier successfully added.");
-            }
+                if (toAddFlag == true) 
+                {
+                    Supplier.newSupplier(txtAddSupplierName.getText(), txtAddSupplierAddress.getText());
+                    addOutput.setText("Supplier successfully added.");
+                }
 
-            txtAddSupplierName.clear();
-            txtAddSupplierAddress.clear();
+                txtAddSupplierName.clear();
+                txtAddSupplierAddress.clear();
+            }
         });
 
         //Setting up add Book pane for second half of page
@@ -1781,83 +2026,94 @@ public class MainDashboard {
 
         btnAddBook.setOnAction(e -> 
         {
-            try 
+            if (txtAddBookTitle.getText().isEmpty() || txtAddBookAuthor.getText().isEmpty()
+                    || txtAddBookDesc.getText().isEmpty() || txtAddBookCost.getText().isEmpty()
+                    || txtAddBookSalePrice.getText().isEmpty() || txtAddBookQuantity.getText().isEmpty())
             {
-                boolean toAddFlag = true;
                 addOutput.setVisible(true);
-
-                String storeNumStr = cmboAddChooseStore.getSelectionModel().getSelectedItem().toString();
-                char storeNumChar = storeNumStr.charAt(0);
-                int storeNumInt = Character.getNumericValue(storeNumChar);
-
-                for (Book b : bookArray) 
+                addOutput.setText("Please ensure that all fields contain a valid value.");
+            }
+            
+            else
+            {
+                try 
                 {
-                    if (txtAddBookTitle.getText().matches(b.getBookTitle())
-                            && txtAddBookAuthor.getText().matches(b.getBookAuthor())
-                            && storeNumInt == b.getBookStore()) {
-                        int newQuantity = b.getBookQuantity() + Integer.parseInt(txtAddBookQuantity.getText());
+                    boolean toAddFlag = true;
+                    addOutput.setVisible(true);
 
-                        b.setBookQuantity(newQuantity);
-
-                        addOutput.setText("Book is already in inventory for store. Updating quantity."
-                                + "\nNew Quantity is: " + b.getBookQuantity());
-
-                        toAddFlag = false;
-                    }
-                }
-
-                if (toAddFlag == true) 
-                {
-                    Book.newBook(txtAddBookTitle.getText(), txtAddBookAuthor.getText(),
-                            Double.parseDouble(txtAddBookCost.getText()),
-                            Double.parseDouble(txtAddBookSalePrice.getText()),
-                            txtAddBookDesc.getText(), Integer.parseInt(txtAddBookQuantity.getText()),
-                            storeNumInt);
-
-                    addOutput.setText("Book successfully added to store " + storeNumInt);
-                }
-
-                txtAddBookTitle.clear();
-                txtAddBookAuthor.clear();
-                txtAddBookCost.clear();
-                txtAddBookSalePrice.clear();
-                txtAddBookDesc.clear();
-                txtAddBookQuantity.clear();
-
-                if (invTabStoreCombo.size() < 2) 
-                {
-                    bookInventoryTableData.clear();
+                    String storeNumStr = cmboAddChooseStore.getSelectionModel().getSelectedItem().toString();
+                    char storeNumChar = storeNumStr.charAt(0);
+                    int storeNumInt = Character.getNumericValue(storeNumChar);
 
                     for (Book b : bookArray) 
                     {
-                        bookInventoryTableData.add(b);
+                        if (txtAddBookTitle.getText().matches(b.getBookTitle())
+                                && txtAddBookAuthor.getText().matches(b.getBookAuthor())
+                                && storeNumInt == b.getBookStore()) {
+                            int newQuantity = b.getBookQuantity() + Integer.parseInt(txtAddBookQuantity.getText());
+
+                            b.setBookQuantity(newQuantity);
+
+                            addOutput.setText("Book is already in inventory for store. Updating quantity."
+                                    + "\nNew Quantity is: " + b.getBookQuantity());
+
+                            toAddFlag = false;
+                        }
                     }
 
-                    bookInventoryView.setItems(bookInventoryTableData);
-                }
-                
-                bookTableData.clear();
-                
-                for (Book b : bookArray) 
+                    if (toAddFlag == true) 
+                    {
+                        Book.newBook(txtAddBookTitle.getText(), txtAddBookAuthor.getText(),
+                                Double.parseDouble(txtAddBookCost.getText()),
+                                Double.parseDouble(txtAddBookSalePrice.getText()),
+                                txtAddBookDesc.getText(), Integer.parseInt(txtAddBookQuantity.getText()),
+                                storeNumInt);
+
+                        addOutput.setText("Book successfully added to store " + storeNumInt);
+                    }
+
+                    txtAddBookTitle.clear();
+                    txtAddBookAuthor.clear();
+                    txtAddBookCost.clear();
+                    txtAddBookSalePrice.clear();
+                    txtAddBookDesc.clear();
+                    txtAddBookQuantity.clear();
+
+                    if (invTabStoreCombo.size() < 2) 
+                    {
+                        bookInventoryTableData.clear();
+
+                        for (Book b : bookArray) 
+                        {
+                            bookInventoryTableData.add(b);
+                        }
+
+                        bookInventoryView.setItems(bookInventoryTableData);
+                    }
+
+                    bookTableData.clear();
+
+                    for (Book b : bookArray) 
+                    {
+                        bookTableData.add(b);
+                    }  
+
+                    bookView.setItems(bookTableData);
+                } 
+
+                catch (NumberFormatException n)
                 {
-                    bookTableData.add(b);
-                }  
-                
-                bookView.setItems(bookTableData);
-            } 
-            
-            catch (NumberFormatException n)
-            {
-                addOutput.setVisible(true);
-                addOutput.setText("Please ensure that Aquisition Cost, Retail Price"
-                        + ", \nand Quantity are numbers and that you have selected a store.");
-            } 
-            
-            catch (NullPointerException npe) 
-            {
-                addOutput.setVisible(true);
-                addOutput.setText("Please ensure that Aquisition Cost, Retail Price"
-                        + ", \nand Quantity are numbers and that you have selected a store.");
+                    addOutput.setVisible(true);
+                    addOutput.setText("Please ensure that Aquisition Cost, Retail Price"
+                            + ", \nand Quantity are numbers and that you have selected a store.");
+                } 
+
+                catch (NullPointerException npe) 
+                {
+                    addOutput.setVisible(true);
+                    addOutput.setText("Please ensure that Aquisition Cost, Retail Price"
+                            + ", \nand Quantity are numbers and that you have selected a store.");
+                }
             }
         });
 
@@ -1901,72 +2157,83 @@ public class MainDashboard {
 
         btnAddConsumable.setOnAction(e -> 
         {
-            try 
+            if (txtAddConsName.getText().isEmpty() || txtAddConsDesc.getText().isEmpty()
+                    || txtAddConsCost.getText().isEmpty() || txtAddConsSalePrice.getText().isEmpty()
+                    || txtAddConsQuantity.getText().isEmpty())
             {
                 addOutput.setVisible(true);
-                boolean toAddFlag = true;
-
-                String storeNumStr = cmboAddChooseStore2.getSelectionModel().getSelectedItem().toString();
-                char storeNumChar = storeNumStr.charAt(0);
-                int storeNumInt = Character.getNumericValue(storeNumChar);
-
-                for (Consumable c : consumableArray) 
+                addOutput.setText("Please ensure that all fields contain a valid value.");
+            }
+            
+            else
+            {
+                try 
                 {
-                    if (txtAddConsName.getText().matches(c.getConName())
-                            && txtAddConsDesc.getText().matches(c.getConDesc())
-                            && storeNumInt == c.getConStore()) 
-                    {
+                    addOutput.setVisible(true);
+                    boolean toAddFlag = true;
 
-                        int newQuantity = c.getConQuantity();
-                        newQuantity = newQuantity + Integer.parseInt(txtAddConsQuantity.getText());
-                        c.setConQuantity(newQuantity);
-
-                        addOutput.setText("Consumable is already in inventory for store. Updating quantity."
-                                + "\nNew Quantity is: " + c.getConQuantity());
-
-                        toAddFlag = false;
-                    }
-                }
-
-                if (toAddFlag == true) 
-                {
-                    Consumable.newCon(txtAddConsName.getText(), Double.parseDouble(txtAddConsCost.getText()),
-                            Double.parseDouble(txtAddConsSalePrice.getText()),
-                            txtAddConsDesc.getText(), Integer.parseInt(txtAddConsQuantity.getText()), storeNumInt);
-
-                    addOutput.setText("Consumable successfully added.");
-                }
-
-                txtAddConsName.clear();
-                txtAddConsCost.clear();
-                txtAddConsSalePrice.clear();
-                txtAddConsDesc.clear();
-                txtAddConsQuantity.clear();
-
-                if (invTabStoreCombo.size() < 2) 
-                {
-                    consumableInventoryTableData.clear();
+                    String storeNumStr = cmboAddChooseStore2.getSelectionModel().getSelectedItem().toString();
+                    char storeNumChar = storeNumStr.charAt(0);
+                    int storeNumInt = Character.getNumericValue(storeNumChar);
 
                     for (Consumable c : consumableArray) 
                     {
-                        consumableInventoryTableData.add(c);
+                        if (txtAddConsName.getText().matches(c.getConName())
+                                && txtAddConsDesc.getText().matches(c.getConDesc())
+                                && storeNumInt == c.getConStore()) 
+                        {
+
+                            int newQuantity = c.getConQuantity();
+                            newQuantity = newQuantity + Integer.parseInt(txtAddConsQuantity.getText());
+                            c.setConQuantity(newQuantity);
+
+                            addOutput.setText("Consumable is already in inventory for store. Updating quantity."
+                                    + "\nNew Quantity is: " + c.getConQuantity());
+
+                            toAddFlag = false;
+                        }
                     }
-                    
-                    consumableInventoryView.setItems(consumableInventoryTableData);
+
+                    if (toAddFlag == true) 
+                    {
+                        Consumable.newCon(txtAddConsName.getText(), Double.parseDouble(txtAddConsCost.getText()),
+                                Double.parseDouble(txtAddConsSalePrice.getText()),
+                                txtAddConsDesc.getText(), Integer.parseInt(txtAddConsQuantity.getText()), storeNumInt);
+
+                        addOutput.setText("Consumable successfully added.");
+                    }
+
+                    txtAddConsName.clear();
+                    txtAddConsCost.clear();
+                    txtAddConsSalePrice.clear();
+                    txtAddConsDesc.clear();
+                    txtAddConsQuantity.clear();
+
+                    if (invTabStoreCombo.size() < 2) 
+                    {
+                        consumableInventoryTableData.clear();
+
+                        for (Consumable c : consumableArray) 
+                        {
+                            consumableInventoryTableData.add(c);
+                        }
+
+                        consumableInventoryView.setItems(consumableInventoryTableData);
+                    }
+                } 
+
+                catch (NumberFormatException n) 
+                {
+                    addOutput.setText("Please ensure that Aquisition Cost, Retail Price"
+                            + ", \nand Quantity are numbers and that you have selected a store.");
+                } 
+
+                catch (NullPointerException npe) 
+                {
+                    addOutput.setVisible(true);
+                    addOutput.setText("Please ensure that Aquisition Cost, Retail Price"
+                            + ", \nand Quantity are numbers and that you have selected a store.");
                 }
-            } 
-            
-            catch (NumberFormatException n) 
-            {
-                addOutput.setText("Please ensure that Aquisition Cost, Retail Price"
-                        + ", \nand Quantity are numbers and that you have selected a store.");
-            } 
-            
-            catch (NullPointerException npe) 
-            {
-                addOutput.setVisible(true);
-                addOutput.setText("Please ensure that Aquisition Cost, Retail Price"
-                        + ", \nand Quantity are numbers and that you have selected a store.");
             }
         });
 
@@ -2030,6 +2297,14 @@ public class MainDashboard {
                 addOutput.setVisible(false);
             }
         });
+        
+        //Listener to reset cmboInvChooseStore when focus is changed from 
+        //Inventory tab
+        
+        tbPane.getSelectionModel().selectedItemProperty().addListener((ov, createTab, invTab) -> 
+        {
+            cmboInvChooseStore.getSelectionModel().clearSelection();
+        });
     }
 
     public void hideAddPanes() 
@@ -2044,7 +2319,6 @@ public class MainDashboard {
 
     public ArrayList enrollCustomer() 
     {
-        // ArrayList<Customer> enrollCustArray = new ArrayList<>();
         Customer selectedCust = custView.getSelectionModel().getSelectedItem();
 
         custLoyaltyArray.add(selectedCust);
@@ -2124,5 +2398,14 @@ public class MainDashboard {
         storeView.getItems().remove(selectedStore);
         storeArray.remove(selectedStore);
         txtAreaStoreDesc.clear();
-    }  
+        populateChooseStoreCombos();
+    }
+    
+    public void removeEmployee()
+    {
+        Employee selectedEmp = employView.getSelectionModel().getSelectedItem();
+        employView.getItems().remove(selectedEmp);
+        employeeArray.remove(selectedEmp);
+        txtAreaEmpDesc.clear();
+    }
 }

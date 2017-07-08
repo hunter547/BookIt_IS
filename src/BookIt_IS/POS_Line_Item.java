@@ -5,9 +5,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import oracle.jdbc.pool.OracleDataSource;
+import oracle.net.aso.c;
 
-public class POS_Line_Item {
+public class POS_Line_Item
+{
     private int posliID; 
     private static ArrayList<POS_Line_Item> posliArray = new ArrayList<>();
     private static int nextID = 0;
@@ -19,7 +23,8 @@ public class POS_Line_Item {
     private static Statement commStmt;
     private static ResultSet dbResults;
 
-    public POS_Line_Item() {
+    public POS_Line_Item() 
+    {
         this.posliID = 0;
         this.orderID = 0;
         this.prodID = 0; 
@@ -130,7 +135,6 @@ public class POS_Line_Item {
         this.identifier = identifier;
     }
     
-
     public int getPosliQuantity() {
         return posliQuantity;
     }
