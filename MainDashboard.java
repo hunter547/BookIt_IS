@@ -1000,87 +1000,87 @@ public class MainDashboard {
             }
         });
 
-        //Profit Vs Expense Header
+       //Profit Vs Expense Header
         //Title header
         Label lblPVE = new Label("Profit/Expense Report");
         lblPVE.setFont(Font.font("Times New Roman", FontWeight.BOLD, 50));
         GridPane.setHalignment(lblPVE, HPos.CENTER);
 
         //Time period header
-        Label lblTime = new Label("Choose Time Period:");
-        lblTime.setFont(Font.font("Times New Roman", FontWeight.BOLD, 25));
-        GridPane.setHalignment(lblTime, HPos.CENTER);
+        Label lblChooseStore = new Label("Choose Store:");
+        lblChooseStore.setFont(Font.font("Times New Roman", FontWeight.BOLD, 25));
+        GridPane.setHalignment(lblChooseStore, HPos.CENTER);
 
         //Radio Buttons 
-        RadioButton rdoDay = new RadioButton();
-        RadioButton rdoMonth = new RadioButton();
-        RadioButton rdoYear = new RadioButton();
+        RadioButton rdoStore1 = new RadioButton("Store 1");
+        RadioButton rdoStore2 = new RadioButton("Store 2");
+        RadioButton rdoStore3 = new RadioButton("Store 3");
+        RadioButton rdoStore4 = new RadioButton("Store 4");
+        RadioButton rdoAllStores = new RadioButton("All Stores");
 
-        Label lblDay = new Label("Day");
-        Label lblMonth = new Label("Month");
-        Label lblYear = new Label("Year");
-
-        Label lblRev = new Label("Revenues:");
-        Label lblExp = new Label("Expenses:");
-
-        Label lblTotal = new Label("Total Profit: ");
-        Label lblIncome = new Label("Income Before Taxes: ");
-
-        TextField txtProfit = new TextField();
-        TextField txtIncome = new TextField();
+        Label lblSales = new Label("Sales");
+        TextField txtSales = new TextField();
+        Label lblExpenses = new Label("Expenses");
+        TextField txtExpenses = new TextField();
+        Label lblNetProfit = new Label("Net Profit");
+        TextField txtNet = new TextField();
+        
+        Label lblBegDate = new Label("Beginning Date");
+        Label lblEndDate = new Label ("End Date");
+        
+        DatePicker dpBegDate = new DatePicker();
+        DatePicker dpEndDate = new DatePicker();
+        
 
         //Location of labels and buttons
-        profitPane.add(lblPVE, 2, 0, 3, 1);
+        GridPane pePane = new GridPane();
+        profitPane.add(pePane, 0, 0);
+//        pePane.setHgap(20);
 
-        profitPane.setHalignment(lblTime, HPos.CENTER);
-        profitPane.add(lblTime, 0, 1);
+        pePane.add(lblPVE, 0,0);
+        lblPVE.setAlignment(Pos.CENTER);
+      
 
-        //Revenues and expenses
-        TableView<Book> profitView = new TableView<>();
+        pePane.add(lblChooseStore, 0, 1);
+         
 
-        //create table columns 
-        TableColumn tblcRevenueID = new TableColumn("ID");
-        TableColumn tblcAmount = new TableColumn("Amount");
-        TableColumn tblcDate = new TableColumn("Date");
-
-        profitView.setMinWidth(300);
-        profitView.setMaxHeight(400);
-        profitView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        profitView.getColumns().addAll(tblcRevenueID, tblcAmount, tblcDate);
-
-        TableView<Book> expenseView = new TableView<>();
-
-        //create table columns 
-        TableColumn tblcExpenseID = new TableColumn("ID");
-        TableColumn tblcAmountExp = new TableColumn("Amount");
-        TableColumn tblcDateExp = new TableColumn("Date");
-
-        expenseView.setMinWidth(300);
-        expenseView.setMaxHeight(400);
-        expenseView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        expenseView.getColumns().addAll(tblcExpenseID, tblcAmountExp, tblcDateExp);
-
-        GridPane.setHalignment(lblDay, HPos.LEFT);
-        GridPane.setHalignment(rdoDay, HPos.RIGHT);
-        GridPane.setHalignment(lblMonth, HPos.LEFT);
-        GridPane.setHalignment(rdoMonth, HPos.RIGHT);
-        GridPane.setHalignment(lblYear, HPos.LEFT);
-        GridPane.setHalignment(rdoYear, HPos.RIGHT);
-
-        profitPane.add(lblDay, 3, 1);
-        profitPane.add(rdoDay, 4, 1);
-        profitPane.add(lblMonth, 6, 1);
-        profitPane.add(rdoMonth, 7, 1);
-        profitPane.add(lblYear, 8, 1);
-        profitPane.add(rdoYear, 9, 1);
-        profitPane.add(lblRev, 0, 5);
-        profitPane.add(lblExp, 4, 5);
-        profitPane.add(profitView, 0, 7);
-        profitPane.add(expenseView, 4, 7);
-        profitPane.add(lblTotal, 0, 11);
-        profitPane.add(lblIncome, 0, 13);
-        profitPane.add(txtProfit, 0, 12);
-        profitPane.add(txtIncome, 0, 14);
+        pePane.add(rdoStore1, 0, 5);
+        rdoStore1.setAlignment(Pos.CENTER);
+        pePane.add(rdoStore2, 1, 5);
+        pePane.add(rdoStore3, 0, 6);
+        pePane.add(rdoStore4, 1, 6);
+        pePane.add(rdoAllStores, 0, 7);
+        pePane.add(lblSales, 0, 11);
+        lblSales.setAlignment(Pos.CENTER);
+        pePane.add(txtSales, 0, 12);
+         txtSales.setAlignment(Pos.CENTER);
+        pePane.add(lblExpenses, 0, 13);
+         lblExpenses.setAlignment(Pos.CENTER);
+        pePane.add(txtExpenses, 0, 14);
+         txtExpenses.setAlignment(Pos.CENTER);
+        pePane.add(lblNetProfit, 0, 15);
+         lblNetProfit.setAlignment(Pos.CENTER);
+        pePane.add(txtNet, 0, 16);
+         txtNet.setAlignment(Pos.CENTER);
+         pePane.add(dpBegDate, 0, 8);
+         pePane.add(lblBegDate,0,9);
+         
+         pePane.add(dpEndDate, 1, 8);
+         pePane.add(lblEndDate, 1, 9);
+         
+         
+        
+        
+        //grouping radio buttons
+      
+           ToggleGroup rdoGroup = new ToggleGroup();
+           rdoStore1.setToggleGroup(rdoGroup);         
+           rdoStore2.setToggleGroup(rdoGroup);
+           rdoStore3.setToggleGroup(rdoGroup);
+           rdoStore4.setToggleGroup(rdoGroup);
+           rdoAllStores.setToggleGroup(rdoGroup);
+           rdoAllStores.setSelected(true);
+                      
         //CREATE TAB INFORMATION
         Label lblCreateHeader = new Label("Create New Object");
         lblCreateHeader.setFont(Font.font("Times New Roman", FontWeight.BOLD, 50));
